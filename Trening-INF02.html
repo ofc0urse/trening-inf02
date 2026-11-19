@@ -1,0 +1,1180 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trening INF.02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Układ: jedna kolumna 720px jak kartka w zeszycie. Pytanie dostaje cały ekran, reszta schodzi niżej. */
+:root {
+  --bg: #eef1ec;
+  --paper: #fbfcfa;
+  --ink: #18211c;
+  --muted: #4c5a52;
+  --line: #d3dad1;
+  --accent: #2a6748;
+  --accent-ink: #f4f8f5;
+  --accent-soft: #dbe8df;
+  --bad: #a3352a;
+  --bad-soft: #f6e0dc;
+  --warn: #8a5f12;
+  --warn-soft: #f3e8d2;
+  --shadow: 0 1px 2px rgba(24, 33, 28, .06), 0 6px 18px rgba(24, 33, 28, .06);
+  --f-head: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111814; --paper: #19211d; --ink: #e1e8e3; --muted: #9eaea5; --line: #2c3832;
+    --accent: #7dbd98; --accent-ink: #0f1a14; --accent-soft: #213428; --bad: #e88a7d; --bad-soft: #3a2420;
+    --warn: #ddb064; --warn-soft: #362c19; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111814; --paper: #19211d; --ink: #e1e8e3; --muted: #9eaea5; --line: #2c3832;
+  --accent: #7dbd98; --accent-ink: #0f1a14; --accent-soft: #213428; --bad: #e88a7d; --bad-soft: #3a2420;
+  --warn: #ddb064; --warn-soft: #362c19; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+::selection { background: var(--accent); color: var(--accent-ink); }
+html { scrollbar-color: var(--line) var(--bg); }
+body { background: var(--bg); color: var(--ink); font: 17px/1.6 var(--f-body); caret-color: var(--accent); }
+.wrap { max-width: 720px; margin: 0 auto; padding-block: 28px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+header { display: grid; gap: 10px; margin-bottom: 18px; }
+h1 { font: 700 clamp(30px, 6vw, 40px)/1.05 var(--f-head); margin: 0; letter-spacing: -0.02em; }
+.overall { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.overall strong { color: var(--ink); font-weight: 600; }
+.track { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.track i { display: block; height: 100%; background: var(--accent); border-radius: 4px; }
+
+nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; gap: 2px; margin: 0 -4px 26px; padding: 8px 4px; background: var(--bg); border-bottom: 1px solid var(--line); overflow-x: auto; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+nav a { font: 600 16px var(--f-head); text-decoration: none; color: var(--muted); padding: 7px 14px; border-radius: 6px; white-space: nowrap; }
+nav a:hover { color: var(--ink); background: var(--paper); }
+nav a[aria-current="page"] { background: var(--ink); color: var(--bg); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+h2 { font: 700 24px/1.2 var(--f-head); margin: 40px 0 10px; text-wrap: balance; }
+h2:first-child { margin-top: 0; }
+p { margin: 0 0 12px; max-width: 65ch; }
+.muted { color: var(--muted); }
+.small { font-size: 14px; }
+code { font-family: var(--f-mono); font-size: 0.88em; background: var(--accent-soft); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
+a { color: var(--accent); text-underline-offset: 3px; }
+button { font: 600 16px var(--f-body); cursor: pointer; border-radius: 6px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); padding: 10px 16px; min-height: 44px; }
+button:hover:not(:disabled) { border-color: var(--ink); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+button.primary:hover:not(:disabled) { filter: brightness(1.08); border-color: var(--accent); }
+button:disabled { opacity: 0.4; cursor: default; }
+select { font: 16px var(--f-body); padding: 9px 10px; min-height: 44px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); color: var(--ink); }
+
+/* tryby quizu: wiersze listy, nie kafelki */
+.modes { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; }
+.mode { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 16px; width: 100%; text-align: left; border: 0; border-radius: 0; border-bottom: 1px solid var(--line); background: transparent; padding: 16px 18px; font-weight: 400; }
+.mode:last-child { border-bottom: 0; }
+.mode:hover:not(:disabled) { background: var(--accent-soft); }
+.mode strong { font: 700 19px/1.2 var(--f-head); }
+.mode span { grid-column: 1; color: var(--muted); font-size: 15px; }
+.mode .go { grid-column: 2; grid-row: 1 / span 2; font: 600 22px var(--f-head); color: var(--accent); }
+.mode.main strong { color: var(--accent); }
+.filter { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 14px 0 0; font-size: 15px; }
+
+/* działy */
+.cats { display: grid; gap: 0; margin-top: 6px; }
+.catrow { display: grid; grid-template-columns: minmax(110px, 190px) 1fr 52px; align-items: center; gap: 4px 14px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 16px; }
+.catrow .bar { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
+.catrow .bar i { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
+.catrow.low .bar i { background: var(--bad); }
+.catrow.mid .bar i { background: var(--warn); }
+.catrow .pct { font-family: var(--f-mono); font-size: 15px; text-align: right; font-variant-numeric: tabular-nums; }
+.catrow .seen { grid-column: 2 / span 2; font-size: 13px; color: var(--muted); margin-top: -2px; }
+.weak { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 12px 14px; border-radius: 8px; background: var(--warn-soft); }
+.weak p { margin: 0; flex: 1 1 260px; }
+.sync { font-size: 13px; color: var(--muted); margin-top: 18px; }
+
+/* pytanie */
+.qcard { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); padding: 22px clamp(16px, 4vw, 30px) 20px; }
+.qhead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.qprog { height: 4px; background: var(--line); border-radius: 2px; margin: 10px 0 20px; overflow: hidden; }
+.qprog i { display: block; height: 100%; background: var(--accent); }
+.qtext { font-size: clamp(19px, 3.2vw, 22px); line-height: 1.45; font-weight: 500; margin: 0 0 20px; text-wrap: pretty; }
+.answers { display: grid; gap: 10px; }
+.ans { display: grid; grid-template-columns: 32px 1fr; align-items: start; gap: 12px; text-align: left; font: 400 17px/1.45 var(--f-body); padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); }
+.ans .key { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--line); background: var(--paper); font: 600 15px var(--f-mono); color: var(--muted); }
+.ans:hover:not(:disabled) { border-color: var(--ink); }
+.ans.sel { border-color: var(--accent); background: var(--accent-soft); }
+.ans.sel .key, .ans.right .key { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.ans.right { border-color: var(--accent); background: var(--accent-soft); opacity: 1; }
+.ans.wrong { border-color: var(--bad); background: var(--bad-soft); opacity: 1; }
+.ans.wrong .key { background: var(--bad); border-color: var(--bad); color: var(--paper); }
+.ans:disabled { cursor: default; }
+.ans.dim { opacity: .55; }
+.expl { margin-top: 16px; padding: 12px 14px; border-radius: 8px; background: var(--bg); font-size: 16px; }
+.expl b { margin-right: 4px; }
+.expl b.ok { color: var(--accent); }
+.expl b.no { color: var(--bad); }
+.qnav { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+.qnav .right { display: flex; gap: 8px; margin-left: auto; }
+.hint { font-size: 13px; color: var(--muted); margin-top: 14px; }
+.hint kbd { font: 600 12px var(--f-mono); border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: var(--paper); }
+.timer { font: 600 16px var(--f-mono); color: var(--ink); }
+.timer.late { color: var(--bad); }
+.grid40 { display: grid; grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); gap: 5px; margin-top: 18px; }
+.grid40 button { min-height: 34px; padding: 0; font: 500 13px var(--f-mono); border-radius: 5px; }
+.grid40 button.has { background: var(--accent-soft); border-color: var(--accent-soft); }
+.grid40 button.cur { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+
+/* wynik */
+.score { font: 700 clamp(48px, 12vw, 72px)/1 var(--f-head); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; margin: 6px 0 4px; }
+.score small { font-size: 0.4em; color: var(--muted); letter-spacing: 0; }
+.verdict { font-size: 18px; margin-bottom: 18px; }
+.mistakes { display: grid; gap: 12px; margin-top: 22px; }
+.mistake { padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); font-size: 16px; }
+.mistake .q { font-weight: 600; margin-bottom: 8px; }
+.mistake .line { display: grid; grid-template-columns: 92px 1fr; gap: 8px; font-size: 15px; }
+.mistake .line .lab { color: var(--muted); }
+.mistake .line.yours .val { color: var(--bad); text-decoration: line-through; text-decoration-thickness: 1px; }
+.mistake .line.good .val { color: var(--accent); font-weight: 600; }
+.mistake .why { margin-top: 8px; font-size: 15px; color: var(--muted); }
+
+/* plan */
+.callout { padding: 16px 18px; border-radius: 10px; background: var(--paper); border: 1px solid var(--line); box-shadow: var(--shadow); margin-bottom: 18px; }
+.callout p:last-child { margin: 0; }
+.weeks { display: grid; }
+.week { display: grid; grid-template-columns: 112px 1fr; gap: 6px 18px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.week .when { font: 600 15px var(--f-mono); padding-top: 2px; font-variant-numeric: tabular-nums; }
+.week .now { display: inline-block; margin-top: 6px; font: 600 12px var(--f-body); letter-spacing: .04em; text-transform: uppercase; color: var(--accent-ink); background: var(--accent); padding: 2px 7px; border-radius: 4px; }
+.week.current { background: linear-gradient(var(--accent-soft), var(--accent-soft)) padding-box; margin: 0 -14px; padding-left: 14px; padding-right: 14px; border-radius: 8px; border-bottom-color: transparent; }
+.week dl { margin: 0; display: grid; gap: 6px; }
+.week dt { font: 600 13px var(--f-body); color: var(--muted); }
+.week dd { margin: 0 0 4px; }
+.week.past { opacity: .6; }
+
+.sheets { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0 24px; margin-top: 6px; }
+.task { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.task input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--accent); flex: none; }
+.task label { min-width: 0; flex: 1; }
+.task .meta { display: block; font-size: 14px; color: var(--muted); }
+.task.done .title { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+.counter { font: 600 15px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+ul.links { padding-left: 20px; max-width: 65ch; }
+ul.links li { margin-bottom: 8px; }
+
+/* historia egzaminów próbnych */
+.hist { display: grid; gap: 8px; margin-top: 6px; }
+.hrow { display: grid; grid-template-columns: 64px 1fr 60px; align-items: center; gap: 12px; font-size: 15px; font-variant-numeric: tabular-nums; }
+.hrow .d { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
+.hbar { position: relative; height: 12px; background: var(--line); border-radius: 3px; }
+.hbar i { position: absolute; inset: 0 auto 0 0; border-radius: 3px; background: var(--accent); }
+.hbar.low i { background: var(--bad); }
+.hbar.mid i { background: var(--warn); }
+.hbar b { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink); opacity: .35; }
+.hrow .r { text-align: right; font-family: var(--f-mono); }
+.legend { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+/* trener podsieci */
+.task-ip { font: 600 clamp(26px, 6vw, 34px)/1.1 var(--f-mono); letter-spacing: -0.01em; margin: 4px 0 18px; overflow-wrap: anywhere; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px 18px; }
+.field { display: grid; gap: 4px; }
+.field label { font-size: 14px; color: var(--muted); }
+.field input { font: 500 18px var(--f-mono); padding: 9px 11px; min-height: 44px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); width: 100%; }
+.field input:focus { border-color: var(--accent); }
+.field.ok input { border-color: var(--accent); background: var(--accent-soft); }
+.field.no input { border-color: var(--bad); background: var(--bad-soft); }
+.field .fix { font: 600 14px var(--f-mono); color: var(--accent); min-height: 1.2em; }
+.solution { margin-top: 16px; padding: 14px 16px; border-radius: 8px; background: var(--bg); font-size: 16px; }
+.solution ol { margin: 6px 0 0; }
+.row-btns { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 18px; }
+
+/* ściąga */
+.ref { overflow-x: auto; margin: 6px 0 8px; }
+.ref table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.ref th, .ref td { text-align: left; vertical-align: top; padding: 7px 14px 7px 0; border-bottom: 1px solid var(--line); }
+.ref th { font: 600 13px var(--f-body); color: var(--muted); white-space: nowrap; }
+.ref td.m { font-family: var(--f-mono); font-size: 14px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.toc { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 15px; margin-bottom: 8px; }
+.wires { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; margin: 6px 0 4px; max-width: 520px; }
+.wire { display: grid; gap: 4px; text-align: center; font: 600 13px var(--f-mono); }
+.wire i { height: 46px; border-radius: 3px; border: 1px solid var(--line); }
+.wire span { font: 400 11px/1.2 var(--f-body); color: var(--muted); }
+
+/* rozwiązania w labie */
+.task .body { min-width: 0; flex: 1; display: grid; gap: 6px; }
+details.how summary { cursor: pointer; font-size: 15px; font-weight: 600; color: var(--accent); width: fit-content; }
+details.how ol { margin: 8px 0 4px; padding-left: 22px; font-size: 15px; }
+details.how li { margin-bottom: 6px; }
+details.how pre { font: 14px/1.5 var(--f-mono); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; overflow-x: auto; margin: 4px 0; }
+.datebox { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 10px; }
+.datebox input { font: 16px var(--f-body); padding: 8px 10px; min-height: 44px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+
+@media (max-width: 520px) {
+  .week { grid-template-columns: 1fr; gap: 6px; }
+  .hrow { grid-template-columns: 52px 1fr 52px; gap: 8px; }
+  .catrow { grid-template-columns: 1fr 52px; }
+  .catrow .bar { grid-column: 1 / span 2; grid-row: 2; }
+  .catrow .seen { grid-column: 1 / span 2; }
+  .mistake .line { grid-template-columns: 1fr; gap: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .track i, .catrow .bar i, .qprog i { transition: width .4s cubic-bezier(.16, 1, .3, 1); }
+  .ans, .mode, button { transition: background-color .15s, border-color .15s; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Trening INF.02</h1>
+    <div class="overall" id="overall"><span>Ładuję postępy</span></div>
+    <div class="track" aria-hidden="true"><i id="overall-bar" style="width:0"></i></div>
+  </header>
+  <nav aria-label="Sekcje">
+    <a href="#quiz" data-tab="quiz">Quiz</a>
+    <a href="#podsieci" data-tab="podsieci">Podsieci</a>
+    <a href="#sciaga" data-tab="sciaga">Ściąga</a>
+    <a href="#arkusze" data-tab="arkusze">Arkusze CKE</a>
+    <a href="#plan" data-tab="plan">Plan</a>
+    <a href="#lab" data-tab="lab">Lab</a>
+  </nav>
+
+  <!-- QUIZ -->
+  <section id="tab-quiz">
+    <div id="quiz-home">
+      <div class="modes">
+        <button class="mode main" id="btn-rand"><strong>Losowe 20</strong><span>Częściej trafiasz na pytania, w których się mylisz. Odpowiedź widzisz od razu.</span><i class="go" aria-hidden="true">›</i></button>
+        <button class="mode" id="btn-exam"><strong>Egzamin próbny</strong><span>40 pytań, 60 minut, wynik na końcu. Cel: 30 poprawnych.</span><i class="go" aria-hidden="true">›</i></button>
+        <button class="mode" id="btn-bad"><strong>Moje błędy</strong><span id="bad-desc">Wracasz tylko do pytań, które ostatnio zawaliłeś.</span><i class="go" aria-hidden="true">›</i></button>
+      </div>
+      <div class="filter">
+        <label for="catsel" class="muted">Dział do losowania:</label>
+        <select id="catsel"></select>
+      </div>
+
+      <h2>Twoje działy</h2>
+      <div class="cats" id="cats"></div>
+      <div class="weak" id="weak" hidden></div>
+
+      <div id="hist-box" hidden>
+        <h2>Egzaminy próbne</h2>
+        <div class="hist" id="hist"></div>
+        <p class="legend">Kreski na pasku: 20 punktów to próg zdania, 30 to Twój cel.</p>
+      </div>
+      <p class="sync" id="sync"></p>
+    </div>
+    <div id="quiz-run" hidden></div>
+  </section>
+
+  <!-- PODSIECI -->
+  <section id="tab-podsieci" hidden>
+    <div class="qcard">
+      <div class="qhead"><span>Trener podsieci</span><span id="sub-score"></span></div>
+      <div class="qprog" aria-hidden="true"><i id="sub-bar" style="width:0"></i></div>
+      <p class="muted" style="margin:0">Policz dla adresu:</p>
+      <div class="task-ip" id="sub-ip"></div>
+      <div class="fields" id="sub-fields"></div>
+      <div class="row-btns">
+        <button class="primary" id="sub-check">Sprawdź</button>
+        <button id="sub-next">Nowe zadanie</button>
+        <label for="sub-level" class="muted small" style="margin-left:auto">Maski:</label>
+        <select id="sub-level">
+          <option value="easy">/24 do /30</option>
+          <option value="mid">/16 do /30</option>
+          <option value="all">/8 do /30</option>
+        </select>
+      </div>
+      <div class="solution" id="sub-sol" hidden></div>
+    </div>
+    <h2>Jak liczyć w głowie</h2>
+    <ol>
+      <li>Znajdź oktet, w którym maska nie jest 255 ani 0. Dla /27 to czwarty oktet: 224.</li>
+      <li>Policz blok: 256 − 224 = 32. Sieci zaczynają się co 32: 0, 32, 64, 96…</li>
+      <li>Znajdź blok, w który wpada adres. 77 wpada w 64–95, więc sieć to .64, a rozgłoszenie .95.</li>
+      <li>Pierwszy host to sieć + 1, ostatni to rozgłoszenie − 1. Hostów jest 2^(32 − prefiks) − 2.</li>
+    </ol>
+  </section>
+
+  <!-- ŚCIĄGA -->
+  <section id="tab-sciaga" hidden>
+    <div class="toc">
+      <a href="#sciaga" data-jump="s-porty">Porty</a><a href="#sciaga" data-jump="s-maski">Maski</a><a href="#sciaga" data-jump="s-adresy">Adresy specjalne</a><a href="#sciaga" data-jump="s-kabel">T568B</a><a href="#sciaga" data-jump="s-polecenia">Polecenia</a><a href="#sciaga" data-jump="s-msc">Przystawki</a><a href="#sciaga" data-jump="s-dns">DNS i DHCP</a><a href="#sciaga" data-jump="s-raid">RAID</a><a href="#sciaga" data-jump="s-chmod">chmod</a>
+    </div>
+    <div id="cheat"></div>
+  </section>
+
+  <!-- ARKUSZE -->
+  <section id="tab-arkusze" hidden>
+    <h2>Prawdziwe arkusze CKE</h2>
+    <p>Pytania z egzaminów się powtarzają, więc przerób wszystkie sesje. W każdej sesji jest kilka wersji testu i zadanie praktyczne. Odhacz sesję, gdy zrobisz test na czas i sprawdzisz wynik.</p>
+    <div class="callout">
+      <p><strong>Test z całej bazy:</strong> <a href="https://egzamin-informatyk.pl/testy-inf02-ee08-sprzet-systemy-sieci/" target="_blank" rel="noopener">egzamin-informatyk.pl</a> losuje 40 pytań z 2265 pytań CKE z lat poprzednich. Rób tam jeden test dziennie obok tego quizu.</p>
+      <p><strong>Generator testu:</strong> <a href="https://arkusze.pl/egzamin-zawodowy-inf-02-egzamin-pisemny/" target="_blank" rel="noopener">arkusze.pl, egzamin pisemny INF.02</a>.</p>
+    </div>
+    <div class="counter" id="sheet-count"></div>
+    <div class="sheets" id="sheets"></div>
+    <p class="small muted" style="margin-top:14px">Klucz odpowiedzi do praktyki (zasady oceniania) czytaj dopiero po zrobieniu zadania. Pokazuje, za co dokładnie egzaminator daje punkty.</p>
+  </section>
+
+  <!-- PLAN -->
+  <section id="tab-plan" hidden>
+    <div class="callout">
+      <p>Teorię zdajesz od 20 na 40 punktów. Praktykę dopiero od 75%, czyli Twój cel to samo minimum. Na ćwiczeniach mierz w 85–90%, bo stres na egzaminie zabiera parę punktów.</p>
+      <p>Teoria wypada zwykle w drugim tygodniu stycznia, praktyka w styczniu albo na początku lutego. Datę i godzinę sprawdź w szkole i wpisz tutaj, a w nagłówku pojawi się odliczanie.</p>
+      <div class="datebox"><label for="examdate">Data teorii:</label><input type="date" id="examdate" min="2026-11-01" max="2027-12-31"></div>
+    </div>
+    <p>W tygodniu: 20 minut quizu i godzina labu. W weekend: jedno dłuższe ćwiczenie albo cały arkusz na czas.</p>
+    <h2>Tydzień po tygodniu</h2>
+    <div class="weeks" id="weeks"></div>
+
+    <h2>Co sprawdza praktyka</h2>
+    <p>Masz 150 minut i wcześniej 10 minut na przeczytanie zadania. Zwykle robisz okablowanie, konfigurujesz router albo przełącznik przez panel WWW, stawiasz usługi na Windows Server i ustawiasz stację z Windows albo Linuksem. Na końcu sprawdzasz łączność poleceniem <code>ping</code>. Egzaminator ocenia to, co działa na stanowisku.</p>
+    <p>Punkty uciekają na drobiazgach: literówka w nazwie konta, zła maska, brak „hasło nigdy nie wygasa”, niezapisana konfiguracja routera. Przed końcem przejdź treść zadania podpunkt po podpunkcie.</p>
+  </section>
+
+  <!-- LAB -->
+  <section id="tab-lab" hidden>
+    <h2>Postaw lab</h2>
+    <p>Trzy maszyny zajmą ok. 10 GB z Twoich 32 GB RAM. Na całość licz 2 godziny, głównie czekania na instalację.</p>
+    <div class="counter" id="setup-count"></div>
+    <div id="setup-tasks"></div>
+    <h2>Ćwiczenia jak na egzaminie</h2>
+    <p>Odhacz ćwiczenie dopiero wtedy, gdy zrobisz je bez podglądania.</p>
+    <div class="counter" id="lab-count"></div>
+    <div id="lab-tasks"></div>
+  </section>
+</div>
+
+<script>
+// [id, dział, pytanie, [POPRAWNA, zła, zła, zła], wyjaśnienie]. Id nie zmieniać: po nich zapisują się postępy.
+const CATS = { sprzet: "Sprzęt", windows: "Windows", linux: "Linux", sieci: "Sieci", serwer: "Serwery", bezp: "Bezpieczeństwo i BHP" };
+const Q = [
+[1,"sprzet","Procesor Intel Core i5-14400F montuje się w gnieździe:",["LGA1700","AM5","LGA1200","AM4"],"Intel 12., 13. i 14. generacji to LGA1700. AM4 i AM5 to gniazda AMD."],
+[2,"sprzet","Ile styków ma moduł pamięci DDR4 DIMM do komputera stacjonarnego?",["288","240","260","184"],"DDR4 i DDR5 DIMM mają 288 styków, DDR3 240, DDR4 SO-DIMM (laptop) 260."],
+[3,"sprzet","Aby dwa moduły RAM pracowały w trybie dual channel, należy:",["włożyć je do gniazd wskazanych w instrukcji płyty (zwykle tego samego koloru)","włożyć je do dwóch sąsiednich gniazd","włączyć tryb RAID w UEFI","użyć modułów o różnej pojemności"],"Dual channel wymaga par gniazd z różnych kanałów, zwykle A2 i B2. Instrukcja płyty mówi które."],
+[4,"sprzet","Procedura testująca podzespoły zaraz po włączeniu komputera to:",["POST","MBR","ACPI","PXE"],"POST (Power-On Self-Test) uruchamia BIOS/UEFI przed startem systemu."],
+[5,"sprzet","Po każdym odłączeniu zasilania komputer zapomina ustawienia UEFI i cofa zegar. Najbardziej prawdopodobna przyczyna:",["rozładowana bateria CR2032 na płycie","uszkodzony zasilacz","za mało pamięci RAM","uszkodzony dysk SSD"],"Bateria podtrzymuje pamięć CMOS i zegar, gdy komputer jest odłączony od prądu."],
+[6,"sprzet","Dodatkowe złącze zasilające procesor na płycie głównej to:",["EPS 12V 8-pin (4+4)","ATX 24-pin","SATA 15-pin","Molex 4-pin"],"24-pin zasila płytę, a osobne złącze 4+4 przy gnieździe procesora zasila sam CPU."],
+[7,"sprzet","Dysk M.2 NVMe przesyła dane przez magistralę:",["PCI Express","SATA III","USB 3.0","IDE"],"NVMe działa na liniach PCIe. Dyski M.2 SATA też istnieją, ale są wolniejsze."],
+[8,"sprzet","RAID 1 polega na:",["kopiowaniu tych samych danych na dwa dyski (mirroring)","dzieleniu danych na paski bez nadmiarowości","rozproszeniu parzystości na min. 3 dyskach","kompresji danych na dysku"],"RAID 1 to lustro. Jeden dysk może paść i dane zostają."],
+[9,"sprzet","Które rozwiązanie NIE chroni danych przed awarią dysku?",["RAID 0","RAID 1","RAID 5","RAID 10"],"RAID 0 to sam striping. Awaria jednego dysku niszczy całą macierz."],
+[10,"sprzet","Cztery dyski po 2 TB połączono w RAID 5. Pojemność użytkowa wynosi:",["6 TB","8 TB","4 TB","2 TB"],"RAID 5: (n−1) × pojemność dysku = 3 × 2 TB. Jeden dysk idzie na parzystość."],
+[11,"sprzet","Dysku SSD nie należy:",["defragmentować","formatować w NTFS","podłączać przez SATA","używać jako dysku systemowego"],"Defragmentacja SSD nic nie daje i zużywa komórki. Windows robi na SSD optymalizację TRIM."],
+[12,"sprzet","W drukarce laserowej za utrwalenie tonera na papierze odpowiada:",["zespół utrwalający (grzałka, fuser)","bęben światłoczuły","głowica drukująca","taśma barwiąca"],"Bęben przenosi toner na papier, a fuser zapieka go temperaturą i dociskiem."],
+[13,"sprzet","Drukarka wymagająca papieru, który ciemnieje pod wpływem temperatury, to drukarka:",["termiczna","igłowa","atramentowa","laserowa"],"Tak działają drukarki paragonowe i etykiet."],
+[14,"sprzet","Kopie przez kalkę (np. faktury w kilku egzemplarzach) wydrukujesz na drukarce:",["igłowej","laserowej","atramentowej","sublimacyjnej"],"Tylko drukarka igłowa uderza mechanicznie w papier przez taśmę barwiącą."],
+[15,"sprzet","Rozdzielczość skanera i drukarki podaje się w:",["dpi","Hz","ppm","bps"],"dpi to punkty na cal. ppm to strony na minutę."],
+[16,"sprzet","Maksymalna przepustowość USB 3.0 (USB 3.2 Gen 1) to:",["5 Gb/s","480 Mb/s","10 Gb/s","12 Mb/s"],"USB 2.0 ma 480 Mb/s, USB 3.2 Gen 2 10 Gb/s, USB 1.1 12 Mb/s."],
+[17,"sprzet","Analogowe złącze do podłączenia monitora to:",["D-Sub (VGA)","HDMI","DisplayPort","DVI-D"],"HDMI, DisplayPort i DVI-D przesyłają sygnał cyfrowy."],
+[18,"sprzet","Oznaczenie 80 PLUS Gold na zasilaczu dotyczy:",["sprawności energetycznej","maksymalnej mocy","liczby złączy PCIe","poziomu hałasu"],"Im wyższy poziom (Bronze, Gold, Platinum), tym mniej energii zasilacz zamienia w ciepło."],
+[19,"sprzet","Pastę termoprzewodzącą nakłada się:",["między procesor a radiator","między moduł RAM a gniazdo","na styki karty graficznej","pod płytę główną"],"Pasta wypełnia mikroszczeliny i poprawia oddawanie ciepła z CPU."],
+[20,"sprzet","Przed wymianą pamięci RAM, żeby nie uszkodzić podzespołów ładunkiem elektrostatycznym, należy:",["założyć opaskę antystatyczną połączoną z uziemieniem","dotknąć ekranu monitora","włączyć komputer na chwilę","założyć gumowe rękawice"],"Opaska ESD wyrównuje potencjał ciała z obudową."],
+[21,"sprzet","Ile partycji podstawowych można utworzyć na dysku z tablicą MBR?",["4","2","128","Bez ograniczeń"],"MBR: 4 podstawowe albo 3 i rozszerzona. GPT w Windows: do 128."],
+[22,"sprzet","Maksymalny rozmiar dysku obsługiwany przez MBR (sektor 512 B) to około:",["2 TB","32 GB","16 TB","8 EB"],"Większe dyski wymagają GPT, a GPT idzie w parze z UEFI."],
+[23,"sprzet","Liczba 255 zapisana w systemie dwójkowym to:",["11111111","11111110","10000000","11110000"],"8 jedynek: 128+64+32+16+8+4+2+1 = 255. Szesnastkowo FF."],
+[24,"sprzet","Liczba 10101100₂ w systemie szesnastkowym to:",["AC","CA","A4","BC"],"Dziel na czwórki od prawej: 1010 = A, 1100 = C."],
+[25,"sprzet","Liczba 1F₁₆ w systemie dziesiętnym to:",["31","15","25","32"],"1×16 + 15 = 31."],
+[26,"sprzet","1 KiB to:",["1024 bajty","1000 bajtów","1024 bity","8 bajtów"],"Przedrostki binarne (KiB, MiB, GiB) to potęgi 2. KB w układzie SI to 1000."],
+[27,"sprzet","Kartę graficzną PCIe montuje się zwykle w gnieździe:",["PCIe x16","PCIe x1","M.2","AGP"],"Gniazdo x16 jest najdłuższe i leży najbliżej procesora."],
+[200,"sprzet","Układ RAMDAC na karcie graficznej:",["zamienia cyfrowy obraz na sygnał analogowy dla wyjścia VGA","zamienia sygnał analogowy na cyfrowy","kompresuje tekstury w pamięci","steruje wentylatorem karty"],"RAM + DAC (Digital-to-Analog Converter). Pytanie wraca w starych arkuszach."],
+[201,"sprzet","Do szukania błędów w pamięci RAM służy program:",["MemTest86","CrystalDiskInfo","HWMonitor","chkdsk"],"CrystalDiskInfo czyta stan dysku (SMART), HWMonitor temperatury i napięcia."],
+[202,"sprzet","Polecenie dxdiag w Windows pokaże:",["parametry karty graficznej i wersję DirectX","błędy na dysku twardym","prędkość karty sieciowej","listę procesów"],"Narzędzie diagnostyczne DirectX ma też zakładki dźwięku i wejścia."],
+[203,"sprzet","BIOS pokazuje 16 GB RAM, a Windows tylko 15,8 GB do użycia. Najczęstsza przyczyna:",["grafika zintegrowana rezerwuje część pamięci RAM","jeden moduł jest uszkodzony","za mały plik stronicowania","zła instalacja systemu"],"Zintegrowany układ graficzny nie ma własnej pamięci i zabiera ją z RAM."],
+[204,"sprzet","Standardowe napięcie modułów DDR4 według JEDEC to:",["1,2 V","1,35 V","1,5 V","1,8 V"],"DDR3 ma 1,5 V, niskonapięciowe DDR3L 1,35 V, DDR2 1,8 V, DDR5 1,1 V."],
+[205,"sprzet","Certyfikat energooszczędności urządzeń elektronicznych to:",["Energy Star","TCO Energy","ISO Energy","IEEE Energy"],"Oznaczenie Energy Star spotkasz na monitorach i zasilaczach."],
+[206,"sprzet","Moc pobieraną przez komputer z gniazdka zmierzysz:",["watomierzem","omomierzem","anemometrem","testerem okablowania"],"Omomierz mierzy rezystancję, anemometr prędkość powietrza."],
+[207,"sprzet","Monitor LCD ma ciemny ekran, a obraz widać tylko pod latarką. Najbardziej prawdopodobna usterka:",["podświetlenie matrycy albo jego zasilanie (inwerter)","uszkodzony kabel HDMI","zły sterownik karty graficznej","uszkodzona matryca CCD"],"Częsty winowajca to spuchnięte kondensatory w zasilaniu podświetlenia."],
+[208,"sprzet","Starą drukarkę ze złączem równoległym podłączysz do komputera z samymi portami USB przez adapter:",["USB na LPT","USB na COM (RS-232)","USB na PS/2","USB na VGA"],"LPT to port równoległy drukarki. COM to port szeregowy."],
+[209,"sprzet","Laptop ma jedną zatokę na dysk 2,5\". Drugi dysk wewnętrzny zamontujesz w złączu:",["M.2 lub mSATA na płycie","SCSI","IDE ATAPI","PS/2"],"mSATA i M.2 to małe karty montowane bezpośrednio na płycie."],
+[210,"sprzet","Zasilacz 650 W to inaczej:",["0,65 kW","6,5 kW","65 kW","0,065 kW"],"1 kW = 1000 W."],
+[211,"sprzet","Łącze 1024 kb/s przesyła w ciągu sekundy maksymalnie około:",["128 kB","1024 kB","1 MB","8 kB"],"Bity dzielisz przez 8: 1024 / 8 = 128 kilobajtów."],
+[212,"sprzet","Liczba 256 dziesiętnie to binarnie:",["1 0000 0000","1111 1111","1000 0000","1 0000 0001"],"256 = 2⁸, czyli jedynka i osiem zer. Szesnastkowo 100."],
+[213,"sprzet","Liczba 17₈ (ósemkowo) to dziesiętnie:",["15","17","13","9"],"1×8 + 7 = 15."],
+[214,"sprzet","Program, który pokaże model procesora, liczbę rdzeni, taktowanie i parametry RAM:",["CPU-Z","MemTest86","SpeedFan","Defraggler"],"CPU-Z często pojawia się na zrzutach ekranu w arkuszach."],
+[215,"sprzet","W skanerze płaskim światło na sygnał elektryczny zamienia:",["matryca CCD (lub CIS)","bęben światłoczuły","głowica piezoelektryczna","zespół utrwalający"],"Bęben i fuser to części drukarki laserowej."],
+[216,"sprzet","Wydruki wielkoformatowe, np. plany budynków, robi się na:",["ploterze","drukarce termicznej","drukarce igłowej","skanerze"],"Ploter drukuje lub tnie na arkuszach i rolach o szerokości nawet ponad metr."],
+[217,"sprzet","Klawiaturę ze złączem PS/2 podłączasz do gniazda w kolorze:",["fioletowym","zielonym","pomarańczowym","niebieskim"],"Zielone PS/2 jest na mysz."],
+[218,"sprzet","Komputer nie daje obrazu i piszczy serią sygnałów. Co sprawdzasz najpierw?",["znaczenie sygnałów w dokumentacji płyty lub BIOS-u","wymieniasz zasilacz","reinstalujesz system","formatujesz dysk"],"Kody dźwiękowe zależą od producenta BIOS-u (AMI, Award, Phoenix). Często wskazują RAM lub grafikę."],
+
+[30,"windows","Które polecenie pokaże adres MAC karty sieciowej w Windows?",["ipconfig /all","ipconfig","ping -a","netstat -r"],"Samo ipconfig nie pokazuje adresu fizycznego. Działa też getmac."],
+[31,"windows","Polecenie, które pobiera nowy adres IP z serwera DHCP:",["ipconfig /renew","ipconfig /flushdns","ipconfig /registerdns","ipconfig /displaydns"],"Najpierw często robi się ipconfig /release, potem /renew."],
+[32,"windows","Czyszczenie lokalnej pamięci podręcznej DNS w Windows:",["ipconfig /flushdns","nslookup /clear","netsh dns reset","dnscmd /clear"],"Pomaga, gdy strona zmieniła adres, a komputer pamięta stary."],
+[33,"windows","Polecenie pokazujące trasę pakietów do hosta (kolejne routery) w Windows:",["tracert","traceroute","pathping -r","route print"],"Windows: tracert. Linux: traceroute."],
+[34,"windows","Aktywne połączenia sieciowe i otwarte porty w Windows pokaże:",["netstat","nslookup","nbtstat","arp -a"],"netstat -an pokazuje porty liczbowo, -b także programy."],
+[35,"windows","Do ręcznego zapytania serwera DNS o adres domeny służy:",["nslookup","tracert","ping -t","hostname"],"nslookup wp.pl pokaże, który serwer DNS odpowiedział i jakim adresem."],
+[36,"windows","Polecenie sprawdzające i naprawiające chronione pliki systemowe Windows:",["sfc /scannow","chkdsk /f","diskpart","defrag C:"],"sfc to System File Checker. chkdsk naprawia system plików na dysku."],
+[37,"windows","Polecenie wyszukujące i naprawiające błędy systemu plików na dysku:",["chkdsk /f","sfc /scannow","format /q","cleanmgr"],"/f naprawia błędy, /r dodatkowo szuka uszkodzonych sektorów."],
+[38,"windows","Partycje z wiersza poleceń Windows tworzysz narzędziem:",["diskpart","fdisk","gparted","mkfs"],"fdisk, gparted i mkfs należą do Linuksa."],
+[39,"windows","Natychmiastowe zastosowanie zmienionych zasad grupy na komputerze wymusza:",["gpupdate /force","gpresult /r","gpedit.msc","secpol.msc"],"gpresult /r pokazuje, które zasady komputer zastosował."],
+[40,"windows","Gałąź rejestru z ustawieniami aktualnie zalogowanego użytkownika:",["HKEY_CURRENT_USER","HKEY_LOCAL_MACHINE","HKEY_CLASSES_ROOT","HKEY_CURRENT_CONFIG"],"HKLM trzyma ustawienia całego komputera."],
+[41,"windows","Przystawkę „Zarządzanie dyskami” uruchomisz poleceniem:",["diskmgmt.msc","devmgmt.msc","compmgmt.msc","services.msc"],"devmgmt to Menedżer urządzeń, services to usługi, compmgmt to Zarządzanie komputerem."],
+[42,"windows","Lokalnymi użytkownikami i grupami (bez domeny) zarządzasz w przystawce:",["lusrmgr.msc","dsa.msc","gpmc.msc","dhcpmgmt.msc"],"dsa.msc obsługuje konta domenowe w Active Directory."],
+[43,"windows","Dziennik błędów systemu i aplikacji Windows przeglądasz w:",["Podglądzie zdarzeń (eventvwr.msc)","Menedżerze urządzeń","msconfig","Monitorze zasobów"],"Błędy usług i awarie lądują w dziennikach System i Aplikacja."],
+[44,"windows","Uprawnienie NTFS, które pozwala zmieniać uprawnienia innym użytkownikom, to:",["Pełna kontrola","Modyfikacja","Zapis","Odczyt i wykonanie"],"Modyfikacja pozwala zmieniać i usuwać pliki, ale bez zmiany uprawnień."],
+[45,"windows","Użytkownik ma w udziale „Pełną kontrolę”, a w NTFS tylko „Odczyt”. Przez sieć ma:",["tylko odczyt","pełną kontrolę","modyfikację","brak dostępu"],"Przy dostępie przez sieć wygrywa bardziej restrykcyjne z dwóch uprawnień."],
+[46,"windows","Udział, który nie pokazuje się w Otoczeniu sieciowym, ma nazwę zakończoną znakiem:",["$","#","!","~"],"Np. Dane$. Wejdziesz do niego, wpisując \\\\SERWER\\Dane$."],
+[47,"windows","Profil użytkownika trzymany na serwerze i ładowany na każdym komputerze w domenie to profil:",["mobilny","lokalny","tymczasowy","obowiązkowy lokalny"],"Ścieżkę profilu mobilnego ustawiasz we właściwościach konta w AD."],
+[48,"windows","Profil obowiązkowy, którego zmiany nie zapisują się, ma plik:",["NTUSER.MAN","NTUSER.DAT","NTUSER.INI","USER.MAN.DAT"],"Zmiana rozszerzenia z .DAT na .MAN robi profil tylko do odczytu."],
+[49,"windows","Konto jkowalski z hasłem utworzysz z wiersza poleceń tak:",["net user jkowalski Haslo123! /add","net use jkowalski /add","useradd jkowalski","net localgroup jkowalski /add"],"net use mapuje dyski, useradd to polecenie Linuksa."],
+[50,"windows","Podłączenie udziału jako dysk Z: z wiersza poleceń:",["net use Z: \\\\SERWER\\Dane","net share Z: \\\\SERWER\\Dane","map Z: \\\\SERWER\\Dane","mount Z: //SERWER/Dane"],"net share tworzy udział na lokalnym komputerze."],
+[51,"windows","Cały dysk w Windows zaszyfrujesz funkcją:",["BitLocker","Windows Defender","EFS tylko dla pliku hosts","Przywracanie systemu"],"EFS szyfruje pojedyncze pliki i foldery, BitLocker cały wolumin."],
+[52,"windows","Plik hosts w Windows leży w katalogu:",["C:\\Windows\\System32\\drivers\\etc","C:\\Windows\\hosts","C:\\Program Files\\etc","C:\\Users\\Public"],"W Linuksie odpowiednik to /etc/hosts."],
+[53,"windows","Kopia obejmująca pliki zmienione od ostatniej kopii DOWOLNEGO typu to kopia:",["przyrostowa","różnicowa","pełna","normalna"],"Różnicowa liczy zmiany od ostatniej pełnej, przyrostowa od ostatniej jakiejkolwiek."],
+[54,"windows","Tablicę ARP w Windows wyświetla polecenie:",["arp -a","arp -d","netstat -a","route print"],"arp -d czyści wpisy, route print pokazuje tablicę routingu."],
+[55,"windows","Tablicę routingu w Windows wyświetla:",["route print","tracert -r","ipconfig /route","netsh show route"],"Druga opcja to netstat -r."],
+[230,"windows","Konfigurację rozruchu Windows 10/11 (magazyn BCD) zmienisz z wiersza poleceń:",["bcdedit","bootcfg","diskpart","chkdsk"],"bootcfg działało w Windows XP. Od Visty jest bcdedit."],
+[231,"windows","Polecenie net user wpisane bez parametrów pokaże:",["listę kont użytkowników","hasło bieżącego użytkownika","pomoc polecenia net","listę udziałów"],"net user nazwa pokaże szczegóły jednego konta."],
+[232,"windows","Zaporę Windows z zabezpieczeniami zaawansowanymi uruchomisz poleceniem:",["wf.msc","perfmon.msc","compmgmt.msc","services.msc"],"Tu ustawiasz reguły ruchu przychodzącego i wychodzącego."],
+[233,"windows","Monitor wydajności Windows uruchomisz poleceniem:",["perfmon.msc","resmon.msc","taskmgr /perf","eventvwr.msc"],"perfmon zbiera liczniki wydajności, np. obciążenie procesora w czasie."],
+[234,"windows","Mapowanie dysku sieciowego to:",["przypisanie litery dysku do udostępnionego folderu w sieci","nadanie uprawnień NTFS","podział dysku na partycje","konfiguracja karty sieciowej"],"Np. litera Z: wskazuje \\\\SERWER\\Dane."],
+[235,"windows","Rozmiar ikon na pulpicie zmienisz kółkiem myszy, trzymając klawisz:",["Ctrl","Shift","Alt","Tab"],"Ctrl + kółko działa też w przeglądarce i Eksploratorze."],
+[236,"windows","Na pendrive z FAT32 nie skopiujesz pliku 6 GB, bo:",["FAT32 obsługuje pliki do 4 GB","FAT32 nie obsługuje nazw plików","pendrive ma za mało partycji","Windows blokuje pliki ISO"],"Sformatuj pendrive w exFAT albo NTFS."],
+[237,"windows","Którego systemu plików Windows nie odczyta bez dodatkowych narzędzi?",["ext4","NTFS","FAT32","exFAT"],"ext4 to domyślny system plików Linuksa."],
+[238,"windows","Plik pagefile.sys w Windows to:",["plik stronicowania, czyli pamięć wirtualna","plik hibernacji","kopia rejestru","dziennik zdarzeń"],"Plik hibernacji nazywa się hiberfil.sys."],
+[239,"windows","Po instalacji sterownika system zawiesza się przy starcie. Co robisz?",["uruchamiasz tryb awaryjny i wycofujesz sterownik","formatujesz dysk","wymieniasz pamięć RAM","resetujesz BIOS do ustawień fabrycznych"],"Tryb awaryjny ładuje tylko podstawowe sterowniki."],
+[240,"windows","Proces o numerze 1234 zakończysz z wiersza poleceń Windows poleceniem:",["taskkill /PID 1234","kill -9 1234","tasklist /end 1234","net stop 1234"],"tasklist pokazuje procesy, kill to polecenie Linuksa."],
+[241,"windows","Natychmiastowy restart Windows z wiersza poleceń:",["shutdown /r /t 0","shutdown /s /t 0","restart now","shutdown -h now"],"/s wyłącza komputer, /r restartuje, /t to czas w sekundach."],
+[242,"windows","Komputer z Windows zablokujesz skrótem:",["Win + L","Win + D","Alt + F4","Ctrl + Shift + Esc"],"Win + D pokazuje pulpit, Ctrl + Shift + Esc otwiera Menedżer zadań."],
+[243,"windows","Pola uprawnień NTFS są wyszarzone i nie da się ich zmienić. To znaczy, że uprawnienia są:",["dziedziczone z folderu nadrzędnego","zablokowane przez antywirusa","ustawione przez BitLocker","uszkodzone"],"Wyłączasz dziedziczenie w Zaawansowanych ustawieniach zabezpieczeń."],
+
+[60,"linux","Po wykonaniu chmod 754 plik.sh uprawnienia to:",["właściciel rwx, grupa r-x, pozostali r--","właściciel rwx, grupa rw-, pozostali r--","właściciel rw-, grupa r-x, pozostali r-x","wszyscy rwx"],"r=4, w=2, x=1. 7=rwx, 5=r-x, 4=r--."],
+[61,"linux","Zmiana właściciela pliku na użytkownika jan i grupę biuro:",["chown jan:biuro plik","chmod jan:biuro plik","chgrp jan biuro plik","usermod jan plik"],"chown użytkownik:grupa. chgrp zmienia tylko grupę."],
+[62,"linux","Dodanie istniejącego użytkownika jan do grupy sudo bez usuwania go z innych grup:",["usermod -aG sudo jan","usermod -G sudo jan","useradd -G sudo jan","groupadd sudo jan"],"Bez -a użytkownik wypadnie z pozostałych grup dodatkowych."],
+[63,"linux","Zahaszowane hasła użytkowników Linuksa leżą w pliku:",["/etc/shadow","/etc/passwd","/etc/group","/etc/login.defs"],"/etc/passwd ma listę kont, ale w miejscu hasła stoi litera x."],
+[64,"linux","W Ubuntu Server stały adres IP ustawiasz w plikach:",["/etc/netplan/*.yaml","/etc/hosts","/etc/resolv.conf","/etc/hostname"],"Po edycji wpisz sudo netplan apply."],
+[65,"linux","Adresy IP interfejsów w nowszych dystrybucjach Linuksa pokazuje polecenie:",["ip a","ipconfig","netsh interface show","getmac"],"Starsze ifconfig wymaga pakietu net-tools."],
+[66,"linux","Procesy na żywo, z obciążeniem CPU i RAM, pokazuje:",["top","ps","jobs","free"],"ps robi jednorazowy zrzut, free pokazuje tylko pamięć."],
+[67,"linux","Wolne miejsce na zamontowanych dyskach w czytelnych jednostkach pokaże:",["df -h","du -h","free -h","lsblk -f"],"du liczy rozmiar katalogów, free pamięć RAM."],
+[68,"linux","Katalog razem z zawartością usuniesz poleceniem:",["rm -r katalog","rmdir katalog","del katalog","rm katalog"],"rmdir usuwa tylko pusty katalog."],
+[69,"linux","Restart usługi ssh w systemie z systemd:",["systemctl restart ssh","service restart ssh","restart ssh.service","systemd ssh restart"],"Status: systemctl status ssh. Start przy uruchomieniu: systemctl enable ssh."],
+[70,"linux","Pakiet w Ubuntu zainstalujesz poleceniem:",["apt install nazwa","yum install nazwa","rpm -i nazwa","pacman -S nazwa"],"yum i rpm działają w Red Hat i Fedorze, pacman w Archu."],
+[71,"linux","Ping w Linuksie ograniczysz do 4 pakietów opcją:",["ping -c 4 adres","ping -n 4 adres","ping -t 4 adres","ping -l 4 adres"],"-n 4 to składnia Windows. W Linuksie ping bez -c leci bez końca."],
+[72,"linux","Katalog spakujesz do archiwum gzip poleceniem:",["tar -czvf archiwum.tar.gz katalog","tar -xzvf archiwum.tar.gz katalog","gzip -r katalog archiwum","zip -x katalog"],"c tworzy, x rozpakowuje, z to gzip, f podaje nazwę pliku."],
+[73,"linux","Hasło użytkownika jan (jako root lub przez sudo) zmienisz poleceniem:",["passwd jan","chpasswd jan","usermod -p jan","password jan"],"Bez nazwy passwd zmienia hasło bieżącego użytkownika."],
+[74,"linux","Konto root ma UID równy:",["0","1","1000","100"],"Pierwszy zwykły użytkownik w Ubuntu dostaje UID 1000."],
+[75,"linux","Linie ze słowem „error” w pliku log.txt znajdziesz poleceniem:",["grep error log.txt","find error log.txt","cat -s error log.txt","locate error log.txt"],"find i locate szukają plików, a nie tekstu w pliku."],
+[76,"linux","Udostępnianie folderów z Linuksa komputerom z Windows zapewnia:",["Samba","Apache","Postfix","Bind"],"Apache to serwer WWW, Postfix poczta, Bind DNS."],
+[250,"linux","Domyślny system plików przy instalacji Ubuntu to:",["ext4","NTFS","FAT32","exFAT"],"NTFS i FAT32 to systemy plików z Windows."],
+[251,"linux","Drukowaniem w Linuksie zarządza usługa:",["CUPS","Samba","NTP","Postfix"],"CUPS ma panel WWW na porcie 631."],
+[252,"linux","Plik w Linuksie jest ukryty, gdy:",["jego nazwa zaczyna się od kropki","ma uprawnienia 000","ma rozszerzenie .hidden","leży w /tmp"],"Ukryte pliki zobaczysz poleceniem ls -a."],
+[253,"linux","Partycje montowane przy starcie systemu wpisujesz do pliku:",["/etc/fstab","/etc/mtab","/etc/hosts","/boot/grub"],"Każda linia to urządzenie, punkt montowania, system plików i opcje."],
+[254,"linux","Nazwa komputera w Ubuntu siedzi w pliku:",["/etc/hostname","/etc/hosts","/etc/network","/etc/resolv.conf"],"Zmienisz ją też poleceniem hostnamectl set-hostname."],
+[255,"linux","Pełną instrukcję polecenia w Linuksie wyświetlisz poleceniem:",["man polecenie","help polecenie /all","info --full","doc polecenie"],"Krótszą pomoc da też polecenie --help."],
+[256,"linux","Czas wyświetlania menu GRUB zmienisz w pliku:",["/etc/default/grub (GRUB_TIMEOUT), potem update-grub","/etc/fstab","/boot/efi/timeout","/etc/inittab"],"Bez update-grub zmiana nie trafi do konfiguracji rozruchu."],
+
+[80,"sieci","Przełącznik (switch) działa w warstwie modelu OSI:",["2, łącza danych","1, fizycznej","3, sieciowej","4, transportowej"],"Switch kieruje ramki na podstawie adresów MAC."],
+[81,"sieci","Router podejmuje decyzje na podstawie:",["adresów IP (warstwa 3)","adresów MAC (warstwa 2)","numerów portów (warstwa 4)","nazw domen"],"Router łączy różne sieci i korzysta z tablicy routingu."],
+[82,"sieci","Adres MAC ma długość:",["48 bitów","32 bitów","64 bitów","128 bitów"],"Zapis to 6 bajtów szesnastkowo, np. 00:1A:2B:3C:4D:5E."],
+[83,"sieci","Adres IPv6 ma długość:",["128 bitów","64 bitów","48 bitów","32 bitów"],"IPv4 ma 32 bity."],
+[84,"sieci","Ile hostów zaadresujesz w sieci z maską 255.255.255.192?",["62","64","30","126"],"/26 zostawia 6 bitów na hosty: 2⁶ − 2 = 62."],
+[85,"sieci","Adres sieci dla hosta 192.168.10.77/27 to:",["192.168.10.64","192.168.10.0","192.168.10.72","192.168.10.96"],"/27 dzieli oktet na bloki po 32: 0, 32, 64, 96. Host 77 leży w bloku od 64."],
+[86,"sieci","Adres rozgłoszeniowy sieci z hostem 172.16.5.130/25:",["172.16.5.255","172.16.5.127","172.16.5.128","172.16.255.255"],"/25 to bloki po 128. Host .130 siedzi w sieci .128–.255."],
+[87,"sieci","Maska /20 zapisana dziesiętnie to:",["255.255.240.0","255.255.248.0","255.255.224.0","255.255.255.240"],"16 bitów plus 4 bity w trzecim oktecie: 128+64+32+16 = 240."],
+[88,"sieci","Który adres jest prywatny?",["172.20.1.1","172.32.1.1","192.169.1.1","11.0.0.1"],"Prywatne: 10.0.0.0/8, 172.16.0.0–172.31.255.255, 192.168.0.0/16."],
+[89,"sieci","Komputer dostał adres 169.254.12.5. Co to znaczy?",["nie dostał adresu z serwera DHCP","ma adres statyczny","ma dostęp do internetu","używa IPv6"],"To APIPA, adres, który komputer nadaje sobie sam, gdy DHCP milczy."],
+[90,"sieci","Adres pętli zwrotnej IPv4 to:",["127.0.0.1","0.0.0.0","255.255.255.255","192.168.0.1"],"W IPv6 pętla zwrotna to ::1."],
+[91,"sieci","Adresy IPv6 typu link-local zaczynają się od:",["fe80::","2001::","ff00::","::1"],"ff00::/8 to multicast, 2000::/3 adresy globalne."],
+[92,"sieci","Domyślny port SSH to:",["22","23","21","3389"],"23 to Telnet bez szyfrowania, 21 FTP, 3389 RDP."],
+[93,"sieci","Serwer DNS odpowiada domyślnie na porcie:",["53","67","80","110"],"67 i 68 UDP to DHCP."],
+[94,"sieci","Pulpit zdalny Windows (RDP) używa portu:",["3389","443","22","8080"],"Przy przekierowaniu portu na routerze często wpisujesz właśnie 3389."],
+[95,"sieci","Pocztę przez POP3 odbierasz domyślnie na porcie:",["110","143","25","587"],"IMAP ma 143, SMTP (wysyłka) 25 albo 587."],
+[96,"sieci","Kolejność komunikatów przy pobieraniu adresu z DHCP:",["Discover, Offer, Request, Acknowledge","Request, Offer, Discover, Acknowledge","Offer, Discover, Acknowledge, Request","Discover, Request, Offer, Acknowledge"],"Zapamiętaj skrót DORA."],
+[97,"sieci","Protokół ustalający adres MAC na podstawie znanego adresu IP to:",["ARP","DNS","DHCP","ICMP"],"ICMP obsługuje ping. DNS zamienia nazwy na adresy IP."],
+[98,"sieci","Zamianę adresów prywatnych na publiczny adres routera wykonuje:",["NAT","DNS","VLAN","STP"],"Dzięki NAT cała sieć domowa wychodzi do internetu z jednym adresem."],
+[99,"sieci","W standardzie T568B piny 1 i 2 to żyły:",["biało-pomarańczowa i pomarańczowa","biało-zielona i zielona","biało-niebieska i niebieska","biało-brązowa i brązowa"],"T568B: b-pom, pom, b-ziel, nieb, b-nieb, ziel, b-brąz, brąz."],
+[100,"sieci","Kabel z jednym końcem w T568A, a drugim w T568B, to kabel:",["krosowy (crossover)","prosty (straight-through)","konsolowy (rollover)","koncentryczny"],"Kabel prosty ma oba końce w tym samym standardzie."],
+[101,"sieci","Maksymalna długość segmentu skrętki kat. 5e w Ethernecie to:",["100 m","50 m","185 m","500 m"],"Te 100 m obejmuje kabel instalacyjny razem z patchcordami."],
+[102,"sieci","Na odległość kilkudziesięciu kilometrów kładziesz światłowód:",["jednomodowy","wielomodowy","skrętkę ekranowaną","kabel koncentryczny"],"Wielomodowy sprawdza się na krótkich dystansach, np. w budynku."],
+[103,"sieci","Standard Wi-Fi 6 to:",["IEEE 802.11ax","IEEE 802.11ac","IEEE 802.11n","IEEE 802.11g"],"802.11n to Wi-Fi 4, 802.11ac to Wi-Fi 5 (tylko 5 GHz)."],
+[104,"sieci","Najmocniejsze zabezpieczenie sieci Wi-Fi z tej listy to:",["WPA3","WEP","WPA (TKIP)","ukrycie SSID"],"WEP pada w kilka minut, a ukryty SSID niczego nie szyfruje."],
+[105,"sieci","Standard tagowania ramek w sieciach VLAN to:",["IEEE 802.1Q","IEEE 802.3af","IEEE 802.11i","IEEE 802.1X"],"802.3af to PoE, 802.1X uwierzytelnianie na portach."],
+[106,"sieci","Metoda dostępu do medium w sieciach Wi-Fi to:",["CSMA/CA","CSMA/CD","Token Ring","TDMA"],"CA unika kolizji. CD (wykrywanie kolizji) to klasyczny Ethernet."],
+[107,"sieci","Przerwę w kablu znajdziesz i długość kabla zmierzysz:",["reflektometrem TDR","zaciskarką","multimetrem cyfrowym","testerem PoE"],"TDR mierzy czas powrotu odbitego impulsu."],
+[108,"sieci","Żyły skrętki w gnieździe keystone albo w patch panelu montujesz:",["narzędziem uderzeniowym (LSA)","zaciskarką RJ45","lutownicą","ściągaczem izolacji"],"Zaciskarką zakładasz wtyki RJ45 na końcach kabla."],
+[109,"sieci","Brama domyślna w ustawieniach karty sieciowej to adres:",["routera w sieci lokalnej","serwera DNS","innego komputera w tej samej sieci","serwera DHCP"],"Na bramę trafiają pakiety do adresów spoza sieci lokalnej."],
+[110,"sieci","Topologia, w której każdy komputer łączy się z centralnym przełącznikiem, to:",["gwiazda","magistrala","pierścień","siatka"],"Większość sieci LAN to gwiazda albo gwiazda rozszerzona."],
+[270,"sieci","W adresowaniu klasowym adres 130.5.1.1 należy do klasy:",["B","A","C","D"],"A: 1–126, B: 128–191, C: 192–223, D: 224–239."],
+[271,"sieci","Adresy klasy B zaczynają się bitami:",["10","0","110","1110"],"Klasa A zaczyna się od 0, C od 110, D od 1110."],
+[272,"sieci","Adresy klasy D (224–239) służą do:",["transmisji grupowej (multicast)","adresowania hostów w LAN","celów badawczych","pętli zwrotnej"],"Klasa E (240–255) jest zarezerwowana."],
+[273,"sieci","Protokół bezpołączeniowy warstwy transportowej to:",["UDP","TCP","FTP","HTTP"],"TCP zestawia połączenie i potwierdza pakiety, UDP wysyła bez potwierdzeń."],
+[274,"sieci","Litera S w HTTPS i FTPS oznacza, że protokół:",["szyfruje transmisję (SSL/TLS)","wymaga loginu","działa szybciej","używa UDP"],"HTTPS działa domyślnie na porcie 443."],
+[275,"sieci","Ile par skrętki wykorzystuje Gigabit Ethernet 1000Base-T?",["4","2","1","3"],"100Base-TX wykorzystuje tylko 2 pary."],
+[276,"sieci","Skrót NEXT w pomiarach okablowania oznacza:",["przesłuch zbliżny","tłumienie sygnału","opóźnienie propagacji","długość kabla"],"FEXT to przesłuch zdalny, mierzony na drugim końcu kabla."],
+[277,"sieci","Kabel S/FTP ma:",["oplot na całym kablu i folię na każdej parze","folię na całym kablu i nieekranowane pary","brak ekranu","ekran tylko na jednej parze"],"Litera przed ukośnikiem opisuje ekran całości, po ukośniku ekran par. U/UTP nie ma żadnego."],
+[278,"sieci","W sieci peer-to-peer (P2P):",["każdy komputer może być naraz klientem i serwerem","wszystko obsługuje centralny serwer","komputery muszą być w domenie","udostępnia się tylko drukarki"],"Typowy przykład to grupa robocza w Windows."],
+[279,"sieci","Protokół routingu z metryką w liczbie przeskoków (maksymalnie 15):",["RIP","OSPF","BGP","EIGRP"],"OSPF liczy koszt łączy i zna całą topologię."],
+[280,"sieci","Nazwy NetBIOS na adresy IP tłumaczy usługa:",["WINS","DNS","DHCP","NAT"],"DNS robi to samo dla nazw domenowych."],
+[281,"sieci","Komputer bez dysku ma startować system z serwera. Jego karta sieciowa musi obsługiwać:",["PXE","PoE","WoL","QoS"],"WoL (Wake on LAN) tylko budzi komputer przez sieć."],
+[282,"sieci","Przełącznikowi zarządzalnemu warstwy 2 nadajesz adres IP po to, żeby:",["łączyć się z nim zdalnie i go konfigurować","mógł routować pakiety","ograniczać pasmo","tworzyć domenę rozgłoszeniową"],"Ramki switch i tak przełącza po adresach MAC."],
+[283,"sieci","Który adres IPv4 ma poprawny zapis?",["10.255.0.254","10.256.0.1","10.0.0.1.5","192.168.1.A1"],"Każdy z 4 oktetów to liczba od 0 do 255."],
+[284,"sieci","Który adres może mieć serwer widoczny bezpośrednio w internecie?",["83.12.45.7","192.168.1.10","10.10.10.10","172.16.0.5"],"Pozostałe adresy są prywatne i nie trafiają do internetu bez NAT."],
+[285,"sieci","Zasilanie punktu dostępowego przez skrętkę to:",["PoE","PXE","STP","LACP"],"Standard 802.3af daje do 15,4 W na port."],
+[286,"sieci","Światłowód ze skrętką połączysz urządzeniem:",["konwerter mediów","modem ADSL","most bezprzewodowy","wzmacniak Wi-Fi"],"Konwerter zamienia sygnał świetlny na elektryczny i odwrotnie."],
+[287,"sieci","Polecenie ping korzysta z protokołu:",["ICMP","ARP","UDP port 53","IGMP"],"Ping wysyła Echo Request i czeka na Echo Reply."],
+[288,"sieci","Port 21 TCP należy do usługi:",["FTP","SSH","SMTP","Telnet"],"Port 20 FTP używa do przesyłu danych w trybie aktywnym."],
+[289,"sieci","Ile hostów zmieści sieć z maską /30?",["2","4","6","0"],"/30 zostawia 2 bity: 4 adresy minus sieć i rozgłoszenie. Stosujesz ją na łączach router–router."],
+[290,"sieci","Poprawny skrót adresu 2001:0db8:0000:0000:0000:0000:0000:0001 to:",["2001:db8::1","2001:db8:::1","2001::db8::1","2001:db8:0:0::0:1::"],"Zera wiodące w grupie usuwasz, a jeden ciąg zerowych grup zastępujesz :: tylko raz."],
+
+[120,"serwer","Rola Windows Server, która daje usługę katalogową i logowanie do domeny:",["Usługi domenowe Active Directory (AD DS)","DHCP","Usługi IIS","Hyper-V"],"Po instalacji AD DS awansujesz serwer na kontroler domeny."],
+[121,"serwer","Obiekt zasad grupy (GPO) podepniesz w AD do:",["jednostki organizacyjnej (OU)","grupy zabezpieczeń","grupy dystrybucyjnej","konta komputera"],"GPO podpinasz do domeny, lokacji albo OU. Grupy się do tego nie nadają."],
+[122,"serwer","Grupa, która przyjmie konta z dowolnej domeny lasu i dostanie uprawnienia w dowolnej domenie lasu:",["uniwersalna","globalna","lokalna domenowa","lokalna komputera"],"Grupa globalna przyjmuje konta tylko z własnej domeny."],
+[123,"serwer","Rekord DNS wskazujący adres IPv4 hosta to:",["A","AAAA","MX","PTR"],"AAAA wskazuje IPv6, MX serwer poczty, PTR robi wpis odwrotny."],
+[124,"serwer","Rekord DNS wskazujący serwer poczty dla domeny to:",["MX","CNAME","NS","SOA"],"CNAME to alias, NS serwer nazw strefy."],
+[125,"serwer","Rekord, który tworzy alias (drugą nazwę) dla istniejącego hosta:",["CNAME","A","PTR","SRV"],"Np. www wskazuje serwer1.firma.local."],
+[126,"serwer","Strefa wyszukiwania wstecznego w DNS zamienia:",["adres IP na nazwę","nazwę na adres IP","adres MAC na adres IP","nazwę NetBIOS na MAC"],"Trzyma rekordy PTR."],
+[127,"serwer","Żeby drukarka sieciowa zawsze dostawała z DHCP ten sam adres, tworzysz:",["rezerwację na podstawie adresu MAC drukarki","wykluczenie w zakresie","nowy zakres","rekord CNAME"],"Wykluczenie tylko zabrania serwerowi rozdawać dane adresy."],
+[128,"serwer","Opcja DHCP 003 przekazuje klientom adres:",["routera (bramy domyślnej)","serwera DNS","serwera WINS","nazwę domeny"],"006 to serwery DNS, 015 nazwa domeny DNS."],
+[129,"serwer","Systemy przez sieć (PXE) na wielu komputerach zainstalujesz rolą:",["Usługi wdrażania systemu Windows (WDS)","WSUS","IIS","Usługi certyfikatów AD"],"Klient startuje z karty sieciowej i pobiera obraz z serwera."],
+[130,"serwer","Aktualizacjami Windows w całej firmie zarządzasz centralnie przez:",["WSUS","WDS","DFS","NPS"],"Serwer pobiera aktualizacje raz i rozdaje je komputerom w sieci."],
+[131,"serwer","Serwer WWW w Windows Server to:",["Internetowe usługi informacyjne (IIS)","Apache Tomcat","Hyper-V","AD LDS"],"Apache i Nginx spotkasz zwykle na Linuksie."],
+[132,"serwer","Maszyny wirtualne w Windows Server uruchomisz dzięki roli:",["Hyper-V","RDS","WDS","AD CS"],"RDS to usługi pulpitu zdalnego."],
+[133,"serwer","Wymagania złożoności haseł dla wszystkich kont domeny ustawiasz w:",["zasadach grupy domeny (Default Domain Policy), Zasady konta","właściwościach każdego konta osobno","Menedżerze serwera, Właściwości lokalne","przystawce DHCP"],"Ścieżka: Konfiguracja komputera → Zasady → Ustawienia systemu Windows → Ustawienia zabezpieczeń → Zasady konta."],
+[134,"serwer","Konsolę „Użytkownicy i komputery usługi Active Directory” uruchomisz poleceniem:",["dsa.msc","lusrmgr.msc","gpmc.msc","dnsmgmt.msc"],"gpmc.msc otwiera zarządzanie zasadami grupy."],
+[135,"serwer","Logowanie użytkownika tylko w godzinach 8–16 ustawiasz:",["we właściwościach konta w AD, karta Konto, Godziny logowania","w Harmonogramie zadań","w zasadach haseł","w ustawieniach zakresu DHCP"],"Na tej samej karcie zaznaczasz „Hasło nigdy nie wygasa”. Oba punkty często padają w praktyce."],
+[136,"serwer","W zakresie DHCP 192.168.1.100–200 adresy .150–.160 mają zostać nierozdane. Tworzysz:",["wykluczenie","rezerwację","superzakres","dzierżawę"],"Rezerwacja przypisuje adres jednemu urządzeniu, wykluczenie wyjmuje adresy z puli."],
+[300,"serwer","W Windows Server 2022 serwer awansujesz na kontroler domeny:",["w Menedżerze serwera po dodaniu roli AD DS","poleceniem dcpromo","poleceniem gpupdate","w Panelu sterowania, System"],"dcpromo działało do Windows Server 2008 R2. Stare arkusze dalej o nie pytają."],
+[301,"serwer","Limit miejsca, które użytkownik może zająć na woluminie, ustawisz przez:",["przydziały dyskowe (limity przydziału)","uprawnienia NTFS","BitLocker","kopie w tle"],"W Menedżerze zasobów serwera plików (FSRM) ustawisz też limity na folder."],
+[302,"serwer","Funkcja, która pozwala przywrócić wcześniejszą wersję pliku z udziału, to:",["kopie w tle (Shadow Copies)","przydziały dyskowe","DFS","BranchCache"],"Użytkownik widzi je jako „Poprzednie wersje” we właściwościach pliku."],
+[303,"serwer","Rola wydająca certyfikaty cyfrowe w domenie to:",["Usługi certyfikatów AD (AD CS)","AD LDS","NPS","WDS"],"Certyfikaty przydają się np. do HTTPS na IIS."],
+[304,"serwer","Serwer RADIUS w Windows Server zapewnia rola:",["Serwer zasad sieciowych (NPS)","DHCP","DNS","WSUS"],"Przez RADIUS logujesz się np. do Wi-Fi w trybie WPA2-Enterprise."],
+[305,"serwer","Kontroler domeny tylko do odczytu, np. w małym oddziale firmy, to:",["RODC","PDC","BDC","DFS"],"RODC nie przechowuje haseł wszystkich kont, więc kradzież serwera mniej szkodzi."],
+[306,"serwer","Udostępnione foldery z kilku serwerów pod jedną wspólną ścieżką połączysz usługą:",["DFS (rozproszony system plików)","WSUS","IIS","Hyper-V"],"Użytkownik widzi jedną ścieżkę, a pliki leżą na różnych serwerach."],
+
+[150,"bezp","Licencja OEM systemu Windows:",["jest przypisana do komputera, z którym ją kupiono","pozwala na instalację na 5 komputerach","jest darmowa dla szkół","można ją przenosić dowolnie"],"Licencję BOX (Retail) przeniesiesz na inny komputer."],
+[151,"bezp","Licencja GNU GPL pozwala:",["kopiować, zmieniać i rozpowszechniać program, udostępniając kod na tej samej licencji","używać programu tylko przez 30 dni","używać programu wyłącznie w domu","zamknąć kod po modyfikacji"],"Okres próbny to cecha shareware."],
+[152,"bezp","Program, który zapisuje naciśnięcia klawiszy, żeby wykraść hasła, to:",["keylogger","adware","rootkit","exploit"],"Adware wyświetla reklamy, rootkit ukrywa szkodnika w systemie."],
+[153,"bezp","Szkodnik szyfrujący pliki i żądający okupu to:",["ransomware","spyware","robak","trojan typu downloader"],"Najlepiej chroni kopia zapasowa trzymana poza komputerem."],
+[154,"bezp","Fałszywy e-mail udający bank, który ma wyłudzić dane logowania, to:",["phishing","spoofing ARP","DDoS","sniffing"],"Sprawdzaj adres nadawcy i prawdziwy adres linku."],
+[155,"bezp","Pracownik został porażony prądem i dalej dotyka urządzenia. Co robisz najpierw?",["odłączasz zasilanie (wyłącznik, bezpiecznik)","odciągasz go gołymi rękami","polewasz go wodą","zaczynasz resuscytację"],"Najpierw przerwij przepływ prądu, potem udzielaj pomocy."],
+[156,"bezp","Urządzenie elektryczne pod napięciem gasisz gaśnicą:",["śniegową (CO2)","wodną","pianową","wodną mgłową bez oznaczeń"],"Woda i piana przewodzą prąd. Proszkowa też się nada."],
+[157,"bezp","Przekreślony kosz na sprzęcie oznacza, że:",["nie wolno go wyrzucać razem z odpadami komunalnymi","sprzęt w całości się rozkłada","sprzęt nadaje się do recyklingu w domu","sprzęt nie zawiera metali ciężkich"],"Zużyty sprzęt oddajesz do punktu zbiórki elektroodpadów."],
+[158,"bezp","Zapora sieciowa (firewall) służy do:",["filtrowania ruchu sieciowego według reguł","usuwania wirusów z plików","szyfrowania dysku","przyspieszania połączenia"],"Antywirus skanuje pliki, a firewall decyduje, co przejdzie przez sieć."],
+[320,"bezp","Program działa w pełni, ale tylko przez 30 dni od instalacji. To licencja:",["trialware","freeware","adware","open source"],"Po okresie próbnym program się blokuje albo prosi o zakup."],
+[321,"bezp","Ogólna nazwa szkodliwego oprogramowania instalowanego bez wiedzy użytkownika to:",["malware","shareware","freeware","firmware"],"Do malware zaliczasz wirusy, trojany, robaki i ransomware."],
+[322,"bezp","Program darmowy, którego autor prosi o dobrowolną wpłatę, ma licencję:",["donationware","trialware","box","OEM"],"Wpłata nie odblokowuje żadnych funkcji."],
+[323,"bezp","Plik cookie to:",["mały plik tekstowy z informacjami zapisanymi przez konkretną stronę","obraz miniatury strony","plik wirusa","kopia całej strony"],"Strona trzyma w nim np. zawartość koszyka albo informację o zalogowaniu."],
+[324,"bezp","Atak, w którym tysiące zainfekowanych komputerów zalewają serwer żądaniami, to:",["DDoS","phishing","keylogging","SQL injection"],"Przed atakami z sieci, np. typu Smurf, chroni poprawnie ustawiona zapora."],
+[325,"bezp","Szkodnik, który sam rozsyła swoje kopie przez sieć bez udziału użytkownika, to:",["robak","trojan","adware","keylogger"],"Trojan udaje przydatny program i czeka, aż go uruchomisz."],
+[326,"bezp","Zasada kopii zapasowych 3-2-1 mówi o:",["3 kopiach na 2 różnych nośnikach, z czego 1 poza domem lub firmą","3 dyskach w RAID 2 i 1 zapasowym","kopii co 3 dni przez 2 tygodnie","3 hasłach do 2 kont"],"Kopia poza miejscem pracy przetrwa pożar albo kradzież."],
+[327,"bezp","Znak CE na urządzeniu oznacza, że:",["spełnia wymagania Unii Europejskiej i można je sprzedawać w UE","zostało wyprodukowane w Europie","jest energooszczędne","można je wyrzucić z odpadami komunalnymi"],"Energooszczędność opisuje Energy Star."],
+];
+
+const SHEETS = [
+  ["ark-2026-06","czerwiec 2026","https://arkusze.pl/egzamin-zawodowy-inf-02-2026-czerwiec/"],
+  ["ark-2026-01","styczeń 2026","https://arkusze.pl/egzamin-zawodowy-inf-02-2026-styczen/"],
+  ["ark-2025-06","czerwiec 2025","https://arkusze.pl/egzamin-zawodowy-inf-02-2025-czerwiec/"],
+  ["ark-2025-01","styczeń 2025","https://arkusze.pl/egzamin-zawodowy-inf-02-2025-styczen/"],
+  ["ark-2024-06","czerwiec 2024","https://arkusze.pl/egzamin-zawodowy-inf-02-2024-czerwiec/"],
+  ["ark-2024-01","styczeń 2024","https://arkusze.pl/egzamin-zawodowy-inf-02-2024-styczen/"],
+  ["ark-2023-06","czerwiec 2023","https://arkusze.pl/egzamin-zawodowy-inf-02-2023-czerwiec/"],
+  ["ark-2023-01","styczeń 2023","https://arkusze.pl/egzamin-zawodowy-inf-02-2023-styczen/"],
+  ["ark-2022-06","czerwiec 2022","https://arkusze.pl/egzamin-zawodowy-inf-02-2022-czerwiec/"],
+  ["ark-2022-01","styczeń 2022","https://arkusze.pl/egzamin-zawodowy-inf-02-2022-styczen/"],
+  ["ark-2021-06","czerwiec 2021","https://arkusze.pl/egzamin-zawodowy-inf-02-2021-czerwiec/"],
+];
+
+// [od, do (włącznie), lab, teoria]
+const WEEKS = [
+  ["2026-11-20","2026-11-26","Postaw VirtualBox i trzy maszyny (zakładka Lab, kroki s1–s5).","Adresacja i maski: 5 zadań z podsieci dziennie."],
+  ["2026-11-27","2026-12-03","Windows Server: AD DS, jednostki organizacyjne, konta, grupy, GPO (A1–A3).","Dział Serwery w quizie, aż przekroczy 70%."],
+  ["2026-12-04","2026-12-10","Udział z uprawnieniami, DHCP, DNS, klient w domenie (A4–A6, B).","Porty, protokoły i polecenia Windows."],
+  ["2026-12-11","2026-12-17","Ubuntu Server: konta, prawa, netplan, ping, SSH (C).","Polecenia Linuksa i chmod."],
+  ["2026-12-18","2026-12-24","Router i Wi-Fi w emulatorze TP-Link (D). Kabel RJ45 na lekcji (E).","Sprzęt, drukarki, RAID, systemy liczbowe."],
+  ["2026-12-25","2026-12-31","Dwa pełne arkusze praktyczne na czas: 150 minut bez podglądania.","Dwa egzaminy próbne i dwie sesje z zakładki Arkusze CKE."],
+  ["2027-01-01","2027-01-10","Jeszcze 2–3 arkusze. Po każdym spisz, czego nie zrobiłeś, i powtórz tylko to.","Egzamin próbny co drugi dzień, „Moje błędy” codziennie."],
+];
+
+const LAB_SETUP = [
+  ["s1","Sprawdź wirtualizację w UEFI","ASUS PRIME H610M-K: Advanced → CPU Configuration → Intel (VMX) Virtualization Technology = Enabled. Zwykle już jest włączona."],
+  ["s2","Zainstaluj VirtualBox","W PowerShell wpisz: winget install Oracle.VirtualBox"],
+  ["s3","Pobierz obrazy ISO","Windows Server 2022 Evaluation (180 dni) i Windows 11 Enterprise Evaluation z Microsoft Evaluation Center. Ubuntu Server 24.04 LTS z ubuntu.com/download/server."],
+  ["s4","Utwórz trzy maszyny","SERWER: 4 GB RAM, 2 CPU, dysk 60 GB. KLIENT (Windows 11): 4 GB, 2 CPU, 64 GB, w VirtualBox 7 zaznacz EFI i TPM 2.0. UBUNTU: 2 GB, 1 CPU, 25 GB. Każdej ustaw kartę sieciową na Sieć wewnętrzna o nazwie „egzamin”, jak izolowana sieć na egzaminie."],
+  ["s5","Zrób migawkę po instalacji","Maszyna → Migawki → Zrób. Przed każdym ćwiczeniem wracasz do czystego systemu jednym kliknięciem."],
+];
+// [id, zadanie, czas, kroki]. Krok zaczynający się od "PRE:" pokazuje się jako blok kodu, a `tekst` jako kod w linii.
+const LAB_TASKS = [
+  ["A1","Serwer: nazwa SERWER, IP 192.168.10.1/24, DNS 127.0.0.1. Rola AD DS i nowa domena firma.local.","ok. 25 min",[
+    "Win + R, wpisz `ncpa.cpl`. Ethernet → Właściwości → Protokół IPv4: adres 192.168.10.1, maska 255.255.255.0, DNS 127.0.0.1. Bramę zostaw pustą, jeśli zadanie jej nie podaje.",
+    "Win + R, `sysdm.cpl` → Zmień → nazwa SERWER → restart.",
+    "Menedżer serwera → Zarządzaj → Dodaj role i funkcje → Usługi domenowe Active Directory → Instaluj.",
+    "Kliknij flagę u góry → Podnieś poziom serwera do kontrolera domeny → Dodaj nowy las → nazwa firma.local → hasło trybu przywracania (DSRM) → Dalej do końca → restart.",
+    "Sprawdzenie: po restarcie logujesz się jako FIRMA\\Administrator."
+  ]],
+  ["A2","OU „Biuro” z kontami jkowalski i anowak. Grupa globalna „Ksiegowosc” z oboma kontami. jkowalski: hasło nigdy nie wygasa, logowanie pn–pt 8–16.","ok. 15 min",[
+    "Win + R, `dsa.msc`. Prawy klik na firma.local → Nowy → Jednostka organizacyjna → Biuro.",
+    "Prawy klik na Biuro → Nowy → Użytkownik. Wpisz imię, nazwisko i nazwę logowania jkowalski. Odznacz „Użytkownik musi zmienić hasło przy następnym logowaniu”, jeśli zadanie tego nie wymaga.",
+    "Prawy klik na Biuro → Nowy → Grupa → Ksiegowosc, zakres Globalny, typ Zabezpieczenia. Właściwości grupy → Członkowie → Dodaj oba konta.",
+    "Właściwości jkowalski → karta Konto → zaznacz „Hasło nigdy nie wygasa” → Godziny logowania: zaznacz pn–pt 8–16 jako dozwolone, resztę jako zabronione."
+  ]],
+  ["A3","GPO podpięte do OU Biuro: blokada Panelu sterowania i ustawień, tapeta z \\\\SERWER\\tapeta$\\tlo.jpg.","ok. 15 min",[
+    "Win + R, `gpmc.msc`. Prawy klik na OU Biuro → Utwórz obiekt GPO w tej domenie i połącz go tutaj → nazwa np. Biuro-zasady → Edytuj.",
+    "Konfiguracja użytkownika → Zasady → Szablony administracyjne → Panel sterowania → „Zabroń dostępu do Panelu sterowania i ustawień komputera” → Włączone.",
+    "Konfiguracja użytkownika → Zasady → Szablony administracyjne → Pulpit → Pulpit → „Tapeta pulpitu” → Włączone, ścieżka \\\\SERWER\\tapeta$\\tlo.jpg. Folder z tapetą udostępnij z prawem Odczyt dla wszystkich.",
+    "Na kliencie: `gpupdate /force`, wyloguj i zaloguj jkowalski."
+  ]],
+  ["A4","Folder C:\\Dane udostępniony jako Dane$. Grupa Ksiegowosc ma Modyfikację w NTFS, Użytkownicy domeny tylko Odczyt.","ok. 15 min",[
+    "Utwórz C:\\Dane → Właściwości → Udostępnianie → Udostępnianie zaawansowane → zaznacz Udostępnij ten folder → nazwa Dane$.",
+    "Tam samo → Uprawnienia: daj Użytkownikom uwierzytelnionym Pełną kontrolę w udziale. Prawdziwe ograniczenia ustawisz w NTFS.",
+    "Karta Zabezpieczenia → Edytuj → Dodaj Ksiegowosc → zaznacz Modyfikacja. Dodaj Użytkownicy domeny → zostaw Odczyt i wykonanie.",
+    "Jeśli dziedziczone wpisy (np. Użytkownicy z prawem zapisu) psują wynik: Zaawansowane → Wyłącz dziedziczenie → Konwertuj → usuń zbędne wpisy."
+  ]],
+  ["A5","DHCP: zakres 192.168.10.100–150, wykluczenie .120–.125, opcje 003 i 006 = 192.168.10.1, rezerwacja .110 dla MAC klienta. Autoryzuj serwer w AD.","ok. 20 min",[
+    "Dodaj role i funkcje → Serwer DHCP → Instaluj. Potem flaga → Ukończ konfigurację DHCP. Ten krok autoryzuje serwer w AD.",
+    "Win + R, `dhcpmgmt.msc` → serwer → IPv4 → prawy klik → Nowy zakres. Zakres 192.168.10.100–192.168.10.150, maska 255.255.255.0.",
+    "W kreatorze: wykluczenie 192.168.10.120–192.168.10.125, router (003) 192.168.10.1, serwery DNS (006) 192.168.10.1, aktywuj zakres.",
+    "Na kliencie `ipconfig /all` → odczytaj Adres fizyczny. Na serwerze: zakres → Rezerwacje → Nowa rezerwacja → IP 192.168.10.110 → wpisz MAC bez myślników."
+  ]],
+  ["A6","DNS: strefa wyszukiwania wstecznego dla 192.168.10.x, rekord A „www” → 192.168.10.1 z PTR, alias CNAME „intranet” → www.","ok. 15 min",[
+    "Win + R, `dnsmgmt.msc` → Strefy wyszukiwania wstecznego → Nowa strefa → Podstawowa (zintegrowana z AD) → IPv4 → identyfikator sieci 192.168.10.",
+    "Strefy wyszukiwania do przodu → firma.local → prawy klik → Nowy host (A) → www, 192.168.10.1, zaznacz „Utwórz skojarzony rekord wskaźnika (PTR)”.",
+    "Prawy klik na firma.local → Nowy alias (CNAME) → intranet → docelowy host www.firma.local.",
+    "Test: `nslookup intranet.firma.local` i `nslookup 192.168.10.1`."
+  ]],
+  ["B","Klient Windows 11: adres z DHCP (sprawdź, czy dostał .110), dołączenie do firma.local, logowanie jako jkowalski, dysk Z: na \\\\SERWER\\Dane$, sprawdzenie gpresult /r.","ok. 20 min",[
+    "Karta sieciowa w trybie automatycznym. `ipconfig /renew`, potem `ipconfig /all`: adres 192.168.10.110, DNS 192.168.10.1.",
+    "Win + R, `sysdm.cpl` → Zmień → Członek: Domena → firma.local → podaj konto Administrator domeny → restart.",
+    "Na ekranie logowania: Inny użytkownik → FIRMA\\jkowalski.",
+    "`net use Z: \\\\SERWER\\Dane$ /persistent:yes` albo Eksplorator → Ten komputer → Mapuj dysk sieciowy.",
+    "`gpresult /r` → w sekcji ustawień użytkownika powinno być Twoje GPO."
+  ]],
+  ["C","Ubuntu: stały IP 192.168.10.20/24 przez netplan, użytkownik „egzamin” w grupie sudo, katalog /srv/projekt z właścicielem egzamin:egzamin i prawami 750, ping do 192.168.10.1, działający SSH.","ok. 25 min",[
+    "`ip a` → odczytaj nazwę karty (np. enp0s3). `ls /etc/netplan` → otwórz plik: `sudo nano /etc/netplan/50-cloud-init.yaml`.",
+    "PRE:network:\n  version: 2\n  ethernets:\n    enp0s3:\n      dhcp4: false\n      addresses: [192.168.10.20/24]\n      nameservers:\n        addresses: [192.168.10.1]",
+    "`sudo netplan apply` i `ip a`, żeby sprawdzić adres. Wcięcia w YAML robisz spacjami, nigdy tabulatorem.",
+    "`sudo adduser egzamin`, potem `sudo usermod -aG sudo egzamin`.",
+    "`sudo mkdir -p /srv/projekt`, `sudo chown egzamin:egzamin /srv/projekt`, `sudo chmod 750 /srv/projekt`, sprawdź `ls -ld /srv/projekt`.",
+    "`ping -c 4 192.168.10.1`. Jeśli serwer nie odpowiada, na serwerze w `wf.msc` włącz regułę przychodzącą „Udostępnianie plików i drukarek (Żądanie echa – ICMPv4-In)”.",
+    "SSH: zaznacz „Install OpenSSH server” przy instalacji Ubuntu (w sieci wewnętrznej nie masz internetu). Sprawdź `systemctl status ssh`."
+  ]],
+  ["D","Emulator TP-Link (emulator.tp-link.com): LAN 192.168.1.1/24, DHCP .50–.99, SSID „Pracownia” z WPA2/WPA3-PSK, nowe hasło administratora, filtr MAC, przekierowanie portu 3389 na 192.168.1.10. Zapisz zmiany.","ok. 20 min",[
+    "Nazwy menu różnią się między modelami. Szukaj w Advanced lub Network.",
+    "Network → LAN: IP 192.168.1.1, maska 255.255.255.0 → Save.",
+    "DHCP Server: start 192.168.1.50, koniec 192.168.1.99 → Save.",
+    "Wireless: SSID Pracownia → Wireless Security: WPA2-PSK albo WPA2/WPA3, hasło min. 8 znaków → Save.",
+    "System Tools → Administration (lub Password): nowe hasło administratora.",
+    "Wireless MAC Filtering → włącz, dodaj adres → Forwarding/NAT → Virtual Servers: port 3389, IP 192.168.1.10, protokół TCP → Save."
+  ]],
+  ["E","W szkole: kabel prosty T568B na obu końcach, sprawdzony testerem. Potem jeden kabel krosowy.","ok. 15 min",[
+    "Zdejmij ok. 3 cm izolacji, rozplot pary i ułóż żyły według T568B (kolory w zakładce Ściąga).",
+    "Wyprostuj żyły, utnij równo na ok. 1,2 cm i wsuń do wtyku tak, żeby każda żyła doszła do czoła wtyku, a izolacja weszła pod zatrzask.",
+    "Zaciśnij zaciskarką. Tester ma pokazać kolejno 1–1, 2–2 … 8–8.",
+    "Kabel krosowy: jeden koniec T568A, drugi T568B. Tester pokaże 1–3, 2–6, 3–1, 6–2."
+  ]],
+];
+
+const CHEAT = [
+  ["s-porty","Porty",["Port","Usługa","Uwagi"],[
+    ["20, 21","FTP","21 sterowanie, 20 dane"],["22","SSH, SFTP","szyfrowany terminal"],["23","Telnet","bez szyfrowania"],["25","SMTP","wysyłka poczty, też 587"],
+    ["53","DNS","UDP i TCP"],["67, 68","DHCP","UDP, 67 serwer, 68 klient"],["80","HTTP",""],["110","POP3","odbiór poczty"],["123","NTP","synchronizacja czasu, UDP"],
+    ["143","IMAP","odbiór poczty"],["161","SNMP","zarządzanie urządzeniami, UDP"],["389","LDAP","usługa katalogowa"],["443","HTTPS","HTTP + TLS"],["445","SMB","udziały Windows"],["3389","RDP","pulpit zdalny"]]],
+  ["s-maski","Maski",["Prefiks","Maska","Blok","Hosty"],[
+    ["/8","255.0.0.0","","16 777 214"],["/16","255.255.0.0","","65 534"],["/20","255.255.240.0","16 w 3. oktecie","4094"],["/22","255.255.252.0","4 w 3. oktecie","1022"],["/23","255.255.254.0","2 w 3. oktecie","510"],
+    ["/24","255.255.255.0","","254"],["/25","255.255.255.128","128","126"],["/26","255.255.255.192","64","62"],["/27","255.255.255.224","32","30"],["/28","255.255.255.240","16","14"],["/29","255.255.255.248","8","6"],["/30","255.255.255.252","4","2"]]],
+  ["s-adresy","Adresy specjalne",["Zakres","Co to"],[
+    ["10.0.0.0/8","prywatne"],["172.16.0.0/12","prywatne, czyli 172.16.0.0–172.31.255.255"],["192.168.0.0/16","prywatne"],["127.0.0.0/8","pętla zwrotna, zwykle 127.0.0.1"],
+    ["169.254.0.0/16","APIPA: komputer nie dostał adresu z DHCP"],["224.0.0.0–239.255.255.255","klasa D, multicast"],["::1","pętla zwrotna IPv6"],["fe80::/10","IPv6 link-local"],["fc00::/7","IPv6 unikatowe lokalne (prywatne)"],["2000::/3","IPv6 globalne"],
+    ["Klasy","A 1–126, B 128–191, C 192–223, D 224–239, E 240–255"]]],
+  ["s-polecenia","Polecenia: Windows i Linux",["Co robisz","Windows","Linux"],[
+    ["adresy IP","ipconfig /all","ip a"],["ping 4 razy","ping -n 4 host","ping -c 4 host"],["trasa pakietów","tracert host","traceroute host"],["zapytanie DNS","nslookup nazwa","nslookup / dig nazwa"],
+    ["porty i połączenia","netstat -an","ss -tuln"],["tablica routingu","route print","ip route"],["lista procesów","tasklist","ps aux / top"],["zabicie procesu","taskkill /PID 123","kill 123"],
+    ["nowy użytkownik","net user jan Haslo1! /add","sudo adduser jan"],["użytkownik do grupy","net localgroup Administratorzy jan /add","sudo usermod -aG sudo jan"],["zawartość katalogu","dir","ls -l"],
+    ["kopiuj / przenieś / usuń","copy, move, del","cp, mv, rm"],["pokaż plik","type plik.txt","cat plik.txt"],["restart","shutdown /r /t 0","sudo reboot"],["nazwa komputera","hostname","hostname"]]],
+  ["s-msc","Przystawki Windows (Win + R)",["Polecenie","Co otwiera"],[
+    ["dsa.msc","Użytkownicy i komputery Active Directory"],["gpmc.msc","Zarządzanie zasadami grupy"],["gpedit.msc","Edytor lokalnych zasad grupy"],["dhcpmgmt.msc","DHCP"],["dnsmgmt.msc","Menedżer DNS"],
+    ["diskmgmt.msc","Zarządzanie dyskami"],["devmgmt.msc","Menedżer urządzeń"],["services.msc","Usługi"],["eventvwr.msc","Podgląd zdarzeń"],["lusrmgr.msc","Lokalni użytkownicy i grupy"],
+    ["compmgmt.msc","Zarządzanie komputerem"],["fsmgmt.msc","Foldery udostępnione"],["wf.msc","Zapora z zabezpieczeniami zaawansowanymi"],["secpol.msc","Lokalne zasady zabezpieczeń"],["ncpa.cpl","Połączenia sieciowe"],["sysdm.cpl","Właściwości systemu: nazwa, domena"]]],
+  ["s-dns","DNS i DHCP",["Wpis","Znaczenie"],[
+    ["A","nazwa → IPv4"],["AAAA","nazwa → IPv6"],["CNAME","alias innej nazwy"],["MX","serwer poczty domeny"],["PTR","IP → nazwa, strefa wyszukiwania wstecznego"],["NS","serwer nazw strefy"],
+    ["SOA","pierwszy rekord strefy, dane o strefie"],["SRV","lokalizacja usługi, np. kontrolera domeny"],["DHCP 003","router, czyli brama"],["DHCP 006","serwery DNS"],["DHCP 015","nazwa domeny DNS"],["DORA","Discover, Offer, Request, Acknowledge"]]],
+  ["s-raid","RAID",["Poziom","Min. dysków","Pojemność","Awaria"],[
+    ["RAID 0","2","suma dysków","żadna, padają dane"],["RAID 1","2","jeden dysk","przeżyje 1 dysk"],["RAID 5","3","(n − 1) dysków","przeżyje 1 dysk"],["RAID 6","4","(n − 2) dysków","przeżyje 2 dyski"],["RAID 10","4","połowa sumy","po 1 dysku w każdym lustrze"]]],
+  ["s-chmod","chmod",["Liczba","Prawa","Typowe użycie"],[
+    ["r = 4, w = 2, x = 1","dodajesz","7 = rwx, 6 = rw-, 5 = r-x, 4 = r--"],["755","rwxr-xr-x","katalogi, skrypty"],["750","rwxr-x---","katalog dla właściciela i grupy"],["644","rw-r--r--","zwykłe pliki"],["700","rwx------","tylko właściciel"],["600","rw-------","klucze, prywatne pliki"]]],
+];
+const T568B = [["b-pom","#f4a259","#fff"],["pom","#e8892b","#e8892b"],["b-ziel","#4caf6a","#fff"],["nieb","#3a6fd8","#3a6fd8"],["b-nieb","#3a6fd8","#fff"],["ziel","#3c9a58","#3c9a58"],["b-brąz","#8a5a3c","#fff"],["brąz","#7a4b2e","#7a4b2e"]];
+
+// ---------- zapis postępów ----------
+let stats = { q: {}, s: [], lab: {}, d: {}, exam: "", sub: [0, 0] };
+const GOAL = 30; // odpowiedzi dziennie
+function today() { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`; }
+function bumpDay() {
+  const k = today();
+  stats.d[k] = (stats.d[k] || 0) + 1;
+  const keys = Object.keys(stats.d).sort();
+  keys.slice(0, Math.max(0, keys.length - 120)).forEach(x => delete stats.d[x]);
+}
+let db = null, saveTimer = null, saving = false, pendingSave = false;
+const LS_KEY = "inf02-stats";
+const syncEl = document.getElementById("sync");
+
+function lsRead() { try { return JSON.parse(localStorage.getItem(LS_KEY) || "null"); } catch (e) { return null; } }
+function lsWrite() { try { localStorage.setItem(LS_KEY, JSON.stringify(stats)); } catch (e) {} }
+function normalize(s) {
+  if (!s || typeof s !== "object") s = {};
+  return { q: s.q || {}, s: Array.isArray(s.s) ? s.s : [], lab: s.lab || {}, d: s.d || {}, exam: typeof s.exam === "string" ? s.exam : "", sub: Array.isArray(s.sub) ? s.sub : [0, 0] };
+}
+
+function scheduleSave() {
+  lsWrite();
+  if (!db) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(flushSave, 1200);
+}
+async function flushSave() {
+  if (saving) { pendingSave = true; return; }
+  saving = true;
+  try { await db.doc("progress/stats").set(stats); syncEl.textContent = "Postęp zapisany na koncie."; }
+  catch (e) { syncEl.textContent = "Zapis na koncie nie przeszedł (" + ((e && e.code) || "błąd") + "). Postęp został w tej przeglądarce."; }
+  saving = false;
+  if (pendingSave) { pendingSave = false; flushSave(); }
+}
+
+async function initStore() {
+  const local = lsRead();
+  if (local) stats = normalize(local);
+  renderAll();
+  if (!window.claude || !window.claude.use) { syncEl.textContent = "Postęp zapisuje się w tej przeglądarce."; return; }
+  try { db = await window.claude.use("db"); } catch (e) { db = null; }
+  if (!db) { syncEl.textContent = "Postęp zapisuje się w tej przeglądarce."; return; }
+  const t = setTimeout(() => { syncEl.textContent = "Konto jeszcze nie odpowiada. Do tego czasu postęp trafia do przeglądarki."; }, 10000);
+  try {
+    const snap = await db.doc("progress/stats").get();
+    clearTimeout(t);
+    if (snap.exists) {
+      const remote = normalize(JSON.parse(JSON.stringify(snap.data())));
+      const count = s => Object.values(s.q).reduce((a, v) => a + v[0] + v[1], 0) + Object.keys(s.lab).length;
+      if (count(remote) >= count(stats)) stats = remote; else scheduleSave();
+    } else if (local) scheduleSave();
+    syncEl.textContent = "Postęp zapisuje się na Twoim koncie.";
+    lsWrite();
+    renderAll();
+  } catch (e) {
+    clearTimeout(t);
+    syncEl.textContent = "Nie wczytałem postępu z konta. Działa zapis w przeglądarce.";
+  }
+}
+
+function record(id, ok) {
+  const v = stats.q[id] || [0, 0, 0];
+  if (ok) v[0]++; else v[1]++;
+  v[2] = ok ? 1 : 0;
+  stats.q[id] = v;
+  bumpDay();
+}
+
+function streak() {
+  const d = new Date();
+  if ((stats.d[today()] || 0) < GOAL) d.setDate(d.getDate() - 1);
+  let n = 0;
+  for (;;) {
+    const k = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+    if ((stats.d[k] || 0) < GOAL) return n;
+    n++; d.setDate(d.getDate() - 1);
+  }
+}
+function daysLeft() {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(stats.exam)) return null;
+  const [y, m, dd] = stats.exam.split("-").map(Number);
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  return Math.round((new Date(y, m - 1, dd) - t) / 86400000);
+}
+function dni(n) { return n === 1 ? "dzień" : "dni"; }
+
+// ---------- statystyki ----------
+function catStats(cat) {
+  const qs = Q.filter(q => q[1] === cat);
+  let ok = 0, bad = 0, seen = 0;
+  qs.forEach(q => { const v = stats.q[q[0]]; if (v) { seen++; ok += v[0]; bad += v[1]; } });
+  return { total: qs.length, seen, pct: ok + bad ? Math.round(100 * ok / (ok + bad)) : null };
+}
+function isMastered(q) { const v = stats.q[q[0]]; return v && v[2] === 1 && v[0] >= 2 && v[0] > v[1]; }
+function badPool(list) { return list.filter(q => { const v = stats.q[q[0]]; return v && v[1] > 0 && (v[2] === 0 || v[1] >= v[0]); }); }
+
+function renderStats() {
+  const el = document.getElementById("cats");
+  el.innerHTML = "";
+  let weakest = null;
+  Object.keys(CATS).forEach(c => {
+    const s = catStats(c);
+    if (s.pct !== null && s.seen >= 3 && (!weakest || s.pct < weakest.pct)) weakest = { c, pct: s.pct };
+    const cls = s.pct === null ? "" : s.pct < 50 ? " low" : s.pct < 75 ? " mid" : "";
+    const d = document.createElement("div");
+    d.className = "catrow" + cls;
+    d.innerHTML = `<span>${CATS[c]}</span><span class="bar" aria-hidden="true"><i style="width:${s.pct || 0}%"></i></span>
+      <span class="pct">${s.pct === null ? "–" : s.pct + "%"}</span>
+      <span class="seen">przerobione ${s.seen} z ${s.total} pytań</span>`;
+    el.appendChild(d);
+  });
+  const weak = document.getElementById("weak");
+  if (weakest && weakest.pct < 75) {
+    weak.hidden = false;
+    weak.innerHTML = `<p>Najsłabiej idzie Ci dział <strong>${CATS[weakest.c]}</strong> (${weakest.pct}%).</p><button class="primary" id="btn-weak">Ćwicz ten dział</button>`;
+    document.getElementById("btn-weak").addEventListener("click", () => { document.getElementById("catsel").value = weakest.c; startRun("losowe"); });
+  } else weak.hidden = true;
+
+  const n = badPool(Q).length;
+  const btnBad = document.getElementById("btn-bad");
+  btnBad.disabled = n === 0;
+  document.getElementById("bad-desc").textContent = n ? `Do poprawy: ${n} ${n === 1 ? "pytanie" : n < 5 ? "pytania" : "pytań"}.` : "Pojawią się tu pytania, w których się pomylisz.";
+
+  const m = Q.filter(isMastered).length;
+  const left = daysLeft(), dzis = stats.d[today()] || 0, st = streak();
+  document.getElementById("overall").innerHTML =
+    (left === null ? `<span><a href="#plan">Wpisz datę egzaminu</a></span>`
+      : left > 0 ? `<span>Do teorii <strong>${left} ${dni(left)}</strong></span>`
+      : left === 0 ? `<span><strong>Egzamin dziś</strong></span>` : `<span>Teoria już była</span>`) +
+    `<span>Dziś <strong>${Math.min(dzis, 999)} z ${GOAL}</strong>${dzis >= GOAL ? ", cel zrobiony" : ""}</span>` +
+    `<span>Seria <strong>${st} ${dni(st)}</strong></span>` +
+    `<span>Opanowane <strong>${m} z ${Q.length}</strong></span>`;
+  document.getElementById("overall-bar").style.width = (100 * m / Q.length) + "%";
+
+  const ex = stats.s.filter(x => x.m === "egzamin" && x.n === 40).slice(-8);
+  document.getElementById("hist-box").hidden = !ex.length;
+  document.getElementById("hist").innerHTML = ex.map(x => {
+    const [, mm, dd] = x.t.split("-");
+    const cls = x.ok < 20 ? " low" : x.ok < 30 ? " mid" : "";
+    return `<div class="hrow"><span class="d">${+dd}.${mm}</span>
+      <span class="hbar${cls}" role="img" aria-label="${x.ok} z 40"><i style="width:${x.ok / 40 * 100}%"></i><b style="left:50%"></b><b style="left:75%"></b></span>
+      <span class="r">${x.ok}/40</span></div>`;
+  }).join("");
+}
+
+function renderCatSelect() {
+  const sel = document.getElementById("catsel");
+  if (sel.options.length) return;
+  sel.innerHTML = `<option value="">Wszystkie działy</option>` + Object.keys(CATS).map(c => `<option value="${c}">${CATS[c]}</option>`).join("");
+}
+
+// ---------- quiz ----------
+let run = null, tickTimer = null;
+const runEl = document.getElementById("quiz-run");
+const homeEl = document.getElementById("quiz-home");
+
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function weight(q) { const v = stats.q[q[0]]; if (!v) return 2; return Math.max(0.3, 1 + 2 * v[1] - v[0] + (v[2] === 0 ? 2 : 0)); }
+function weightedPick(pool, n) {
+  const left = pool.slice(), out = [];
+  while (out.length < n && left.length) {
+    const total = left.reduce((a, q) => a + weight(q), 0);
+    let r = Math.random() * total, i = 0;
+    for (; i < left.length - 1; i++) { r -= weight(left[i]); if (r <= 0) break; }
+    out.push(left.splice(i, 1)[0]);
+  }
+  return out;
+}
+function pool() { const c = document.getElementById("catsel").value; return c ? Q.filter(q => q[1] === c) : Q; }
+
+function startRun(mode) {
+  let qs;
+  if (mode === "losowe") qs = weightedPick(pool(), 20);
+  else if (mode === "bledy") qs = shuffle(badPool(pool())).slice(0, 25);
+  else qs = shuffle(Q.slice()).slice(0, 40);
+  if (!qs.length) { syncEl.textContent = "W tym dziale nie masz jeszcze błędów do poprawy."; return; }
+  run = { mode, i: 0, items: qs.map(q => ({ q, order: shuffle([0, 1, 2, 3]), pick: null })), end: mode === "egzamin" ? Date.now() + 3600000 : null, done: false };
+  homeEl.hidden = true; runEl.hidden = false;
+  renderRun();
+  window.scrollTo({ top: 0 });
+}
+
+function tick() {
+  clearTimeout(tickTimer);
+  if (!run || run.done || !run.end) return;
+  const left = Math.max(0, run.end - Date.now());
+  const el = document.getElementById("timer");
+  if (el) {
+    el.textContent = `${Math.floor(left / 60000)}:${String(Math.floor(left / 1000) % 60).padStart(2, "0")}`;
+    el.classList.toggle("late", left < 300000);
+  }
+  if (left === 0) { finishRun(); return; }
+  tickTimer = setTimeout(tick, 1000);
+}
+
+function esc(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+function answer(ai) {
+  const it = run.items[run.i];
+  if (run.mode === "egzamin") { it.pick = ai; renderRun(); return; }
+  if (it.pick !== null) return;
+  it.pick = ai; record(it.q[0], ai === 0); scheduleSave(); renderRun();
+  const nx = document.getElementById("btn-next") || document.getElementById("btn-finish");
+  if (nx) nx.focus();
+}
+function next() { if (run.i < run.items.length - 1) { run.i++; renderRun(); } else finishRun(); }
+function quit() { clearTimeout(tickTimer); run = null; runEl.hidden = true; homeEl.hidden = false; renderStats(); }
+
+function renderRun() {
+  if (run.done) return renderResult();
+  const it = run.items[run.i], q = it.q, exam = run.mode === "egzamin";
+  const answered = it.pick !== null, last = run.i === run.items.length - 1;
+  const L = "ABCD";
+  const label = { losowe: "Losowe", egzamin: "Egzamin próbny", bledy: "Moje błędy" }[run.mode];
+  let html = `<div class="qcard">
+    <div class="qhead"><span>${label} · ${CATS[q[1]]}</span><span>${exam ? `<span class="timer" id="timer"></span> · ` : ""}${run.i + 1} z ${run.items.length}</span></div>
+    <div class="qprog" aria-hidden="true"><i style="width:${100 * (run.i + (answered ? 1 : 0)) / run.items.length}%"></i></div>
+    <p class="qtext">${esc(q[2])}</p><div class="answers">`;
+  it.order.forEach((ai, pos) => {
+    let cls = "ans";
+    if (answered && !exam) cls += ai === 0 ? " right" : ai === it.pick ? " wrong" : " dim";
+    if (exam && it.pick === ai) cls += " sel";
+    html += `<button class="${cls}" data-a="${ai}" ${answered && !exam ? "disabled" : ""}><span class="key">${L[pos]}</span><span>${esc(q[3][ai])}</span></button>`;
+  });
+  html += `</div>`;
+  if (answered && !exam) html += `<div class="expl" role="status">${it.pick === 0 ? `<b class="ok">Dobrze.</b>` : `<b class="no">Źle.</b>`}${esc(q[4])}</div>`;
+  const canGo = exam || answered;
+  html += `<div class="qnav"><button id="btn-quit">Przerwij</button><span class="right">
+      ${exam && run.i > 0 ? `<button id="btn-prev">Wstecz</button>` : ""}
+      <button class="primary" id="${last ? "btn-finish" : "btn-next"}" ${canGo ? "" : "disabled"}>${last ? (exam ? "Oddaj test" : "Wynik") : "Dalej"}</button>
+    </span></div>`;
+  if (exam) {
+    html += `<div class="grid40" aria-label="Pytania">` + run.items.map((x, i) =>
+      `<button data-go="${i}" class="${x.pick !== null ? "has" : ""}${i === run.i ? " cur" : ""}" aria-label="Pytanie ${i + 1}${x.pick !== null ? ", zaznaczone" : ""}">${i + 1}</button>`).join("") + `</div>`;
+  }
+  html += `<p class="hint">Klawiatura: <kbd>A</kbd>–<kbd>D</kbd> albo <kbd>1</kbd>–<kbd>4</kbd> zaznacza odpowiedź, <kbd>Enter</kbd> przechodzi dalej.</p></div>`;
+  runEl.innerHTML = html;
+  runEl.querySelectorAll(".ans").forEach(b => b.addEventListener("click", () => answer(+b.dataset.a)));
+  runEl.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => { run.i = +b.dataset.go; renderRun(); }));
+  const on = (id, fn) => { const e = document.getElementById(id); if (e) e.addEventListener("click", fn); };
+  on("btn-next", next); on("btn-finish", finishRun); on("btn-quit", quit);
+  on("btn-prev", () => { run.i--; renderRun(); });
+  if (exam) tick();
+}
+
+document.addEventListener("keydown", e => {
+  if (!run || run.done || runEl.hidden || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
+  const k = e.key.toUpperCase();
+  const pos = "ABCD".indexOf(k) >= 0 ? "ABCD".indexOf(k) : "1234".indexOf(k);
+  const it = run.items[run.i];
+  if (pos >= 0 && k.length === 1) { e.preventDefault(); answer(it.order[pos]); }
+  else if (e.key === "Enter" && (run.mode === "egzamin" || it.pick !== null) && !(e.target && e.target.tagName === "BUTTON")) { e.preventDefault(); next(); }
+});
+
+function finishRun() {
+  clearTimeout(tickTimer);
+  if (run.mode === "egzamin") run.items.forEach(it => { if (it.pick !== null) record(it.q[0], it.pick === 0); });
+  const ok = run.items.filter(it => it.pick === 0).length;
+  stats.s.push({ t: new Date().toISOString().slice(0, 10), m: run.mode, n: run.items.length, ok });
+  stats.s = stats.s.slice(-60);
+  scheduleSave();
+  run.done = true; run.ok = ok;
+  renderResult();
+  window.scrollTo({ top: 0 });
+}
+
+function plural(n) { return n === 1 ? "błąd" : (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? "błędy" : "błędów"; }
+
+function renderResult() {
+  const n = run.items.length, pct = Math.round(100 * run.ok / n), exam = run.mode === "egzamin";
+  const verdict = exam
+    ? (run.ok >= 30 ? "Masz cel 30 z 40." : run.ok >= 20 ? `Zdałbyś. Do celu 30 brakuje Ci ${30 - run.ok}.` : `Do progu 20 brakuje Ci ${20 - run.ok}.`)
+    : (pct >= 75 ? "Powyżej 75%." : "Poniżej 75%. Przejrzyj błędy poniżej.");
+  const wrong = run.items.filter(it => it.pick !== 0);
+  let html = `<div class="qcard">
+    <div class="qhead"><span>Wynik</span><span>${n} pytań</span></div>
+    <div class="score">${run.ok}<small> / ${n} · ${pct}%</small></div>
+    <p class="verdict">${verdict}</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="primary" id="btn-again">Jeszcze raz</button><button id="btn-home">Wróć do menu</button></div>`;
+  if (wrong.length) {
+    html += `<h2 style="margin-top:30px">${wrong.length} ${plural(wrong.length)}</h2><div class="mistakes">`;
+    wrong.forEach(it => {
+      html += `<div class="mistake"><div class="q">${esc(it.q[2])}</div>
+        <div class="line yours"><span class="lab">Twoja</span><span class="val">${it.pick === null ? "bez odpowiedzi" : esc(it.q[3][it.pick])}</span></div>
+        <div class="line good"><span class="lab">Poprawna</span><span class="val">${esc(it.q[3][0])}</span></div>
+        <div class="why">${esc(it.q[4])}</div></div>`;
+    });
+    html += `</div>`;
+  }
+  html += `</div>`;
+  runEl.innerHTML = html;
+  document.getElementById("btn-again").addEventListener("click", () => startRun(run.mode));
+  document.getElementById("btn-home").addEventListener("click", quit);
+}
+
+document.getElementById("btn-rand").addEventListener("click", () => startRun("losowe"));
+document.getElementById("btn-exam").addEventListener("click", () => startRun("egzamin"));
+document.getElementById("btn-bad").addEventListener("click", () => startRun("bledy"));
+
+// ---------- listy do odhaczania ----------
+function renderTasks(elId, countId, list, render, extra) {
+  const el = document.getElementById(elId);
+  const open = new Set([...el.querySelectorAll("details[open]")].map(x => x.dataset.id));
+  el.innerHTML = "";
+  const count = () => { document.getElementById(countId).textContent = `Zrobione: ${list.filter(t => stats.lab[t[0]]).length} z ${list.length}`; };
+  list.forEach(t => {
+    const id = t[0], done = !!stats.lab[id];
+    const d = document.createElement("div");
+    d.className = "task" + (done ? " done" : "");
+    d.innerHTML = `<input type="checkbox" id="chk-${id}" ${done ? "checked" : ""}><div class="body"><label for="chk-${id}">${render(t)}</label>${extra ? extra(t) : ""}</div>`;
+    const det = d.querySelector("details");
+    if (det && open.has(det.dataset.id)) det.open = true;
+    d.querySelector("input").addEventListener("change", e => {
+      if (e.target.checked) stats.lab[id] = new Date().toISOString().slice(0, 10); else delete stats.lab[id];
+      d.classList.toggle("done", e.target.checked);
+      count(); renderStats(); scheduleSave();
+    });
+    el.appendChild(d);
+  });
+  count();
+}
+
+function renderWeeks() {
+  const today = new Date().toISOString().slice(0, 10);
+  const fmt = s => { const [y, m, d] = s.split("-"); return `${+d}.${m}`; };
+  document.getElementById("weeks").innerHTML = WEEKS.map(w => {
+    const cur = today >= w[0] && today <= w[1], past = today > w[1];
+    return `<div class="week${cur ? " current" : ""}${past ? " past" : ""}">
+      <div class="when">${fmt(w[0])}–${fmt(w[1])}${cur ? `<br><span class="now">ten tydzień</span>` : ""}</div>
+      <dl><dt>Lab</dt><dd>${esc(w[2])}</dd><dt>Teoria</dt><dd>${esc(w[3])}</dd></dl></div>`;
+  }).join("");
+}
+
+// kroki: `kod` w linii, "PRE:" jako blok kodu
+function stepHtml(s) {
+  if (s.startsWith("PRE:")) return `<pre>${esc(s.slice(4))}</pre>`;
+  return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+function howTo(t) {
+  return `<details class="how" data-id="${t[0]}"><summary>Jak to zrobić</summary><ol>${t[3].map(s => `<li>${stepHtml(s)}</li>`).join("")}</ol></details>`;
+}
+
+// ---------- ściąga ----------
+function renderCheat() {
+  const el = document.getElementById("cheat");
+  if (el.childElementCount) return;
+  el.innerHTML = CHEAT.map(([id, title, head, rows]) => {
+    let html = `<h2 id="${id}">${title}</h2><div class="ref"><table><thead><tr>${head.map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>`;
+    html += rows.map(r => `<tr>${r.map((c, i) => `<td${i === 0 || (head[i] === "Maska" || head[i] === "Windows" || head[i] === "Linux" || head[i] === "Prawa") ? ' class="m"' : ""}>${esc(c)}</td>`).join("")}</tr>`).join("");
+    html += `</tbody></table></div>`;
+    if (id === "s-adresy") {
+      html += `<h2 id="s-kabel">T568B</h2><p>Od lewej, wtyk zatrzaskiem w dół, styki do Ciebie. T568A zamienia miejscami parę pomarańczową z zieloną.</p><div class="wires">` +
+        T568B.map(([n, c, s], i) => `<div class="wire"><i style="background:${s === "#fff" ? `repeating-linear-gradient(135deg, ${c} 0 6px, #f2f2ee 6px 12px)` : c}"></i>${i + 1}<span>${n}</span></div>`).join("") + `</div>`;
+    }
+    return html;
+  }).join("");
+  document.querySelectorAll("[data-jump]").forEach(a => a.addEventListener("click", e => {
+    e.preventDefault();
+    const t = document.getElementById(a.dataset.jump);
+    if (t) t.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  }));
+}
+
+// ---------- trener podsieci ----------
+const ipStr = n => [n >>> 24, (n >>> 16) & 255, (n >>> 8) & 255, n & 255].join(".");
+function subnet(ip, p) {
+  const mask = p === 0 ? 0 : (0xFFFFFFFF << (32 - p)) >>> 0;
+  const net = (ip & mask) >>> 0, bc = (net | (~mask >>> 0)) >>> 0;
+  return { mask, net, bc, first: net + 1, last: bc - 1, hosts: 2 ** (32 - p) - 2 };
+}
+// kontrola: 192.168.10.77/27 → sieć .64, rozgłoszenie .95, 30 hostów
+(function () {
+  const s = subnet(((192 << 24) | (168 << 16) | (10 << 8) | 77) >>> 0, 27);
+  console.assert(ipStr(s.net) === "192.168.10.64" && ipStr(s.bc) === "192.168.10.95" && s.hosts === 30 && ipStr(s.mask) === "255.255.255.224", "subnet() liczy źle");
+})();
+const SUB_FIELDS = [["mask", "Maska dziesiętnie"], ["net", "Adres sieci"], ["bc", "Adres rozgłoszeniowy"], ["first", "Pierwszy host"], ["last", "Ostatni host"], ["hosts", "Liczba hostów"]];
+let sub = null;
+function newSub() {
+  const lvl = document.getElementById("sub-level").value;
+  const lo = lvl === "easy" ? 24 : lvl === "mid" ? 16 : 8;
+  const p = lo + Math.floor(Math.random() * (31 - lo));
+  let a; do { a = 1 + Math.floor(Math.random() * 223); } while (a === 127);
+  const pick = Math.random();
+  if (pick < 0.35) a = 192; else if (pick < 0.55) a = 172; else if (pick < 0.7) a = 10;
+  const b = a === 192 ? 168 : a === 172 ? 16 + Math.floor(Math.random() * 16) : Math.floor(Math.random() * 256);
+  const ip = ((a << 24) | (b << 16) | (Math.floor(Math.random() * 256) << 8) | (1 + Math.floor(Math.random() * 254))) >>> 0;
+  sub = { ip, p, r: subnet(ip, p), checked: false };
+  document.getElementById("sub-ip").textContent = `${ipStr(ip)}/${p}`;
+  document.getElementById("sub-fields").innerHTML = SUB_FIELDS.map(([k, l]) =>
+    `<div class="field" id="f-${k}"><label for="in-${k}">${l}</label><input id="in-${k}" inputmode="${k === "hosts" ? "numeric" : "decimal"}" autocomplete="off" spellcheck="false"><span class="fix"></span></div>`).join("");
+  document.getElementById("sub-sol").hidden = true;
+  document.getElementById("sub-check").textContent = "Sprawdź";
+  document.getElementById("in-mask").focus({ preventScroll: true });
+}
+function checkSub() {
+  if (!sub) return;
+  if (sub.checked) { newSub(); return; }
+  const r = sub.r, want = { mask: ipStr(r.mask), net: ipStr(r.net), bc: ipStr(r.bc), first: ipStr(r.first), last: ipStr(r.last), hosts: String(r.hosts) };
+  let good = 0;
+  SUB_FIELDS.forEach(([k]) => {
+    const raw = document.getElementById("in-" + k).value.replace(/\s/g, "");
+    const ok = k === "hosts" ? raw.replace(/\D/g, "") === want[k] && raw !== "" : raw === want[k];
+    const f = document.getElementById("f-" + k);
+    f.classList.toggle("ok", ok); f.classList.toggle("no", !ok);
+    f.querySelector(".fix").textContent = ok ? "" : want[k];
+    if (ok) good++;
+  });
+  stats.sub = [stats.sub[0] + (good === 6 ? 1 : 0), stats.sub[1] + 1];
+  bumpDay(); scheduleSave(); renderStats(); renderSubScore();
+  const o = Math.ceil(sub.p / 8) - 1, mo = (r.mask >>> (24 - 8 * o)) & 255, block = 256 - mo;
+  const io = (sub.ip >>> (24 - 8 * o)) & 255, no = Math.floor(io / block) * block;
+  const sol = document.getElementById("sub-sol");
+  sol.hidden = false;
+  sol.innerHTML = `<strong>${good === 6 ? "Wszystko dobrze." : `Dobrze ${good} z 6.`}</strong><ol>
+    ${sub.p % 8 === 0
+      ? `<li>/${sub.p} kończy się równo na granicy oktetu, więc maska to ${want.mask}. Sieć dostajesz, zerując ${(32 - sub.p) / 8} ${(32 - sub.p) / 8 === 1 ? "ostatni oktet" : "ostatnie oktety"}.</li>`
+      : `<li>/${sub.p} to ${sub.p} jedynek. W ${o + 1}. oktecie maska ma ${mo}, więc maska to ${want.mask}.</li>
+    <li>Blok: 256 − ${mo} = ${block}. ${io} wpada w przedział ${no}–${no + block - 1} w ${o + 1}. oktecie.</li>`}
+    <li>Sieć ${want.net}, rozgłoszenie ${want.bc}, hosty od ${want.first} do ${want.last}.</li>
+    <li>Hostów: 2^${32 - sub.p} − 2 = ${r.hosts.toLocaleString("pl-PL")}.</li></ol>`;
+  sub.checked = true;
+  document.getElementById("sub-check").textContent = "Następne zadanie";
+}
+function renderSubScore() {
+  const [ok, n] = stats.sub;
+  document.getElementById("sub-score").textContent = n ? `bezbłędnie ${ok} z ${n}` : "";
+  document.getElementById("sub-bar").style.width = n ? (100 * ok / n) + "%" : "0";
+}
+document.getElementById("sub-check").addEventListener("click", checkSub);
+document.getElementById("sub-next").addEventListener("click", newSub);
+document.getElementById("sub-level").addEventListener("change", newSub);
+document.getElementById("sub-fields").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); checkSub(); } });
+
+// ---------- data egzaminu ----------
+const examInput = document.getElementById("examdate");
+examInput.addEventListener("change", () => {
+  stats.exam = /^\d{4}-\d{2}-\d{2}$/.test(examInput.value) ? examInput.value : "";
+  renderStats(); scheduleSave();
+});
+
+// ---------- zakładki ----------
+const TABS = ["quiz", "podsieci", "sciaga", "arkusze", "plan", "lab"];
+function showTab() {
+  const h = location.hash.slice(1);
+  const tab = TABS.includes(h) ? h : "quiz";
+  TABS.forEach(t => {
+    document.getElementById("tab-" + t).hidden = t !== tab;
+    const a = document.querySelector(`nav a[data-tab="${t}"]`);
+    if (t === tab) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+  });
+}
+window.addEventListener("hashchange", showTab);
+
+function renderAll() {
+  renderCatSelect();
+  renderStats();
+  renderWeeks();
+  renderTasks("sheets", "sheet-count", SHEETS, t => `<span class="title"><a href="${t[2]}" target="_blank" rel="noopener">INF.02 ${t[1]}</a></span><span class="meta">test i zadanie praktyczne</span>`);
+  renderTasks("setup-tasks", "setup-count", LAB_SETUP, t => `<span class="title"><strong>${esc(t[1])}</strong></span><span class="meta">${esc(t[2])}</span>`);
+  renderTasks("lab-tasks", "lab-count", LAB_TASKS, t => `<span class="title"><strong>${t[0]}.</strong> ${esc(t[1])}</span><span class="meta">${esc(t[2])}</span>`, howTo);
+  renderCheat();
+  renderSubScore();
+  examInput.value = stats.exam || "";
+}
+
+// kontrola bazy: 4 odpowiedzi, znany dział, unikalne id
+(function () {
+  const ids = new Set();
+  Q.forEach(q => { console.assert(q[3].length === 4 && CATS[q[1]] && !ids.has(q[0]), "Złe pytanie", q[0]); ids.add(q[0]); });
+})();
+
+showTab();
+newSub();
+initStore();
+</script>
+
+</body>
+</html>
