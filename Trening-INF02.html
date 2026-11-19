@@ -70,6 +70,16 @@ nav a:hover { color: var(--ink); }
 nav a[aria-current="page"] { color: var(--accent); }
 /* pigułka aktywnej zakładki jeździ pod linkami */
 nav .pill { position: absolute; z-index: 0; left: 0; top: 4px; height: calc(100% - 8px); width: 0; border-radius: 10px; background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent); pointer-events: none; }
+#login { display: none; min-height: 100vh; place-items: center; padding: 20px; }
+body.locked #login { display: grid; }
+body.locked .bar-top, body.locked .wrap { display: none; }
+.login-card { width: min(380px, 100%); padding: 28px; display: grid; gap: 10px; }
+.login-card .brand { margin-bottom: 14px; }
+.login-card label { font-weight: 800; }
+.login-card input { font: 700 18px var(--f-body); padding: 11px 14px; min-height: 50px; border: 2px solid var(--line); border-radius: 12px; background: var(--bg); color: var(--ink); }
+.login-card input:focus { border-color: var(--accent); outline: none; }
+.login-err { min-height: 1.4em; margin: 0; color: var(--bad); font-weight: 700; font-size: 15px; }
+.login-card .small { margin: 4px 0 0; text-align: center; }
 .theme { flex: none; display: grid; place-items: center; width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 10px; }
 .theme .ic { width: 19px; height: 19px; }
 
@@ -261,6 +271,24 @@ ul.links li { margin-bottom: 8px; }
 .legend { font-size: 13px; color: var(--muted); margin-top: 6px; }
 
 /* trener podsieci */
+.prac { padding: 20px 22px; }
+.prac-row button .ic { margin: 0 7px 0 0; }
+.prac h3 { font: 900 16px var(--f-head); margin: 18px 0 4px; }
+.prac-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.prac-time { font: 700 34px var(--f-mono); }
+.prac-time.late { color: var(--bad); }
+.prac-pct b { font: 900 22px var(--f-head); color: var(--accent); }
+.crit { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 14px; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.crit > span:first-child { flex: 1 1 260px; }
+.seg { display: inline-flex; gap: 4px; }
+.seg button { min-height: 36px; padding: 4px 12px; font-size: 14px; border-bottom-width: 2px; border-radius: 9px; }
+.seg button.on.y { background: var(--accent); border-color: var(--accent-deep); color: var(--accent-ink); }
+.seg button.on.n { background: var(--bad); border-color: var(--bad); color: #fff; }
+.seg button.on.x { background: var(--line); }
+.tag.okt { background: var(--accent-soft); color: var(--accent); }
+.tag.badt { background: var(--bad-soft); color: var(--bad); }
+.prac .tag { font: 800 12px var(--f-head); padding: 2px 8px; border-radius: 6px; }
+.task-ip.v6 { font-size: clamp(17px, 3.4vw, 24px); }
 .task-ip { font: 600 clamp(26px, 6vw, 34px)/1.1 var(--f-mono); letter-spacing: -0.01em; margin: 4px 0 18px; overflow-wrap: anywhere; }
 .fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px 18px; }
 .field { display: grid; gap: 4px; }
@@ -343,19 +371,25 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
 <symbol id="i-binary" viewBox="0 0 24 24"><rect x="14" y="14" width="4" height="6" rx="2" /><rect x="6" y="4" width="4" height="6" rx="2" /><path d="M6 20h4" /><path d="M14 10h4" /><path d="M6 14h2v6" /><path d="M14 4h2v6" /></symbol>
 <symbol id="i-book-open" viewBox="0 0 24 24"><path d="M12 7v14" /><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" /></symbol>
 <symbol id="i-cable" viewBox="0 0 24 24"><path d="M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1" /><path d="M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9" /><path d="M21 21v-2h-4" /><path d="M3 5h4V3" /><path d="M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3" /></symbol>
+<symbol id="i-calculator" viewBox="0 0 24 24"><rect width="16" height="20" x="4" y="2" rx="2" /><line x1="8" x2="16" y1="6" y2="6" /><line x1="16" x2="16" y1="14" y2="18" /><path d="M16 10h.01" /><path d="M12 10h.01" /><path d="M8 10h.01" /><path d="M12 14h.01" /><path d="M8 14h.01" /><path d="M12 18h.01" /><path d="M8 18h.01" /></symbol>
 <symbol id="i-calendar-clock" viewBox="0 0 24 24"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5" /><path d="M16 2v4" /><path d="M8 2v4" /><path d="M3 10h5" /><path d="M17.5 17.5 16 16.3V14" /><circle cx="16" cy="16" r="6" /></symbol>
 <symbol id="i-calendar-days" viewBox="0 0 24 24"><path d="M8 2v4" /><path d="M16 2v4" /><rect width="18" height="18" x="3" y="4" rx="2" /><path d="M3 10h18" /><path d="M8 14h.01" /><path d="M12 14h.01" /><path d="M16 14h.01" /><path d="M8 18h.01" /><path d="M12 18h.01" /><path d="M16 18h.01" /></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
 <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></symbol>
 <symbol id="i-circle-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><path d="M12 17h.01" /></symbol>
+<symbol id="i-clipboard-list" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></symbol>
 <symbol id="i-cpu" viewBox="0 0 24 24"><rect width="16" height="16" x="4" y="4" rx="2" /><rect width="6" height="6" x="9" y="9" rx="1" /><path d="M15 2v2" /><path d="M15 20v2" /><path d="M2 15h2" /><path d="M2 9h2" /><path d="M20 15h2" /><path d="M20 9h2" /><path d="M9 2v2" /><path d="M9 20v2" /></symbol>
 <symbol id="i-external-link" viewBox="0 0 24 24"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></symbol>
 <symbol id="i-file-text" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /><path d="M14 2v4a2 2 0 0 0 2 2h4" /><path d="M10 9H8" /><path d="M16 13H8" /><path d="M16 17H8" /></symbol>
 <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></symbol>
 <symbol id="i-flask-conical" viewBox="0 0 24 24"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /><path d="M6.453 15h11.094" /><path d="M8.5 2h7" /></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></symbol>
+<symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></symbol>
 <symbol id="i-layout-dashboard" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1" /><rect width="7" height="5" x="14" y="3" rx="1" /><rect width="7" height="9" x="14" y="12" rx="1" /><rect width="7" height="5" x="3" y="16" rx="1" /></symbol>
 <symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></symbol>
 <symbol id="i-list-checks" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></symbol>
+<symbol id="i-lock-keyhole" viewBox="0 0 24 24"><circle cx="12" cy="16" r="1" /><rect x="3" y="10" width="18" height="12" rx="2" /><path d="M7 10V7a5 5 0 0 1 10 0v3" /></symbol>
+<symbol id="i-log-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></symbol>
 <symbol id="i-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" /></symbol>
 <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></symbol>
 <symbol id="i-network" viewBox="0 0 24 24"><rect x="16" y="16" width="6" height="6" rx="1" /><rect x="2" y="16" width="6" height="6" rx="1" /><rect x="9" y="2" width="6" height="6" rx="1" /><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" /><path d="M12 12V8" /></symbol>
@@ -364,6 +398,7 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
 <symbol id="i-server" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2" /><rect width="20" height="8" x="2" y="14" rx="2" ry="2" /><line x1="6" x2="6.01" y1="6" y2="6" /><line x1="6" x2="6.01" y1="18" y2="18" /></symbol>
 <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></symbol>
 <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="m18 14 4 4-4 4" /><path d="m18 2 4 4-4 4" /><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" /><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" /><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" /></symbol>
+<symbol id="i-stethoscope" viewBox="0 0 24 24"><path d="M11 2v2" /><path d="M5 2v2" /><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /><path d="M8 15a6 6 0 0 0 12 0v-3" /><circle cx="20" cy="10" r="2" /></symbol>
 <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></symbol>
 <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></symbol>
 <symbol id="i-terminal" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5" /><line x1="12" x2="20" y1="19" y2="19" /></symbol>
@@ -373,6 +408,16 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
 <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></symbol>
 </svg>
 
+<div id="login">
+  <form class="card login-card" id="login-form" autocomplete="on">
+    <span class="brand"><i><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></i>Trening INF.02</span>
+    <label for="login-pw">Hasło</label>
+    <input type="password" id="login-pw" autocomplete="current-password" autocapitalize="none" spellcheck="false" required>
+    <p class="login-err" id="login-err" role="alert"></p>
+    <button class="primary" type="submit">Wejdź</button>
+    <p class="muted small">Hasło wczytuje Twój postęp na każdym urządzeniu.</p>
+  </form>
+</div>
 <div class="bar-top"><div class="bar-in">
     <a class="brand" href="#przeglad"><i><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></i><span>Trening INF.02</span></a>
     <nav aria-label="Sekcje">
@@ -387,6 +432,7 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
       <a href="#plan" data-tab="plan"><svg class="ic" aria-hidden="true"><use href="#i-calendar-days"/></svg>Plan</a>
       <a href="#lab" data-tab="lab"><svg class="ic" aria-hidden="true"><use href="#i-flask-conical"/></svg>Lab</a>
     </nav>
+    <button class="theme" id="logout" aria-label="Wyloguj"><svg class="ic" aria-hidden="true"><use href="#i-log-out"/></svg></button>
     <button class="theme" id="theme" aria-label="Przełącz jasny i ciemny wygląd"><svg class="ic" aria-hidden="true"><use href="#i-moon"/></svg></button>
 </div></div>
 
@@ -494,6 +540,7 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
           <option value="num">systemy liczbowe</option>
           <option value="bit">operacje bitowe</option>
           <option value="gate">bramki</option>
+          <option value="ipv6">IPv6</option>
         </select>
       </div>
       <div class="solution" id="lic-sol" hidden></div>
@@ -555,6 +602,9 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
     <p>Odhaczaj dopiero bez podglądania.</p>
     <div class="counter" id="lab-count"></div>
     <div id="lab-tasks"></div>
+    <h2>Próbna praktyka na czas</h2>
+    <p>Bierzesz prawdziwy arkusz CKE, masz 150 minut, potem oceniasz się kryteriami jak egzaminator. Próg zdania to 75%.</p>
+    <div class="card prac" id="prac"></div>
   </section>
 </div>
 
@@ -1039,6 +1089,10 @@ const LAB_TASKS = [
     "Zaciśnij zaciskarką. Tester ma pokazać kolejno 1–1, 2–2 … 8–8.",
     "Kabel krosowy: jeden koniec T568A, drugi T568B. Tester pokaże 1–3, 2–6, 3–1, 6–2."
   ]],
+  ["F","Diagnostyka jak od 2025: tabela z parametrami komputera, zrzuty ekranu i ocena, czy sprzęt spełnia wymagania programu.","ok. 25 min",["CPU-Z: zakładka CPU (Name, Cores, Threads, Max TDP), Memory (Type, Size, kanały), Mainboard (producent, model). GPU-Z: nazwa karty i Memory Size. CrystalDiskInfo: model dysku, stan (Dobry), liczba godzin pracy.","Bez tych programów: `msinfo32` (procesor, RAM, płyta), `dxdiag` (karta graficzna), w Linuksie `lscpu`, `free -h`, `lsblk`, `sudo smartctl -a /dev/sda`.","Każdą wartość wpisz do tabeli dokładnie tak, jak pokazuje program, i zrób zrzut: Win + Shift + S, potem Ctrl + V do dokumentu. Jedna niezgodność tabeli ze zrzutem kasuje punkt.","Ocena: porównaj z wymaganiami z zadania (np. 16 GB RAM, dysk SSD, 4 rdzenie). Napisz jedno zdanie na element: spełnia albo nie spełnia, i co wymienić. Przykład: „RAM 8 GB nie spełnia wymagania 16 GB, dołożyć drugi moduł 8 GB DDR4 3200”."]],
+  ["G","Skrypt .bat: pyta o nazwę folderu, tworzy go na pulpicie i zapisuje tam wynik ipconfig /all.","ok. 15 min",["Otwórz Notatnik i wpisz:","PRE:@echo off\ncls\nset /p nazwa=Podaj nazwe folderu: \nif not exist \"%USERPROFILE%\\Desktop\\%nazwa%\" mkdir \"%USERPROFILE%\\Desktop\\%nazwa%\"\nipconfig /all > \"%USERPROFILE%\\Desktop\\%nazwa%\\siec.txt\"\necho Zapisano do %nazwa%\\siec.txt\npause","Zapisz jako `skrypt.bat`: Typ pliku „Wszystkie pliki”, bez polskich znaków w treści. Uruchom dwuklikiem.","`@echo off` ukrywa wypisywanie poleceń, `cls` czyści ekran, `set /p` czyta tekst od użytkownika do zmiennej, `%nazwa%` wstawia jej wartość, `>` zapisuje wynik polecenia do pliku (`>>` dopisuje), `pause` czeka na klawisz."]],
+  ["H","Skrypt bash z parametrami i pętlą: ./katalogi.sh projekt 3 tworzy katalogi projekt1, projekt2, projekt3.","ok. 15 min",["Na Ubuntu: `nano katalogi.sh` i wpisz:","PRE:#!/bin/bash\nif [ $# -ne 2 ]; then\n  echo \"Uzycie: $0 prefiks liczba\"\n  exit 1\nfi\nfor i in $(seq 1 $2); do\n  mkdir -p \"$1$i\"\n  echo \"Utworzono $1$i\"\ndone\necho \"Gotowe: $2 katalogow\"","Zapisz: Ctrl + O, Enter, Ctrl + X. Nadaj prawo wykonania: `chmod +x katalogi.sh`. Uruchom: `./katalogi.sh projekt 3`, sprawdź: `ls`.","`$1` i `$2` to parametry z wywołania, `$#` ich liczba, `$0` nazwa skryptu. `for i in $(seq 1 $2)` powtarza pętlę od 1 do drugiego parametru. Pierwsza linia `#!/bin/bash` mówi, czym uruchomić plik."]],
+  ["I","Kosztorys w Excelu albo Calc: kabel 25 m po 1,20 zł, 10 wtyków RJ45 po 0,80 zł, 2 gniazda po 12 zł. Netto, VAT 23%, brutto.","ok. 15 min",["Nagłówki w wierszu 1: Nazwa | Ilość | J.m. | Cena netto | Wartość netto. Wpisz trzy pozycje w wierszach 2–4, tylko te z zadania.","W E2 wpisz `=B2*D2` i przeciągnij do E4. Liczby wpisuj formułą, nigdy ręcznie wyliczone, bo CKE punktuje formuły.","E5: `=SUMA(E2:E4)` (w angielskim Excelu `=SUM(E2:E4)`), E6: `=E5*23%` (VAT), E7: `=E5+E6` (brutto). Podpisz wiersze w kolumnie D.","Zaznacz kolumny D i E, Ctrl + 1, format Walutowy, zł. Wynik do sprawdzenia: netto 62,00 zł, VAT 14,26 zł, brutto 76,26 zł.","Zapisz pod nazwą z zadania na pendrive albo we wskazanym folderze. Brak pliku to 0 punktów za cały kosztorys."]]
 ];
 
 const CHEAT = [
@@ -1091,56 +1145,121 @@ function bumpDay() {
   const keys = Object.keys(stats.d).sort();
   keys.slice(0, Math.max(0, keys.length - 120)).forEach(x => delete stats.d[x]);
 }
-let db = null, saveTimer = null, saving = false, pendingSave = false;
-const LS_KEY = "inf02-stats";
+// ---------- konta i zapis ----------
+// Hasło zamienia się w skrót SHA-256 ("inf02:" + hasło). Postęp leży w Supabase (funkcje inf02_load / inf02_save),
+// kopia w tej przeglądarce pod kluczem konta. Bez internetu działa sama kopia.
+const SB_URL = "", SB_KEY = ""; // adres projektu i klucz anon public z Supabase
+const ACCOUNTS = ["49f74dc7a091b26ed0bfc0487140693957c41f1d3032ee5c5b623273d4bd2748", "2af6bc6ed448bb52a755d962d11a32a1bed0ad8c5c476fd100c5dd2a46fa3f59"];
+let acct = null, saveTimer = null, saving = false, pendingSave = false;
 const syncEl = document.getElementById("sync");
+const lsKey = () => "inf02-stats-" + acct.slice(0, 12);
 
-function lsRead() { try { return JSON.parse(localStorage.getItem(LS_KEY) || "null"); } catch (e) { return null; } }
-function lsWrite() { try { localStorage.setItem(LS_KEY, JSON.stringify(stats)); } catch (e) {} }
+function lsRead() { try { return JSON.parse(localStorage.getItem(lsKey()) || "null"); } catch (e) { return null; } }
+function lsWrite() { try { localStorage.setItem(lsKey(), JSON.stringify(stats)); } catch (e) {} }
 function normalize(s) {
   if (!s || typeof s !== "object") s = {};
-  return { q: s.q || {}, s: Array.isArray(s.s) ? s.s : [], lab: s.lab || {}, d: s.d || {}, exam: typeof s.exam === "string" ? s.exam : "", sub: Array.isArray(s.sub) ? s.sub : [0, 0], lic: Array.isArray(s.lic) ? s.lic : [0, 0] };
+  return { q: s.q || {}, s: Array.isArray(s.s) ? s.s : [], lab: s.lab || {}, d: s.d || {}, exam: typeof s.exam === "string" ? s.exam : "", sub: Array.isArray(s.sub) ? s.sub : [0, 0], lic: Array.isArray(s.lic) ? s.lic : [0, 0], prac: s.prac && s.prac.start ? s.prac : null, pr: Array.isArray(s.pr) ? s.pr : [] };
+}
+const amount = s => Object.values(s.q).reduce((a, v) => a + v[0] + v[1], 0) + Object.keys(s.lab).length;
+
+// SHA-256 bez crypto.subtle, bo plik otwarty z dysku (file://) nie ma bezpiecznego kontekstu
+function sha256(str) {
+  const K = [], H = [], b = new TextEncoder().encode(str), r = (x, n) => (x >>> n) | (x << (32 - n));
+  for (let n = 2, c = 0; c < 64; n++) { let p = true; for (let d = 2; d * d <= n; d++) if (n % d === 0) { p = false; break; } if (p) { if (c < 8) H[c] = (Math.pow(n, 1 / 2) * 2 ** 32) | 0; K[c++] = (Math.pow(n, 1 / 3) * 2 ** 32) | 0; } }
+  const len = ((b.length + 9 + 63) >> 6) << 6, m = new Uint8Array(len); m.set(b); m[b.length] = 0x80;
+  const bits = b.length * 8; m[len - 4] = bits >>> 24; m[len - 3] = bits >>> 16; m[len - 2] = bits >>> 8; m[len - 1] = bits;
+  for (let o = 0; o < len; o += 64) {
+    const w = [];
+    for (let i = 0; i < 64; i++) w[i] = i < 16 ? (m[o + 4 * i] << 24 | m[o + 4 * i + 1] << 16 | m[o + 4 * i + 2] << 8 | m[o + 4 * i + 3]) : (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10)) + w[i - 7] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 16] | 0;
+    let [a, bb, c, d, e, f, g, h] = H;
+    for (let i = 0; i < 64; i++) {
+      const t1 = h + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i] | 0, t2 = (r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & bb) ^ (a & c) ^ (bb & c)) | 0;
+      h = g; g = f; f = e; e = d + t1 | 0; d = c; c = bb; bb = a; a = t1 + t2 | 0;
+    }
+    [a, bb, c, d, e, f, g, h].forEach((v, i) => { H[i] = H[i] + v | 0; });
+  }
+  return H.map(v => (v >>> 0).toString(16).padStart(8, "0")).join("");
+}
+console.assert(sha256("abc") === "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad", "sha256");
+
+async function rpc(fn, body) {
+  const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 10000);
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, { method: "POST", signal: ctl.signal,
+      headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return await res.json();
+  } finally { clearTimeout(t); }
 }
 
 function scheduleSave() {
   lsWrite();
-  if (!db) return;
+  if (!SB_URL) return;
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(flushSave, 1200);
+  saveTimer = setTimeout(flushSave, 1500);
 }
 async function flushSave() {
   if (saving) { pendingSave = true; return; }
   saving = true;
-  try { await db.doc("progress/stats").set(stats); syncEl.textContent = "Postęp zapisany na koncie."; }
-  catch (e) { syncEl.textContent = "Zapis na koncie nie przeszedł (" + ((e && e.code) || "błąd") + "). Postęp został w tej przeglądarce."; }
+  try { syncEl.textContent = (await rpc("inf02_save", { p_key: acct, p_data: stats })) ? "Postęp zapisany w chmurze." : "Chmura nie przyjęła zapisu. Postęp został w tej przeglądarce."; }
+  catch (e) { syncEl.textContent = "Brak połączenia. Postęp został w tej przeglądarce i wyśle się przy następnym zapisie."; }
   saving = false;
   if (pendingSave) { pendingSave = false; flushSave(); }
 }
 
-async function initStore() {
-  const local = lsRead();
-  if (local) stats = normalize(local);
-  renderAll();
-  if (!window.claude || !window.claude.use) { syncEl.textContent = "Postęp zapisuje się w tej przeglądarce."; return; }
-  try { db = await window.claude.use("db"); } catch (e) { db = null; }
-  if (!db) { syncEl.textContent = "Postęp zapisuje się w tej przeglądarce."; return; }
-  const t = setTimeout(() => { syncEl.textContent = "Konto jeszcze nie odpowiada. Do tego czasu postęp trafia do przeglądarki."; }, 10000);
+// wczytanie z chmury: wygrywa wersja z większą liczbą odpowiedzi
+async function pull() {
+  if (!SB_URL) { syncEl.textContent = "Chmura nie jest jeszcze podłączona. Postęp zapisuje się w tej przeglądarce."; return; }
   try {
-    const snap = await db.doc("progress/stats").get();
-    clearTimeout(t);
-    if (snap.exists) {
-      const remote = normalize(JSON.parse(JSON.stringify(snap.data())));
-      const count = s => Object.values(s.q).reduce((a, v) => a + v[0] + v[1], 0) + Object.keys(s.lab).length;
-      if (count(remote) >= count(stats)) stats = remote; else scheduleSave();
-    } else if (local) scheduleSave();
-    syncEl.textContent = "Postęp zapisuje się na Twoim koncie.";
-    lsWrite();
-    renderAll();
-  } catch (e) {
-    clearTimeout(t);
-    syncEl.textContent = "Nie wczytałem postępu z konta. Działa zapis w przeglądarce.";
-  }
+    const remote = await rpc("inf02_load", { p_key: acct });
+    if (remote === null) { logout(); return; }
+    const r = normalize(remote);
+    if (amount(r) >= amount(stats)) { stats = r; lsWrite(); renderAll(); } else flushSave();
+    syncEl.textContent = "Postęp zapisuje się w chmurze, na każdym urządzeniu to samo.";
+  } catch (e) { syncEl.textContent = "Nie połączyłem się z chmurą. Działa zapis w tej przeglądarce."; }
 }
+
+function initStore() {
+  try { acct = localStorage.getItem("inf02-acct"); } catch (e) {}
+  if (!acct || !ACCOUNTS.includes(acct)) { showLogin(); return; }
+  document.body.classList.remove("locked");
+  stats = normalize(lsRead());
+  renderAll();
+  pull();
+}
+
+function showLogin() {
+  document.body.classList.add("locked");
+  const inp = document.getElementById("login-pw");
+  setTimeout(() => inp.focus(), 50);
+}
+async function login(e) {
+  e.preventDefault();
+  const pw = document.getElementById("login-pw").value.trim().toLowerCase(), err = document.getElementById("login-err");
+  if (!pw) return;
+  const h = sha256("inf02:" + pw);
+  if (!ACCOUNTS.includes(h)) { err.textContent = "Nie ma konta z takim hasłem."; return; }
+  err.textContent = "";
+  acct = h;
+  try { localStorage.setItem("inf02-acct", h); } catch (e2) {}
+  // postęp sprzed kont trafia do pierwszego konta, na które się zalogujesz na tym urządzeniu
+  let local = lsRead();
+  try { const old = localStorage.getItem("inf02-stats"); if (!local && old) { local = JSON.parse(old); localStorage.removeItem("inf02-stats"); } } catch (e3) {}
+  stats = normalize(local);
+  lsWrite();
+  document.body.classList.remove("locked");
+  document.getElementById("login-pw").value = "";
+  location.hash = "#przeglad";
+  renderAll(); showTab();
+  await pull();
+}
+function logout() {
+  try { localStorage.removeItem("inf02-acct"); } catch (e) {}
+  acct = null; stats = normalize(null);
+  showLogin();
+}
+document.getElementById("login-form").addEventListener("submit", login);
+document.getElementById("logout").addEventListener("click", logout);
 
 function record(id, ok) {
   const v = stats.q[id] || [0, 0, 0];
@@ -1597,15 +1716,53 @@ function licSteps(n, from, to) {
   return out;
 }
 
+// ---- IPv6: skrót wg RFC 5952 (małe litery, bez zer wiodących, najdłuższy ciąg zer jako ::) ----
+const hex4 = g => g.toString(16).padStart(4, "0");
+function v6short(g) {
+  let best = [-1, 0];
+  for (let i = 0; i < 8;) { if (g[i]) { i++; continue; } let j = i; while (j < 8 && !g[j]) j++; if (j - i > best[1]) best = [i, j - i]; i = j; }
+  const h = g.map(x => x.toString(16));
+  if (best[1] < 2) return h.join(":");
+  return h.slice(0, best[0]).join(":") + "::" + h.slice(best[0] + best[1]).join(":");
+}
+console.assert(v6short([0x2001, 0xdb8, 0, 0, 0, 0, 0, 1]) === "2001:db8::1" && v6short([0xfe80, 0, 0, 0, 0xa, 0, 0, 0]) === "fe80::a:0:0:0" && v6short([0, 0, 0, 0, 0, 0, 0, 1]) === "::1", "v6short");
+const V6TYPES = [
+  ["link-local", "fe80::/10, adres lokalny łącza, działa tylko w jednym segmencie sieci", () => [0xfe80, 0, 0, 0, rnd(65536), rnd(256), 0, 1 + rnd(255)], ["link-local", "linklocal", "lokalnylacza", "lokalnyłącza"]],
+  ["global", "2000::/3, adres globalny (global unicast), routowalny w internecie", () => [0x2001, 0xdb8, rnd(65536), 0, 0, 0, 0, 1 + rnd(255)], ["global", "globalny", "globalunicast", "gua"]],
+  ["multicast", "ff00::/8, adres grupowy, np. ff02::1 to wszystkie węzły w łączu", () => [0xff02, 0, 0, 0, 0, 0, 0, 1 + rnd(2)], ["multicast", "grupowy", "rozgloszeniowy"]],
+  ["loopback", "::1, pętla zwrotna, odpowiednik 127.0.0.1", () => [0, 0, 0, 0, 0, 0, 0, 1], ["loopback", "petlazwrotna", "pętlazwrotna", "localhost"]],
+  ["ula", "fc00::/7 (w praktyce fd00::/8), unikalny adres lokalny, odpowiednik adresów prywatnych", () => [0xfd00 + rnd(256), rnd(65536), 0, 1, 0, 0, 0, 1 + rnd(255)], ["ula", "uniquelocal", "unikalnylokalny", "prywatny"]]
+];
+function v6task() {
+  const k = Math.random();
+  if (k < 0.55) {
+    const g = [0x2001, 0xdb8, rnd(4) ? 0 : rnd(65536), rnd(65536), 0, 0, rnd(3) ? 0 : rnd(4096), 1 + rnd(4095)];
+    if (Math.random() < 0.5) g[3] = 0;
+    const full = g.map(hex4).join(":"), ans = v6short(g);
+    return { ask: "Zapisz w najkrótszej postaci:", task: full, ans, base: 16, check: v => v === ans,
+      steps: ["Usuń zera wiodące w każdej grupie: " + g.map(x => x.toString(16)).join(":") + ".", "Najdłuższy ciąg grup zerowych zamień na :: (tylko raz w adresie). Wynik: " + ans + "."] };
+  }
+  if (k < 0.8) {
+    const g = [0xfe80, 0, 0, 0, rnd(65536), 0, 0, 1 + rnd(4095)], short = v6short(g), ans = g.map(hex4).join(":");
+    return { ask: "Rozwiń do pełnej postaci (8 grup po 4 cyfry):", task: short, ans, base: 16, check: v => v === ans,
+      steps: ["Policz grupy po obu stronach ::, brakujące do 8 uzupełnij zerami.", "Każdą grupę dopełnij zerami z przodu do 4 cyfr: " + ans + "."] };
+  }
+  const t = V6TYPES[rnd(V6TYPES.length)];
+  return { ask: "Jaki to typ adresu? Wpisz: link-local, global, multicast, loopback albo ula.", task: v6short(t[2]()), ans: t[0], base: 16,
+    check: v => t[3].includes(v.replace(/[\s-]/g, "").replace("linklocal", "link-local")) || t[3].includes(v), steps: [t[1] + "."] };
+}
+
 function newLic() {
   const mode = document.getElementById("lic-mode").value;
-  const kinds = mode === "all" ? ["num", "num", "bit", "gate"] : [mode];
+  const kinds = mode === "all" ? ["num", "num", "bit", "gate", "ipv6"] : [mode];
   const kind = kinds[rnd(kinds.length)];
   if (kind === "num") {
     const pairs = [[10, 2], [2, 10], [2, 16], [16, 2], [8, 10], [10, 16], [16, 10], [8, 2], [2, 8], [10, 8]];
     const [from, to] = pairs[rnd(pairs.length)];
     const n = 5 + rnd(from === 2 || to === 2 ? 251 : 500);
     lic = { ask: `Zapisz ${SYS[to]}:`, task: `${fmt(n, from)}${SUBS[from]}`, ans: fmt(n, to), base: to, steps: licSteps(n, from, to) };
+  } else if (kind === "ipv6") {
+    lic = v6task();
   } else if (kind === "bit") {
     const op = ["AND", "OR", "XOR"][rnd(3)], a = rnd(16), b = rnd(16);
     const r = op === "AND" ? a & b : op === "OR" ? a | b : a ^ b;
@@ -1628,6 +1785,7 @@ function newLic() {
   document.getElementById("lic-task").textContent = lic.task;
   const inp = document.getElementById("lic-in");
   inp.value = ""; inp.inputMode = lic.base === 16 ? "text" : "numeric";
+  document.getElementById("lic-task").classList.toggle("v6", !!lic.check);
   document.getElementById("lic-field").className = "field";
   document.getElementById("lic-fix").textContent = "";
   document.getElementById("lic-sol").hidden = true;
@@ -1639,9 +1797,9 @@ function checkLic() {
   if (lic.done) { newLic(); document.getElementById("lic-in").focus(); return; }
   const raw = document.getElementById("lic-in").value.replace(/\s+/g, "").toUpperCase();
   if (!raw) return;
-  let v = raw.replace(/^0+(?=.)/, "");
-  const want = lic.pad ? lic.ans.replace(/^0+(?=.)/, "") : lic.ans;
-  const ok = v === want;
+  let ok;
+  if (lic.check) ok = lic.check(raw.toLowerCase());
+  else ok = raw.replace(/^0+(?=.)/, "") === (lic.pad ? lic.ans.replace(/^0+(?=.)/, "") : lic.ans);
   stats.lic[1]++; if (ok) stats.lic[0]++;
   lic.done = true;
   document.getElementById("lic-field").className = "field " + (ok ? "ok" : "no");
@@ -1663,6 +1821,63 @@ document.getElementById("lic-mode").addEventListener("change", newLic);
 document.getElementById("lic-in").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); checkLic(); } });
 // samokontrola: kroki i wynik muszą się zgadzać z wbudowaną konwersją
 console.assert(licSteps(173, 2, 16)[0].includes("1010 = A") && licSteps(111, 8, 10)[0].endsWith("= 111."), "licSteps");
+
+// ---------- próbna praktyka ----------
+// kryteria uogólnione z 42 kluczy oceniania CKE (2021–2026)
+const PRAC = [
+  ["Okablowanie i sprzęt", ["Kabel zarobiony w standardzie z zadania na obu końcach", "Odizolowane najwyżej 25 mm, pary rozkręcone najwyżej 13 mm, zatrzask na izolacji", "Kabel sprawdzony testerem, wynik zapisany", "Podzespół zamontowany, komputer się uruchamia"]],
+  ["Diagnostyka", ["Tabela zgodna ze zrzutami ekranu", "Ocena wymagań z uzasadnieniem, co wymienić"]],
+  ["Ruter i przełącznik", ["Adres LAN rutera zgodny z zadaniem", "WAN statyczny: IP, maska kropkowo, brama, DNS", "DHCP włączony albo wyłączony jak w zadaniu, zakres i rezerwacja", "Wi-Fi: SSID, zabezpieczenie, hasło", "Nowe hasło administratora rutera", "Adres IP przełącznika", "VLAN-y i porty jak w zadaniu"]],
+  ["Serwer", ["Nazwy połączeń sieciowych zmienione", "Adresacja kart serwera", "Rola lub usługa zainstalowana i ustawiona (AD DS, DHCP, DNS, IIS, udział)", "Konta i grupy z dokładnymi nazwami i opcjami haseł", "Uprawnienia NTFS i udostępniania"]],
+  ["Stacja robocza", ["Adresacja stacji: IP, maska, brama, DNS", "Stacja w domenie albo ustawiona jak w zadaniu", "Zapora przepuszcza ping"]],
+  ["Testy i dokumenty", ["Ping między urządzeniami pokazany egzaminatorowi", "Polecenia z konsoli zapisane w tabeli", "Plik (kosztorys, skrypt, dokument) zapisany pod nazwą i w miejscu z zadania", "Kosztorys: formuły, SUMA, format zł, tylko pozycje z zadania"]],
+  ["BHP", ["Stanowisko uporządkowane, zasady BHP i ESD zachowane"]]
+];
+const PRAC_MIN = 150;
+let pracTick = null;
+function pracLeft() { return Math.max(0, stats.prac.start + PRAC_MIN * 60000 - Date.now()); }
+function mmss(ms) { const m = Math.floor(ms / 60000), sec = Math.floor(ms / 1000) % 60; return `${m}:${String(sec).padStart(2, "0")}`; }
+function pracScore() {
+  const v = Object.values(stats.prac.marks || {}), y = v.filter(x => x === "y").length, n = v.filter(x => x === "n").length;
+  return { y, n, pct: y + n ? Math.round(100 * y / (y + n)) : null };
+}
+function renderPrac() {
+  const el = document.getElementById("prac");
+  clearTimeout(pracTick);
+  const hist = stats.pr.slice(-5).map(p => `<span class="tag ${p.pct >= 75 ? "okt" : "badt"}">${p.t.slice(8, 10)}.${p.t.slice(5, 7)}: ${p.pct}%</span>`).join(" ");
+  if (!stats.prac) {
+    el.innerHTML = `<div class="prac-row"><button class="primary" id="prac-start">${ico("timer")}Start: 150 minut</button><button id="prac-sheet">${ico("file-text")}Losuj arkusz CKE</button></div>
+      ${hist ? `<p class="small muted" style="margin:12px 0 0">Ostatnie wyniki: ${hist}</p>` : ""}`;
+    document.getElementById("prac-start").onclick = () => { stats.prac = { start: Date.now(), marks: {} }; scheduleSave(); renderPrac(); };
+    document.getElementById("prac-sheet").onclick = () => { const sh = SHEETS[rnd(SHEETS.length)]; window.open(sh[2], "_blank", "noopener"); };
+    return;
+  }
+  const left = pracLeft(), sc = pracScore();
+  let html = `<div class="prac-row"><span class="prac-time${left < 900000 ? " late" : ""}" id="prac-time">${left ? mmss(left) : "Koniec czasu"}</span>
+    <span class="prac-pct">${sc.pct === null ? "Oceń kryteria po skończeniu" : `Wynik: <b>${sc.pct}%</b> (${sc.y} z ${sc.y + sc.n})`}</span></div>`;
+  PRAC.forEach(([g, items], gi) => {
+    html += `<h3>${g}</h3>`;
+    items.forEach((it, ii) => {
+      const k = gi + "-" + ii, m = stats.prac.marks[k] || "";
+      html += `<div class="crit"><span>${it}</span><span class="seg" role="group" aria-label="${it}">` +
+        [["y", "Tak"], ["n", "Nie"], ["x", "Nie było"]].map(([v, l]) => `<button data-k="${k}" data-v="${v}" class="${m === v ? "on " + v : ""}" aria-pressed="${m === v}">${l}</button>`).join("") + `</span></div>`;
+    });
+  });
+  html += `<div class="prac-row" style="margin-top:16px"><button class="primary" id="prac-end">Zakończ i zapisz wynik</button><button id="prac-cancel">Przerwij</button></div>`;
+  el.innerHTML = html;
+  el.querySelectorAll(".seg button").forEach(b => b.onclick = () => { stats.prac.marks[b.dataset.k] = b.dataset.v; scheduleSave(); renderPrac(); });
+  document.getElementById("prac-end").onclick = () => {
+    const r = pracScore();
+    if (r.pct !== null) stats.pr.push({ t: today(), pct: r.pct });
+    stats.pr = stats.pr.slice(-30); stats.prac = null; scheduleSave(); renderPrac();
+  };
+  document.getElementById("prac-cancel").onclick = () => { if (confirm("Przerwać próbną praktykę bez zapisu wyniku?")) { stats.prac = null; scheduleSave(); renderPrac(); } };
+  if (left) pracTick = setTimeout(function t() {
+    const e = document.getElementById("prac-time"); if (!e || !stats.prac) return;
+    const l = pracLeft(); e.textContent = l ? mmss(l) : "Koniec czasu"; e.classList.toggle("late", l < 900000);
+    if (l) pracTick = setTimeout(t, 1000);
+  }, 1000);
+}
 
 // ---------- zakładki ----------
 const TABS = ["przeglad", "quiz", "umiec", "podsieci", "liczby", "sciaga", "arkusze", "plan", "lab"];
@@ -1718,6 +1933,7 @@ function renderAll() {
   renderCheat();
   renderSubScore();
   renderLicScore();
+  renderPrac();
   examInput.value = stats.exam || "";
 }
 
