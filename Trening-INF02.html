@@ -56,7 +56,8 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 500 17px/1.6 v
 section > p, section > ol, section > ul { max-width: 70ch; }
 
 /* górny pasek: marka, zakładki, motyw */
-.bar-top { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 18px; margin: 0 calc(-1 * max(20px, env(safe-area-inset-left, 0px))) 30px; padding: 10px max(20px, env(safe-area-inset-left, 0px)); background: var(--paper); border-bottom: 1px solid var(--line); }
+.bar-top { position: sticky; top: 0; z-index: 5; margin-bottom: 30px; background: var(--paper); border-bottom: 1px solid var(--line); }
+.bar-in { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 18px; padding: 10px max(20px, env(safe-area-inset-right, 0px)) 10px max(20px, env(safe-area-inset-left, 0px)); }
 .brand { display: inline-flex; align-items: center; gap: 9px; font: 900 20px var(--f-head); letter-spacing: -0.01em; white-space: nowrap; color: var(--ink); text-decoration: none; }
 .brand i { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--accent); color: var(--accent-ink); }
 .brand i .ic { width: 19px; height: 19px; }
@@ -100,20 +101,21 @@ select { font: 700 16px var(--f-body); padding: 9px 12px; min-height: 46px; bord
 .when .lbl { font: 800 15px var(--f-head); color: var(--muted); display: inline-flex; gap: 7px; align-items: center; }
 .when .lbl .ic { color: var(--accent); }
 .when .dates { color: var(--muted); font-weight: 700; }
-.when .dates a { font-weight: 800; }
+.when .dates a { font-weight: 800; white-space: nowrap; }
 .today { padding: 22px 24px; display: grid; gap: 14px; align-content: start; }
 .today .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 800; }
 .today .row .ic { color: var(--accent); }
 .today .row .fl { color: var(--c-sprzet); }
+#ov-streak { font: 900 22px var(--f-head); color: var(--c-sprzet); }
 .today .num { font: 900 30px/1 var(--f-head); }
 .today .num small { font-size: 17px; color: var(--muted); }
 .today button { width: 100%; font-size: 18px; min-height: 54px; }
-.today .hint2 { font-size: 14px; color: var(--muted); margin: 2px 0 0; text-align: center; }
+.today .hint2 { font-size: 14px; color: var(--muted); margin: 4px 0 0; text-align: center; }
 .track { height: 12px; background: var(--line); border-radius: 6px; overflow: hidden; }
 .track i { display: block; height: 100%; background: var(--accent); border-radius: 6px; }
 
-.cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
-.catrow { --c: var(--accent); display: grid; grid-template-columns: 46px 1fr auto; grid-template-rows: auto auto auto; align-items: center; gap: 4px 12px; width: 100%; text-align: left; padding: 18px; min-height: 0; border-radius: 18px; font-weight: 600; }
+.cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.catrow { --c: var(--accent); display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; grid-template-rows: auto auto auto; align-items: center; gap: 4px 12px; width: 100%; text-align: left; padding: 18px; min-height: 0; border-radius: 18px; font-weight: 600; }
 .catrow { border-bottom-width: 4px; }
 .catrow:hover:not(:disabled) { background: var(--paper); border-color: var(--c); }
 .catrow .ci { grid-row: 1 / span 2; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 13px; background: var(--c); color: #fff; }
@@ -121,7 +123,7 @@ select { font: 700 16px var(--f-body); padding: 9px 12px; min-height: 46px; bord
 .catrow .cn { grid-column: 2; grid-row: 1; align-self: end; font: 900 17px/1.2 var(--f-head); }
 .catrow .pct { grid-column: 3; grid-row: 1 / span 2; font: 900 26px var(--f-head); color: var(--c); }
 .catrow .seen { grid-column: 2; grid-row: 2; align-self: start; font-size: 14px; color: var(--muted); }
-.catrow .bar { grid-column: 1 / -1; height: 10px; margin-top: 10px; background: var(--line); border-radius: 5px; overflow: hidden; }
+.catrow .bar { grid-column: 1 / -1; height: 10px; margin-top: 10px; background: color-mix(in srgb, var(--c) 18%, var(--line)); border-radius: 5px; overflow: hidden; }
 .catrow .bar i { display: block; height: 100%; border-radius: 5px; background: var(--c); }
 .catrow .tag { grid-column: 1 / -1; justify-self: start; margin-top: 4px; font: 800 12px var(--f-head); letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 6px; }
 .catrow.low .tag { background: var(--bad-soft); color: var(--bad); }
@@ -131,7 +133,7 @@ select { font: 700 16px var(--f-body); padding: 9px 12px; min-height: 46px; bord
 .c-serwer { --c: var(--c-serwer); } .c-bezp { --c: var(--c-bezp); } .c-podstawy { --c: var(--c-podstawy); }
 .c-linux .ci { color: #2b2300; }
 
-.more { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+.more { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; align-items: start; }
 .prog { padding: 8px 22px; }
 .prog a { display: grid; grid-template-columns: 40px 1fr auto; grid-template-rows: auto auto; align-items: center; gap: 2px 14px; padding: 14px 0; border-bottom: 2px solid var(--line); color: var(--ink); text-decoration: none; }
 .prog a:last-child { border-bottom: 0; }
@@ -163,8 +165,11 @@ select { font: 700 16px var(--f-body); padding: 9px 12px; min-height: 46px; bord
   .when { padding: 22px; }
 }
 @media (max-width: 640px) {
-  .brand span { display: none; }
-  .bar-top { gap: 10px; margin-bottom: 22px; }
+  .bar-in { flex-wrap: wrap; gap: 6px 10px; padding-bottom: 4px; }
+  .bar-top { margin-bottom: 22px; }
+  .brand { flex: 1; }
+  nav { order: 3; flex-basis: 100%; scroll-snap-type: x proximity; mask-image: linear-gradient(90deg, #000 85%, transparent); }
+  nav a { scroll-snap-align: start; }
   .cats { grid-template-columns: 1fr; gap: 12px; }
 }
 .grid40 button { border-width: 2px; border-radius: 8px; }
@@ -366,8 +371,7 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
 <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></symbol>
 </svg>
 
-<div class="wrap">
-  <div class="bar-top">
+<div class="bar-top"><div class="bar-in">
     <a class="brand" href="#przeglad"><i><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></i><span>Trening INF.02</span></a>
     <nav aria-label="Sekcje">
       <span class="pill" aria-hidden="true"></span>
@@ -382,13 +386,13 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
       <a href="#lab" data-tab="lab"><svg class="ic" aria-hidden="true"><use href="#i-flask-conical"/></svg>Lab</a>
     </nav>
     <button class="theme" id="theme" aria-label="Przełącz jasny i ciemny wygląd"><svg class="ic" aria-hidden="true"><use href="#i-moon"/></svg></button>
-  </div>
+</div></div>
 
+<div class="wrap">
   <!-- PRZEGLĄD -->
   <section id="tab-przeglad">
     <div class="hero">
       <div class="card when">
-        <span class="lbl"><svg class="ic" aria-hidden="true"><use href="#i-calendar-clock"/></svg>Egzamin pisemny</span>
         <h1 id="ov-days">Ładuję</h1>
         <span class="dates" id="ov-dates"></span>
       </div>
@@ -408,7 +412,7 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
       <div class="card histc">
         <h3>Egzaminy próbne</h3>
         <div id="hist-box" hidden><div class="hist" id="hist"></div><p class="legend">Kreski: 20 to próg, 30 to Twój cel.</p></div>
-        <p class="muted" id="hist-empty">Jeszcze żadnego. Zrób pierwszy w zakładce Quiz.</p>
+        <div id="hist-empty"><p class="muted">Jeszcze żadnego. 40 pytań, 60 minut.</p><button class="primary" id="btn-first-exam">Zrób pierwszy</button></div>
       </div>
     </div>
     <p class="sync" id="sync"></p>
@@ -1193,7 +1197,7 @@ function renderStats() {
     d.className = `card catrow c-${c}${cls}`;
     d.setAttribute("aria-label", `${CATS[c]}: ${s.pct === null ? "jeszcze nie ćwiczony" : s.pct + "% poprawnych"}. Ćwicz 20 pytań.`);
     d.innerHTML = `<span class="ci">${ico(CAT_ICON[c] || "binary")}</span><span class="cn">${CATS[c]}</span>
-      <span class="pct">${s.pct === null ? "–" : s.pct + "%"}</span>
+      <span class="pct">${s.pct === null ? "" : s.pct + "%"}</span>
       <span class="seen">${s.seen} z ${s.total} pytań</span>
       <span class="bar" aria-hidden="true"><i style="width:${s.pct || 0}%"></i></span>${tag ? `<span class="tag">${tag}</span>` : ""}`;
     d.addEventListener("click", () => practise(c));
@@ -1212,10 +1216,10 @@ function renderStats() {
   document.getElementById("bad-desc").textContent = n ? `Do poprawy: ${n} ${n === 1 ? "pytanie" : n < 5 ? "pytania" : "pytań"}` : "Pojawią się tu pytania, w których się pomylisz";
 
   const left = daysLeft(), dzis = stats.d[today()] || 0, st = streak();
-  document.getElementById("ov-days").textContent = left > 0 ? `Za ${left} ${dni(left)}` : left === 0 ? "Dziś" : "Już był";
+  document.getElementById("ov-days").textContent = left > 0 ? `Teoria za ${left} ${dni(left)}` : left === 0 ? "Teoria dziś" : "Teoria już była";
   document.getElementById("ov-dates").innerHTML = stats.exam
-    ? `${plDate(stats.exam)}. Praktyka 15–19 stycznia. <a href="#plan">Zmień datę</a>`
-    : `7–13 stycznia 2027, dokładny dzień poda szkoła. Praktyka 15–19 stycznia. <a href="#plan">Wpisz swój dzień</a>`;
+    ? `Twój dzień: ${plDate(stats.exam)} · praktyka 15–19 stycznia · <a href="#plan">zmień</a>`
+    : `Pisemny 7–13 stycznia · praktyka 15–19 stycznia · <a href="#plan">wpisz swój dzień</a>`;
   document.getElementById("ov-today").innerHTML = `${Math.min(dzis, 999)}<small> z ${GOAL}</small>`;
   document.getElementById("ov-today-bar").style.width = Math.min(100, 100 * dzis / GOAL) + "%";
   document.getElementById("ov-streak").textContent = `${st} ${dni(st)}`;
@@ -1402,6 +1406,7 @@ function renderResult() {
 document.getElementById("btn-rand").addEventListener("click", () => startRun("losowe"));
 document.getElementById("btn-exam").addEventListener("click", () => startRun("egzamin"));
 document.getElementById("btn-bad").addEventListener("click", () => startRun("bledy"));
+document.getElementById("btn-first-exam").addEventListener("click", () => { location.hash = "#quiz"; startRun("egzamin"); });
 
 // ---------- listy do odhaczania ----------
 function renderTasks(elId, countId, list, render, extra) {
@@ -1722,6 +1727,7 @@ function renderAll() {
 })();
 
 showTab();
+{ const first = document.querySelector("section:not([hidden])"); first.classList.add("in"); setTimeout(() => first.classList.remove("in"), 900); }
 newSub();
 newLic();
 initStore();
