@@ -49,15 +49,24 @@ body { background: var(--bg); color: var(--ink); font: 17px/1.6 var(--f-body); c
 header { display: grid; gap: 10px; margin-bottom: 18px; }
 h1 { font: 700 clamp(30px, 6vw, 40px)/1.05 var(--f-head); margin: 0; letter-spacing: -0.02em; }
 .overall { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.overall > span { display: inline-flex; align-items: center; gap: 6px; }
+.overall .ic { width: 16px; height: 16px; color: var(--accent); }
 .overall strong { color: var(--ink); font-weight: 600; }
 .track { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
 .track i { display: block; height: 100%; background: var(--accent); border-radius: 4px; }
 
-nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; gap: 2px; margin: 0 -4px 26px; padding: 8px 4px; background: var(--bg); border-bottom: 1px solid var(--line); overflow-x: auto; }
+nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; gap: 2px; margin: 0 -4px 26px; padding: 8px 4px; background: var(--bg); border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+nav::-webkit-scrollbar { display: none; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
-nav a { font: 600 16px var(--f-head); text-decoration: none; color: var(--muted); padding: 7px 14px; border-radius: 6px; white-space: nowrap; }
-nav a:hover { color: var(--ink); background: var(--paper); }
-nav a[aria-current="page"] { background: var(--ink); color: var(--bg); }
+nav a { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 7px; font: 600 16px var(--f-head); text-decoration: none; color: var(--muted); padding: 7px 13px; border-radius: 6px; white-space: nowrap; transition: color .2s; }
+nav a .ic { width: 17px; height: 17px; }
+nav a:hover { color: var(--ink); }
+nav a[aria-current="page"] { color: var(--bg); }
+/* pigułka aktywnej zakładki jeździ pod linkami */
+nav .pill { position: absolute; z-index: 0; left: 0; top: 8px; height: calc(100% - 16px); width: 0; border-radius: 6px; background: var(--ink); pointer-events: none; }
+
+/* ikony: Lucide, kolor bierze z tekstu */
+.ic { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.2em; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 h2 { font: 700 24px/1.2 var(--f-head); margin: 40px 0 10px; text-wrap: balance; }
@@ -76,12 +85,16 @@ select { font: 16px var(--f-body); padding: 9px 10px; min-height: 44px; border: 
 
 /* tryby quizu: wiersze listy, nie kafelki */
 .modes { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; }
-.mode { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 16px; width: 100%; text-align: left; border: 0; border-radius: 0; border-bottom: 1px solid var(--line); background: transparent; padding: 16px 18px; font-weight: 400; }
+.mode { display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: 2px 14px; width: 100%; text-align: left; border: 0; border-radius: 0; border-bottom: 1px solid var(--line); background: transparent; padding: 16px 18px; font-weight: 400; }
 .mode:last-child { border-bottom: 0; }
 .mode:hover:not(:disabled) { background: var(--accent-soft); }
-.mode strong { font: 700 19px/1.2 var(--f-head); }
-.mode span { grid-column: 1; color: var(--muted); font-size: 15px; }
-.mode .go { grid-column: 2; grid-row: 1 / span 2; font: 600 22px var(--f-head); color: var(--accent); }
+.mode .mi { grid-row: 1 / span 2; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); }
+.mode .mi .ic { width: 19px; height: 19px; }
+.mode.main .mi { background: var(--accent); color: var(--accent-ink); }
+.mode strong { grid-column: 2; font: 700 19px/1.2 var(--f-head); }
+.mode span { grid-column: 2; color: var(--muted); font-size: 15px; }
+.mode .go { grid-column: 3; grid-row: 1 / span 2; width: 22px; height: 22px; color: var(--accent); transition: transform .2s cubic-bezier(.16, 1, .3, 1); }
+.mode:hover:not(:disabled) .go { transform: translateX(3px); }
 .mode.main strong { color: var(--accent); }
 .filter { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 14px 0 0; font-size: 15px; }
 
@@ -92,6 +105,8 @@ select { font: 16px var(--f-body); padding: 9px 10px; min-height: 44px; border: 
 .catrow .bar i { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
 .catrow.low .bar i { background: var(--bad); }
 .catrow.mid .bar i { background: var(--warn); }
+.catrow .cn { display: inline-flex; align-items: center; gap: 8px; }
+.catrow .cn .ic { color: var(--muted); width: 17px; height: 17px; }
 .catrow .pct { font-family: var(--f-mono); font-size: 15px; text-align: right; font-variant-numeric: tabular-nums; }
 .catrow .seen { grid-column: 2 / span 2; font-size: 13px; color: var(--muted); margin-top: -2px; }
 .weak { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 12px 14px; border-radius: 8px; background: var(--warn-soft); }
@@ -116,7 +131,9 @@ select { font: 16px var(--f-body); padding: 9px 10px; min-height: 44px; border: 
 .ans:disabled { cursor: default; }
 .ans.dim { opacity: .55; }
 .expl { margin-top: 16px; padding: 12px 14px; border-radius: 8px; background: var(--bg); font-size: 16px; }
-.expl b { margin-right: 4px; }
+.expl b { margin-right: 4px; display: inline-flex; align-items: center; gap: 5px; }
+.ans .key svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+button .ic { margin-left: 6px; }
 .expl b.ok { color: var(--accent); }
 .expl b.no { color: var(--bad); }
 .qnav { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
@@ -206,7 +223,12 @@ ul.links li { margin-bottom: 8px; }
 
 /* rozwiązania w labie */
 .task .body { min-width: 0; flex: 1; display: grid; gap: 6px; }
-details.how summary { cursor: pointer; font-size: 15px; font-weight: 600; color: var(--accent); width: fit-content; }
+details.how summary { cursor: pointer; font-size: 15px; font-weight: 600; color: var(--accent); width: fit-content; display: flex; align-items: center; gap: 6px; list-style: none; }
+details.how summary::-webkit-details-marker { display: none; }
+details.how summary .ic { width: 16px; height: 16px; transition: transform .2s cubic-bezier(.16, 1, .3, 1); }
+details.how[open] summary .ic { transform: rotate(90deg); }
+h2 .ic { color: var(--accent); width: 22px; height: 22px; margin-right: 8px; vertical-align: -0.15em; }
+.task .title a .ic { width: 14px; height: 14px; margin-left: 4px; vertical-align: -0.1em; }
 details.how ol { margin: 8px 0 4px; padding-left: 22px; font-size: 15px; }
 details.how li { margin-bottom: 6px; }
 details.how pre { font: 14px/1.5 var(--f-mono); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; overflow-x: auto; margin: 4px 0; }
@@ -221,13 +243,69 @@ details.how pre { font: 14px/1.5 var(--f-mono); background: var(--bg); border: 1
   .catrow .seen { grid-column: 1 / span 2; }
   .mistake .line { grid-template-columns: 1fr; gap: 0; }
 }
+/* Ruch: zakładka wjeżdża, paski rosną przy wejściu, odpowiedź dostaje znak, który się rysuje.
+   Przy ograniczonym ruchu zostają same zmiany koloru i przezroczystości. */
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+@keyframes fade { from { opacity: 0; } }
+@keyframes grow { from { transform: scaleX(0); } }
+@keyframes draw { from { stroke-dashoffset: 1; } }
+@keyframes shake { 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }
+@keyframes pop { 50% { transform: scale(1.25); } }
+@keyframes flash { from { background-color: var(--accent); } }
+.ans .key path { stroke-dasharray: 1; }
+section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2s ease-out both; }
 @media (prefers-reduced-motion: no-preference) {
   .track i, .catrow .bar i, .qprog i { transition: width .4s cubic-bezier(.16, 1, .3, 1); }
   .ans, .mode, button { transition: background-color .15s, border-color .15s; }
+  nav .pill.ready { transition: transform .35s cubic-bezier(.16, 1, .3, 1), width .35s cubic-bezier(.16, 1, .3, 1); }
+  section.in { animation: rise .32s cubic-bezier(.16, 1, .3, 1) both; }
+  section.in .bar i, section.in .hbar i { transform-origin: left; animation: grow .7s cubic-bezier(.16, 1, .3, 1) both; }
+  .qcard.in .qtext { animation: rise .3s cubic-bezier(.16, 1, .3, 1) both; }
+  .qcard.in .ans { animation: rise .3s cubic-bezier(.16, 1, .3, 1) both; }
+  .qcard.in .ans:nth-child(2) { animation-delay: 40ms; }
+  .qcard.in .ans:nth-child(3) { animation-delay: 80ms; }
+  .qcard.in .ans:nth-child(4) { animation-delay: 120ms; }
+  .ans.right.now { animation: flash .5s ease-out; }
+  .ans.wrong.now { animation: shake .32s ease-in-out; }
+  .ans.now .key path { animation: draw .35s .08s cubic-bezier(.16, 1, .3, 1) both; }
+  .expl { animation: rise .3s .1s cubic-bezier(.16, 1, .3, 1) both; }
+  .task input:checked { animation: pop .25s ease-out; }
+  .score { animation: rise .5s cubic-bezier(.16, 1, .3, 1) both; }
 }
 </style>
 </head>
 <body>
+<!-- Ikony: Lucide v0.469.0 (lucide.dev), licencja ISC -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></symbol>
+<symbol id="i-binary" viewBox="0 0 24 24"><rect x="14" y="14" width="4" height="6" rx="2" /><rect x="6" y="4" width="4" height="6" rx="2" /><path d="M6 20h4" /><path d="M14 10h4" /><path d="M6 14h2v6" /><path d="M14 4h2v6" /></symbol>
+<symbol id="i-book-open" viewBox="0 0 24 24"><path d="M12 7v14" /><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" /></symbol>
+<symbol id="i-cable" viewBox="0 0 24 24"><path d="M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1" /><path d="M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9" /><path d="M21 21v-2h-4" /><path d="M3 5h4V3" /><path d="M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3" /></symbol>
+<symbol id="i-calendar-clock" viewBox="0 0 24 24"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5" /><path d="M16 2v4" /><path d="M8 2v4" /><path d="M3 10h5" /><path d="M17.5 17.5 16 16.3V14" /><circle cx="16" cy="16" r="6" /></symbol>
+<symbol id="i-calendar-days" viewBox="0 0 24 24"><path d="M8 2v4" /><path d="M16 2v4" /><rect width="18" height="18" x="3" y="4" rx="2" /><path d="M3 10h18" /><path d="M8 14h.01" /><path d="M12 14h.01" /><path d="M16 14h.01" /><path d="M8 18h.01" /><path d="M12 18h.01" /><path d="M16 18h.01" /></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6" /></symbol>
+<symbol id="i-circle-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><path d="M12 17h.01" /></symbol>
+<symbol id="i-cpu" viewBox="0 0 24 24"><rect width="16" height="16" x="4" y="4" rx="2" /><rect width="6" height="6" x="9" y="9" rx="1" /><path d="M15 2v2" /><path d="M15 20v2" /><path d="M2 15h2" /><path d="M2 9h2" /><path d="M20 15h2" /><path d="M20 9h2" /><path d="M9 2v2" /><path d="M9 20v2" /></symbol>
+<symbol id="i-external-link" viewBox="0 0 24 24"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></symbol>
+<symbol id="i-file-text" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /><path d="M14 2v4a2 2 0 0 0 2 2h4" /><path d="M10 9H8" /><path d="M16 13H8" /><path d="M16 17H8" /></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></symbol>
+<symbol id="i-flask-conical" viewBox="0 0 24 24"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /><path d="M6.453 15h11.094" /><path d="M8.5 2h7" /></symbol>
+<symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></symbol>
+<symbol id="i-list-checks" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></symbol>
+<symbol id="i-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" /></symbol>
+<symbol id="i-network" viewBox="0 0 24 24"><rect x="16" y="16" width="6" height="6" rx="1" /><rect x="2" y="16" width="6" height="6" rx="1" /><rect x="9" y="2" width="6" height="6" rx="1" /><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" /><path d="M12 12V8" /></symbol>
+<symbol id="i-rotate-ccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></symbol>
+<symbol id="i-server" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2" /><rect width="20" height="8" x="2" y="14" rx="2" ry="2" /><line x1="6" x2="6.01" y1="6" y2="6" /><line x1="6" x2="6.01" y1="18" y2="18" /></symbol>
+<symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></symbol>
+<symbol id="i-shuffle" viewBox="0 0 24 24"><path d="m18 14 4 4-4 4" /><path d="m18 2 4 4-4 4" /><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" /><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" /><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" /></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></symbol>
+<symbol id="i-terminal" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5" /><line x1="12" x2="20" y1="19" y2="19" /></symbol>
+<symbol id="i-timer" viewBox="0 0 24 24"><line x1="10" x2="14" y1="2" y2="2" /><line x1="12" x2="15" y1="14" y2="11" /><circle cx="12" cy="14" r="8" /></symbol>
+<symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" /><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" /><path d="M4 22h16" /><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" /><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" /><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" /></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></symbol>
+</svg>
 
 <div class="wrap">
   <header>
@@ -236,22 +314,24 @@ details.how pre { font: 14px/1.5 var(--f-mono); background: var(--bg); border: 1
     <div class="track" aria-hidden="true"><i id="overall-bar" style="width:0"></i></div>
   </header>
   <nav aria-label="Sekcje">
-    <a href="#quiz" data-tab="quiz">Quiz</a>
-    <a href="#umiec" data-tab="umiec">Co umieć</a>
-    <a href="#podsieci" data-tab="podsieci">Podsieci</a>
-    <a href="#sciaga" data-tab="sciaga">Ściąga</a>
-    <a href="#arkusze" data-tab="arkusze">Arkusze CKE</a>
-    <a href="#plan" data-tab="plan">Plan</a>
-    <a href="#lab" data-tab="lab">Lab</a>
+    <span class="pill" aria-hidden="true"></span>
+    <a href="#quiz" data-tab="quiz"><svg class="ic" aria-hidden="true"><use href="#i-circle-help"/></svg>Quiz</a>
+    <a href="#umiec" data-tab="umiec"><svg class="ic" aria-hidden="true"><use href="#i-list-checks"/></svg>Co umieć</a>
+    <a href="#podsieci" data-tab="podsieci"><svg class="ic" aria-hidden="true"><use href="#i-network"/></svg>Podsieci</a>
+    <a href="#liczby" data-tab="liczby"><svg class="ic" aria-hidden="true"><use href="#i-binary"/></svg>Liczby</a>
+    <a href="#sciaga" data-tab="sciaga"><svg class="ic" aria-hidden="true"><use href="#i-book-open"/></svg>Ściąga</a>
+    <a href="#arkusze" data-tab="arkusze"><svg class="ic" aria-hidden="true"><use href="#i-file-text"/></svg>Arkusze CKE</a>
+    <a href="#plan" data-tab="plan"><svg class="ic" aria-hidden="true"><use href="#i-calendar-days"/></svg>Plan</a>
+    <a href="#lab" data-tab="lab"><svg class="ic" aria-hidden="true"><use href="#i-flask-conical"/></svg>Lab</a>
   </nav>
 
   <!-- QUIZ -->
   <section id="tab-quiz">
     <div id="quiz-home">
       <div class="modes">
-        <button class="mode main" id="btn-rand"><strong>Losowe 20</strong><span>Częściej trafiasz na pytania, w których się mylisz. Odpowiedź widzisz od razu.</span><i class="go" aria-hidden="true">›</i></button>
-        <button class="mode" id="btn-exam"><strong>Egzamin próbny</strong><span>40 pytań, 60 minut, wynik na końcu. Cel: 30 poprawnych.</span><i class="go" aria-hidden="true">›</i></button>
-        <button class="mode" id="btn-bad"><strong>Moje błędy</strong><span id="bad-desc">Wracasz tylko do pytań, które ostatnio zawaliłeś.</span><i class="go" aria-hidden="true">›</i></button>
+        <button class="mode main" id="btn-rand"><i class="mi" aria-hidden="true"><svg class="ic"><use href="#i-shuffle"/></svg></i><strong>Losowe 20</strong><span>Częściej trafiasz na pytania, w których się mylisz. Odpowiedź widzisz od razu.</span><svg class="ic go" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+        <button class="mode" id="btn-exam"><i class="mi" aria-hidden="true"><svg class="ic"><use href="#i-timer"/></svg></i><strong>Egzamin próbny</strong><span>40 pytań, 60 minut, wynik na końcu. Cel: 30 poprawnych.</span><svg class="ic go" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+        <button class="mode" id="btn-bad"><i class="mi" aria-hidden="true"><svg class="ic"><use href="#i-rotate-ccw"/></svg></i><strong>Moje błędy</strong><span id="bad-desc">Wracasz tylko do pytań, które ostatnio zawaliłeś.</span><svg class="ic go" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
       </div>
       <div class="filter">
         <label for="catsel" class="muted">Dział do losowania:</label>
@@ -275,7 +355,7 @@ details.how pre { font: 14px/1.5 var(--f-mono); background: var(--bg); border: 1
   <!-- CO UMIEĆ -->
   <section id="tab-umiec" hidden>
     <h2>Wszystko, co musisz umieć</h2>
-    <p>Lista zbiera podstawę programową INF.02 i tematy, które wracają w arkuszach CKE. „Teoria” trafia na test, „Praktyka” na zadanie przy stanowisku. Odhaczaj punkt dopiero wtedy, gdy umiesz go zrobić albo wytłumaczyć bez podglądania.</p>
+    <p>Lista zbiera podstawę programową INF.02 i tematy, które wracają w arkuszach CKE. „Teoria” trafia na test, „Praktyka” na zadanie przy stanowisku. Przy praktyce widzisz, w ilu z 42 arkuszy CKE z lat 2021–2026 temat się pojawił. Odhaczaj punkt dopiero wtedy, gdy umiesz go zrobić albo wytłumaczyć bez podglądania.</p>
     <div class="counter" id="umiec-total"></div>
     <div id="umiec"></div>
   </section>
@@ -309,10 +389,45 @@ details.how pre { font: 14px/1.5 var(--f-mono); background: var(--bg); border: 1
     </ol>
   </section>
 
+  <!-- LICZBY I BRAMKI -->
+  <section id="tab-liczby" hidden>
+    <div class="qcard">
+      <div class="qhead"><span>Trener liczb i bramek</span><span id="lic-score"></span></div>
+      <div class="qprog" aria-hidden="true"><i id="lic-bar" style="width:0"></i></div>
+      <p class="muted" style="margin:0" id="lic-ask"></p>
+      <div class="task-ip" id="lic-task"></div>
+      <div class="field" id="lic-field">
+        <label for="lic-in" id="lic-label">Twoja odpowiedź</label>
+        <input id="lic-in" autocomplete="off" autocapitalize="characters" spellcheck="false">
+        <span class="fix" id="lic-fix"></span>
+      </div>
+      <div class="row-btns">
+        <button class="primary" id="lic-check">Sprawdź</button>
+        <button id="lic-next">Nowe zadanie</button>
+        <label for="lic-mode" class="muted small" style="margin-left:auto">Ćwicz:</label>
+        <select id="lic-mode">
+          <option value="all">wszystko</option>
+          <option value="num">systemy liczbowe</option>
+          <option value="bit">operacje bitowe</option>
+          <option value="gate">bramki</option>
+        </select>
+      </div>
+      <div class="solution" id="lic-sol" hidden></div>
+    </div>
+    <h2>Jak przeliczać bez kalkulatora</h2>
+    <ol>
+      <li>Z dziesiętnego na dwójkowy dziel przez 2 i zapisuj reszty. Wynik czytasz od ostatniej reszty do pierwszej.</li>
+      <li>Z dwójkowego na dziesiętny dodaj wagi tych pozycji, gdzie stoi 1: 128, 64, 32, 16, 8, 4, 2, 1.</li>
+      <li>Dwójkowy na szesnastkowy: dziel bity na czwórki od prawej i każdą czwórkę zamień na cyfrę 0–F. Na ósemkowy tak samo, tylko trójkami.</li>
+      <li>Ósemkowy albo szesnastkowy na dziesiętny: mnóż cyfry przez wagi 1, 8, 64 albo 1, 16, 256 i dodaj.</li>
+    </ol>
+    <p>Tabelę liczb 0–15 i tabele prawdy bramek masz w <a href="#sciaga">Ściądze</a>.</p>
+  </section>
+
   <!-- ŚCIĄGA -->
   <section id="tab-sciaga" hidden>
     <div class="toc">
-      <a href="#sciaga" data-jump="s-porty">Porty</a><a href="#sciaga" data-jump="s-maski">Maski</a><a href="#sciaga" data-jump="s-adresy">Adresy specjalne</a><a href="#sciaga" data-jump="s-kabel">T568B</a><a href="#sciaga" data-jump="s-polecenia">Polecenia</a><a href="#sciaga" data-jump="s-msc">Przystawki</a><a href="#sciaga" data-jump="s-dns">DNS i DHCP</a><a href="#sciaga" data-jump="s-raid">RAID</a><a href="#sciaga" data-jump="s-chmod">chmod</a>
+      <a href="#sciaga" data-jump="s-liczby">Liczby</a><a href="#sciaga" data-jump="s-bramki">Bramki</a><a href="#sciaga" data-jump="s-jednostki">Jednostki</a><a href="#sciaga" data-jump="s-porty">Porty</a><a href="#sciaga" data-jump="s-maski">Maski</a><a href="#sciaga" data-jump="s-adresy">Adresy specjalne</a><a href="#sciaga" data-jump="s-kabel">T568B</a><a href="#sciaga" data-jump="s-polecenia">Polecenia</a><a href="#sciaga" data-jump="s-msc">Przystawki</a><a href="#sciaga" data-jump="s-dns">DNS i DHCP</a><a href="#sciaga" data-jump="s-raid">RAID</a><a href="#sciaga" data-jump="s-chmod">chmod</a>
     </div>
     <div id="cheat"></div>
   </section>
@@ -361,7 +476,12 @@ details.how pre { font: 14px/1.5 var(--f-mono); background: var(--bg); border: 1
 
 <script>
 // [id, dział, pytanie, [POPRAWNA, zła, zła, zła], wyjaśnienie]. Id nie zmieniać: po nich zapisują się postępy.
-const CATS = { sprzet: "Sprzęt", windows: "Windows", linux: "Linux", sieci: "Sieci", serwer: "Serwery", bezp: "Bezpieczeństwo i BHP" };
+const CATS = { sprzet: "Sprzęt", windows: "Windows", linux: "Linux", sieci: "Sieci", serwer: "Serwery", bezp: "Bezpieczeństwo i BHP", podstawy: "Liczby, bramki, elektronika" };
+const CAT_ICON = { sprzet: "cpu", windows: "monitor", linux: "terminal", sieci: "network", serwer: "server", bezp: "shield-check", podstawy: "binary" };
+const ico = n => `<svg class="ic" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+// znak w kwadraciku odpowiedzi rysuje się kreską, więc ścieżki są wpisane wprost (Lucide check i x)
+const MARK_OK = `<svg viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M20 6 9 17l-5-5"/></svg>`;
+const MARK_NO = `<svg viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1" d="M18 6 6 18"/><path pathLength="1" d="m6 6 12 12"/></svg>`;
 const Q = [
 [1,"sprzet","Procesor Intel Core i5-14400F montuje się w gnieździe:",["LGA1700","AM5","LGA1200","AM4"],"Intel 12., 13. i 14. generacji to LGA1700. AM4 i AM5 to gniazda AMD."],
 [2,"sprzet","Ile styków ma moduł pamięci DDR4 DIMM do komputera stacjonarnego?",["288","240","260","184"],"DDR4 i DDR5 DIMM mają 288 styków, DDR3 240, DDR4 SO-DIMM (laptop) 260."],
@@ -570,12 +690,61 @@ const Q = [
 [324,"bezp","Atak, w którym tysiące zainfekowanych komputerów zalewają serwer żądaniami, to:",["DDoS","phishing","keylogging","SQL injection"],"Przed atakami z sieci, np. typu Smurf, chroni poprawnie ustawiona zapora."],
 [325,"bezp","Szkodnik, który sam rozsyła swoje kopie przez sieć bez udziału użytkownika, to:",["robak","trojan","adware","keylogger"],"Trojan udaje przydatny program i czeka, aż go uruchomisz."],
 [326,"bezp","Zasada kopii zapasowych 3-2-1 mówi o:",["3 kopiach na 2 różnych nośnikach, z czego 1 poza domem lub firmą","3 dyskach w RAID 2 i 1 zapasowym","kopii co 3 dni przez 2 tygodnie","3 hasłach do 2 kont"],"Kopia poza miejscem pracy przetrwa pożar albo kradzież."],
-[327,"bezp","Znak CE na urządzeniu oznacza, że:",["spełnia wymagania Unii Europejskiej i można je sprzedawać w UE","zostało wyprodukowane w Europie","jest energooszczędne","można je wyrzucić z odpadami komunalnymi"],"Energooszczędność opisuje Energy Star."],
+[327,"bezp","Znak CE na urządzeniu oznacza, że:",["spełnia wymagania Unii Europejskiej i można je sprzedawać w UE","zostało wyprodukowane w Europie","jest energooszczędne","można je wyrzucić z odpadami komunalnymi"],"Energooszczędność opisuje Energy Star."],,
+[401,"podstawy","Liczba 10101101₂ zapisana szesnastkowo to:",["AD","DA","173","255"],"Dziel bity na czwórki od prawej: 1010 = A, 1101 = D. 173 to ta sama liczba dziesiętnie, 255 ósemkowo."],
+[402,"podstawy","Liczba 157₈ zapisana dziesiętnie to:",["111","157","103","127"],"1·64 + 5·8 + 7·1 = 64 + 40 + 7 = 111. W ósemkowym wagi to 64, 8, 1."],
+[403,"podstawy","Liczba 2F₁₆ zapisana dwójkowo to:",["101111","111101","100111","1011111"],"Każda cyfra hex to 4 bity: 2 = 0010, F = 1111. Razem 0010 1111, czyli 101111."],
+[404,"podstawy","Ile bitów potrzeba do zapisania liczby FFFF₁₆?",["16","8","4","32"],"Jedna cyfra szesnastkowa to 4 bity, cztery cyfry to 16 bitów."],
+[405,"podstawy","Wynik dodawania 25₈ + 13₈ zapisany dwójkowo to:",["100000","111000","100110","101000"],"25₈ = 21, 13₈ = 11, suma 32. 32 dwójkowo to 100000. Ósemkowo wynik to 40₈."],
+[406,"podstawy","Wynik dodawania A9₁₆ + 17₁₆ to:",["C0","B0","C1","BF"],"9 + 7 = 16, czyli 0 i przeniesienie 1. A + 1 + 1 = C. Wynik C0. Sprawdzenie: 169 + 23 = 192 = C0."],
+[407,"podstawy","Liczba 255₁₀ zapisana ósemkowo to:",["377","FF","11111111","777"],"255 = 3·64 + 7·8 + 7. FF to zapis szesnastkowy, 11111111 dwójkowy tej samej liczby."],
+[408,"podstawy","Liczba 100₁₀ zapisana dwójkowo to:",["1100100","1010100","1100010","1001100"],"100 = 64 + 32 + 4, więc jedynki stoją na wagach 64, 32 i 4: 1100100."],
+[409,"podstawy","Bramka AND daje na wyjściu 1, gdy:",["oba wejścia mają 1","przynajmniej jedno wejście ma 1","wejścia mają różne wartości","oba wejścia mają 0"],"AND to iloczyn logiczny: 1 tylko przy 1 i 1. Przynajmniej jedno 1 to opis OR."],
+[410,"podstawy","Bramka XOR daje na wyjściu 1, gdy:",["wejścia mają różne wartości","oba wejścia mają 1","oba wejścia mają 0","przynajmniej jedno wejście ma 0"],"XOR (alternatywa wykluczająca): 0 i 1 albo 1 i 0 daje 1. Dwa takie same wejścia dają 0."],
+[411,"podstawy","Na wejścia bramki NAND podano A = 1 i B = 1. Na wyjściu jest:",["0","1","stan wysokiej impedancji","raz 0, raz 1"],"NAND to AND z negacją. 1 AND 1 = 1, po negacji 0. NAND daje 0 tylko w tym jednym przypadku."],
+[412,"podstawy","Bramka NOR daje na wyjściu 1, gdy:",["oba wejścia mają 0","oba wejścia mają 1","wejścia mają różne wartości","przynajmniej jedno wejście ma 1"],"NOR to OR z negacją. OR daje 0 tylko przy 0 i 0, więc NOR daje wtedy 1."],
+[413,"podstawy","Sygnały A = 1 i B = 0 trafiają na bramkę AND, a jej wyjście na bramkę NOT. Na wyjściu układu jest:",["1","0","raz 0, raz 1","nie da się tego ustalić"],"1 AND 0 = 0, a NOT 0 = 1. Taki układ działa jak jedna bramka NAND."],
+[414,"podstawy","Wynik operacji 1100 AND 1010 to:",["1000","1110","0110","0010"],"AND bit po bicie: 1 tylko tam, gdzie obie liczby mają 1. Wspólna jedynka jest tylko na pierwszej pozycji."],
+[415,"podstawy","Wynik operacji 1100 XOR 1010 to:",["0110","1110","1000","0010"],"XOR bit po bicie: 1 tam, gdzie bity się różnią. Różnią się 2. i 3. pozycja."],
+[416,"podstawy","Wynik operacji 1100 OR 1010 to:",["1110","1000","0110","1111"],"OR bit po bicie: 1 tam, gdzie choć jedna liczba ma 1. Tylko ostatnia pozycja ma dwa zera."],
+[417,"podstawy","Łącze ma przepustowość 16 Mb/s. Ile to najwyżej megabajtów na sekundę?",["2 MB/s","16 MB/s","128 MB/s","1,6 MB/s"],"Mała litera b to bity, duża B to bajty. 1 bajt = 8 bitów, więc 16 : 8 = 2 MB/s."],
+[418,"podstawy","Ile bajtów ma 1 KiB?",["1024","1000","512","8192"],"Przedrostki binarne (KiB, MiB, GiB) liczą potęgami 2: 1 KiB = 1024 B. Dziesiętne kB to 1000 B."],
+[419,"podstawy","Pamięć DDR3L pracuje przy napięciu:",["1,35 V","1,5 V","1,2 V","3,3 V"],"DDR3 to 1,5 V, DDR3L (L = low voltage) 1,35 V, DDR4 1,2 V, DDR5 1,1 V."],
+[420,"podstawy","Który element elektroniczny jest czynny (aktywny)?",["tranzystor","rezystor","kondensator","cewka"],"Element czynny wzmacnia albo steruje sygnałem: tranzystor, układ scalony. Rezystor, kondensator i cewka są bierne."],
+[421,"podstawy","Do sprawdzania stanów 0 i 1 w układach cyfrowych służy:",["próbnik stanów logicznych","omomierz","tester okablowania","reflektometr"],"Próbnik stanów logicznych świeci diodą przy stanie wysokim albo niskim. Reflektometr mierzy kable, głównie światłowody."],
+[422,"podstawy","Rezystancję elementu mierzy się multimetrem:",["na zakresie Ω, przy odłączonym zasilaniu","na zakresie V, przy włączonym zasilaniu","na zakresie A, włączonym szeregowo","na zakresie Hz"],"Omomierz podaje własny prąd pomiarowy, więc układ musi być bez zasilania, bo inaczej wynik będzie zły albo uszkodzisz miernik."],
+[423,"podstawy","Transformator służy do:",["zmiany wartości napięcia przemiennego","prostowania prądu","magazynowania ładunku elektrycznego","ograniczania prądu stałego"],"Transformator działa tylko przy prądzie przemiennym. Prostuje dioda (mostek), ładunek magazynuje kondensator."],
+[424,"podstawy","Kabel kosztuje 2 zł netto za metr. Ile zapłacisz brutto za 50 m przy VAT 23%?",["123 zł","100 zł","77 zł","112,30 zł"],"50 · 2 = 100 zł netto. 100 · 1,23 = 123 zł brutto. W kosztorysie zawsze sprawdź, czy ceny są netto czy brutto."],
+[425,"podstawy","Liczba −1 zapisana 8-bitowo w kodzie U2 to:",["11111111","10000001","00000001","01111111"],"W U2 negujesz bity liczby 1 (11111110) i dodajesz 1, wychodzi 11111111. 10000001 to −1 w kodzie ZM (znak-moduł)."],
+[426,"podstawy","Wielka litera A w kodzie ASCII ma wartość:",["65 (41₁₆)","97 (61₁₆)","1","255"],"A = 65, B = 66 i dalej po kolei. Mała litera a to 97, czyli o 32 więcej."],
+[427,"podstawy","Przez rezystor 4 Ω podłączony do napięcia 12 V płynie prąd:",["3 A","48 A","0,33 A","16 A"],"Prawo Ohma: I = U / R = 12 / 4 = 3 A. Moc wyniesie P = U · I = 36 W."],
+[428,"podstawy","Dioda prostownicza przepuszcza prąd:",["w jednym kierunku","w obu kierunkach jednakowo","tylko prąd przemienny","dopiero po naładowaniu"],"Dioda przewodzi od anody do katody, więc z prądu przemiennego robi prąd jednokierunkowy. Tak działa zasilacz."],
+[429,"podstawy","Sygnał o częstotliwości 50 Hz ma okres:",["20 ms","50 ms","2 ms","0,5 s"],"T = 1 / f = 1 / 50 s = 0,02 s = 20 ms. W gniazdku w Polsce jest 230 V i 50 Hz."],
+[430,"podstawy","Komputer pobiera ze zasilacza 12 V prąd 25 A. Jaką moc oddaje zasilacz na tej linii?",["300 W","37 W","2,08 W","250 W"],"P = U · I = 12 · 25 = 300 W. Dobierając zasilacz, dodaj zapas około 20–30% do sumy poborów podzespołów."],
+[431,"podstawy","Rejestr procesora, który przechowuje adres następnego rozkazu do wykonania, to:",["licznik rozkazów (PC)","akumulator","rejestr flag","wskaźnik stosu (SP)"],"Licznik rozkazów (Program Counter) wskazuje następny rozkaz. Akumulator trzyma wynik działań, rejestr flag ich skutki (np. przeniesienie)."],
+[432,"podstawy","Jednostka ALU w procesorze odpowiada za:",["działania arytmetyczne i logiczne","dekodowanie adresów pamięci","sterowanie zasilaniem","przechowywanie BIOS-u"],"ALU (Arithmetic Logic Unit) liczy: dodaje, odejmuje, robi AND, OR, XOR, przesunięcia bitów."]
 ];
 
-// [id, co umieć, teoria/praktyka, gdzie ćwiczyć]. Id nie zmieniać: po nich zapisuje się odhaczenie.
+// grupa: [tytuł, ikona Lucide, punkty]; punkt: [id, co umieć, teoria/praktyka, gdzie ćwiczyć]. Id nie zmieniać: po nich zapisuje się odhaczenie.
 const UMIEC = [
-  ["Sprzęt i budowa komputera", [
+  ["Podstawy informatyki i elektroniki", "binary", [
+    ["u-x1", "Przeliczasz liczby między systemami dwójkowym, ósemkowym, dziesiętnym i szesnastkowym w obie strony.", "Teoria", "Trener: Liczby"],
+    ["u-x2", "Wiesz, że cyfra ósemkowa to 3 bity, a szesnastkowa 4 bity, i liczysz, ile bitów ma liczba.", "Teoria", "Ściąga: Liczby"],
+    ["u-x3", "Dodajesz i odejmujesz liczby dwójkowe, ósemkowe i szesnastkowe, także z wynikiem w innym systemie.", "Teoria", "Quiz: Liczby, bramki"],
+    ["u-x4", "Zapisujesz liczby ujemne w kodzie U2 i odróżniasz go od kodu ZM.", "Teoria", "Ściąga: Liczby"],
+    ["u-x5", "Robisz operacje bitowe AND, OR, XOR i NOT na liczbach dwójkowych.", "Teoria", "Trener: Liczby"],
+    ["u-x6", "Znasz bramki AND, OR, NOT, NAND, NOR i XOR: symbol i tabelę prawdy.", "Teoria", "Ściąga: Bramki"],
+    ["u-x7", "Liczysz wyjście prostego układu z dwóch albo trzech bramek dla podanych wejść.", "Teoria", "Trener: Bramki"],
+    ["u-x8", "Przeliczasz jednostki: bit i bajt, kb/s i kB/s, KiB i kB, Hz, kHz, MHz, GHz.", "Teoria", "Ściąga: Jednostki"],
+    ["u-x9", "Znasz kodowanie znaków ASCII i Unicode (UTF-8) na poziomie testu.", "Teoria", "Quiz: Liczby, bramki"],
+    ["u-x10", "Znasz budowę procesora: ALU, rejestry, licznik rozkazów, pamięć podręczna, cykl rozkazu.", "Teoria", "Quiz: Liczby, bramki"],
+    ["u-x11", "Znasz wielkości i jednostki: napięcie V, prąd A, opór Ω, moc W. Liczysz z prawa Ohma i P = U · I.", "Teoria", "Ściąga: Jednostki"],
+    ["u-x12", "Odróżniasz prąd stały i przemienny oraz parametry sygnału: amplituda, okres, częstotliwość.", "Teoria", "Quiz: Liczby, bramki"],
+    ["u-x13", "Rozpoznajesz elementy na schemacie: rezystor, kondensator, cewka, dioda, tranzystor, transformator. Wiesz, które są czynne.", "Teoria", "Quiz: Liczby, bramki"],
+    ["u-x14", "Znasz przyrządy: multimetr (V, A, Ω), próbnik stanów logicznych, tester zasilacza, oscyloskop.", "Teoria", "Quiz: Liczby, bramki"],
+    ["u-x15", "Liczysz moc zasilacza z poboru podzespołów i znasz napięcia pamięci DDR3, DDR3L, DDR4, DDR5.", "Teoria", "Ściąga: Jednostki"]
+  ]],
+  ["Sprzęt i budowa komputera", "cpu", [
     ["u-s1", "Rozpoznajesz na zdjęciu podzespoły: płytę główną, procesor, RAM, zasilacz, karty rozszerzeń, chipset, baterię CMOS.", "Teoria", "Quiz: Sprzęt"],
     ["u-s2", "Znasz złącza: SATA, M.2, PCIe x1 i x16, DIMM, ATX 24-pin, EPS 8-pin, USB-A i USB-C, HDMI, DisplayPort, DVI, VGA, RJ-45, RJ-11.", "Teoria", "Quiz: Sprzęt"],
     ["u-s3", "Rozróżniasz pamięci DDR3, DDR4 i DDR5, SO-DIMM, ECC. Wiesz, co oznaczają taktowanie, opóźnienie CL i dual channel.", "Teoria", "Quiz: Sprzęt"],
@@ -587,9 +756,12 @@ const UMIEC = [
     ["u-s9", "Diagnozujesz usterki: sygnały POST, test pamięci, SMART dysku, pomiar zasilacza multimetrem, przegrzewanie.", "Teoria", "Quiz: Sprzęt"],
     ["u-s10", "Znasz peryferia: drukarki laserowe, atramentowe, termiczne i igłowe, skanery, monitory LCD i OLED, rozdzielczość, odświeżanie, DPI.", "Teoria", "Quiz: Sprzęt"],
     ["u-s11", "Dobierasz zasilanie: moc w W i VA, UPS offline, line-interactive i online, listwa przeciwprzepięciowa.", "Teoria", "Quiz: Sprzęt"],
-    ["u-s12", "Znasz BHP: opaska antystatyczna, pomoc przy porażeniu prądem, ergonomia stanowiska, utylizacja elektroodpadów i tonerów.", "Teoria", "Quiz: Bezpieczeństwo"]
+    ["u-s12", "Znasz BHP: opaska antystatyczna, pomoc przy porażeniu prądem, ergonomia stanowiska, utylizacja elektroodpadów i tonerów.", "Teoria", "Quiz: Bezpieczeństwo"],
+    ["u-s13", "Obsługujesz drukarki: wymiana tonera, tuszu, bębna i taśmy, kalibracja, czyszczenie głowic, typowe usterki wydruku.", "Teoria i praktyka", "Quiz: Sprzęt"],
+    ["u-s14", "Rozpoznajesz na zdjęciu złącza, gniazda i karty, bo w teście co czwarte pytanie ma rysunek.", "Teoria", "Arkusze CKE"],
+    ["u-s15", "Czytasz kody POST i sygnały dźwiękowe BIOS, wiesz, co oznacza dany błąd przy starcie.", "Teoria", "Quiz: Sprzęt"]
   ]],
-  ["Windows na stacji roboczej", [
+  ["Windows na stacji roboczej", "monitor", [
     ["u-w1", "Instalujesz Windows 10 albo 11 i dzielisz dysk na partycje w instalatorze i w diskmgmt.msc.", "Praktyka", "Lab: maszyna Win 11"],
     ["u-w2", "Zakładasz konta lokalne i grupy w lusrmgr.msc. Ustawiasz „hasło nigdy nie wygasa”, „zmień hasło przy logowaniu”, wyłączenie konta.", "Praktyka", "Lab: maszyna Win 11"],
     ["u-w3", "Ustawiasz statyczny adres IP, maskę, bramę i DNS w ncpa.cpl, potem sprawdzasz ipconfig /all.", "Praktyka", "Lab: maszyna Win 11"],
@@ -602,7 +774,7 @@ const UMIEC = [
     ["u-w10", "Dołączasz komputer do domeny i logujesz się kontem domenowym.", "Praktyka", "Lab B"],
     ["u-w11", "Znasz aktualizacje, sterowniki, BitLocker i Windows Defender na poziomie testu.", "Teoria", "Quiz: Windows"]
   ]],
-  ["Windows Server", [
+  ["Windows Server", "server", [
     ["u-ws1", "Zmieniasz nazwę serwera i ustawiasz statyczny IP przed instalacją ról.", "Praktyka", "Lab A1"],
     ["u-ws2", "Instalujesz rolę AD DS i promujesz serwer na kontroler domeny w nowym lesie.", "Praktyka", "Lab A1"],
     ["u-ws3", "Tworzysz jednostki organizacyjne, użytkowników i grupy w dsa.msc. Ustawiasz godziny logowania, datę wygaśnięcia konta, folder domowy i profil mobilny.", "Praktyka", "Lab A2"],
@@ -613,7 +785,7 @@ const UMIEC = [
     ["u-ws8", "Znasz pozostałe role: serwer wydruku, IIS, FTP, routing i NAT (RRAS), WSUS, Hyper-V.", "Teoria", "Quiz: Serwer"],
     ["u-ws9", "Tworzysz dyski dynamiczne: lustrzany, łączony, rozłożony. Wiesz, który odpowiada któremu RAID.", "Teoria i praktyka", "Ściąga: RAID"]
   ]],
-  ["Linux", [
+  ["Linux", "terminal", [
     ["u-l1", "Instalujesz Ubuntu Server albo Debiana, logujesz się, używasz sudo.", "Praktyka", "Lab: maszyna Ubuntu"],
     ["u-l2", "Ustawiasz statyczny IP przez netplan (Ubuntu) albo /etc/network/interfaces (Debian). Sprawdzasz ip a i ip route.", "Praktyka", "Lab C"],
     ["u-l3", "Zarządzasz kontami: adduser, passwd, usermod -aG, groupadd, userdel. Wiesz, co jest w /etc/passwd, /etc/shadow i /etc/group.", "Teoria i praktyka", "Lab C"],
@@ -624,7 +796,7 @@ const UMIEC = [
     ["u-l8", "Znasz katalogi /etc, /home, /var/log, /dev, /proc, /boot oraz montowanie przez mount i /etc/fstab.", "Teoria", "Quiz: Linux"],
     ["u-l9", "Wiesz, do czego służą SSH, Samba, Apache, isc-dhcp-server i bind9.", "Teoria", "Quiz: Linux"]
   ]],
-  ["Sieci: teoria", [
+  ["Sieci: teoria", "network", [
     ["u-n1", "Znasz model OSI i TCP/IP. Przypisujesz urządzenie i protokół do warstwy.", "Teoria", "Quiz: Sieci"],
     ["u-n2", "Znasz klasy adresów, adresy prywatne i specjalne: 127.0.0.1, 169.254.x.x, 0.0.0.0, 255.255.255.255.", "Teoria", "Ściąga: Adresy specjalne"],
     ["u-n3", "Liczysz podsieci: maskę, adres sieci, rozgłoszenie, pierwszy i ostatni host, liczbę hostów, podział na równe podsieci.", "Teoria i praktyka", "Zakładka Podsieci"],
@@ -638,9 +810,10 @@ const UMIEC = [
     ["u-n11", "Rozumiesz przełączniki zarządzalne: VLAN, trunk 802.1Q, STP, agregację łączy, PoE, tablicę adresów MAC.", "Teoria", "Quiz: Sieci"],
     ["u-n12", "Rozumiesz routing: trasę statyczną i domyślną, metrykę, RIP i OSPF ogólnie, polecenie route print.", "Teoria", "Quiz: Sieci"],
     ["u-n13", "Znasz normy i pomiary: PN-EN 50173, TIA/EIA-568, tester okablowania, mapa połączeń, reflektometr.", "Teoria", "Quiz: Sieci"],
-    ["u-n14", "Liczysz kosztorys sieci: metry kabla, gniazda, wtyki, robocizna.", "Teoria", "Arkusze CKE"]
+    ["u-n14", "Liczysz kosztorys: metry kabla, gniazda, wtyki, robocizna, dojazd, VAT 23% z netto na brutto.", "Teoria", "Arkusze CKE"],
+    ["u-n15", "Rozpoznajesz topologię sieci z rysunku i odczytujesz adresy ze schematu.", "Teoria", "Arkusze CKE"]
   ]],
-  ["Sieci: praktyka", [
+  ["Sieci: praktyka", "cable", [
     ["u-p1", "Zarabiasz patchcord w standardzie T568B i sprawdzasz go testerem.", "Praktyka", "Lab E, Ściąga: T568B"],
     ["u-p2", "Podłączasz gniazdo keystone albo natynkowe i panel krosowy narzędziem uderzeniowym.", "Praktyka", "Pracownia w szkole"],
     ["u-p3", "W panelu WWW routera ustawiasz IP LAN, DHCP z zakresem, statyczny WAN i nowe hasło administratora, potem zapisujesz konfigurację.", "Praktyka", "Lab D, emulator TP-Link"],
@@ -648,12 +821,30 @@ const UMIEC = [
     ["u-p5", "Na przełączniku zarządzalnym ustawiasz IP zarządzania, VLAN-y na portach i hasło, potem zapisujesz.", "Praktyka", "Pracownia w szkole"],
     ["u-p6", "Ustawiasz przekierowanie portów, DMZ, filtrowanie MAC i rezerwację DHCP na routerze.", "Praktyka", "Lab D, emulator TP-Link"],
     ["u-p7", "Sprawdzasz łączność: ping między wszystkimi urządzeniami, brama, DNS. Wiesz, co zrobić, gdy ping nie przechodzi.", "Praktyka", "Lab B i C"],
-    ["u-p8", "Czytasz zadanie podpunkt po podpunkcie i dokumentujesz wyniki: zrzuty ekranu i opis testów w pliku.", "Praktyka", "Arkusze CKE"]
+    ["u-p8", "Czytasz zadanie podpunkt po podpunkcie i dokumentujesz wyniki: zrzuty ekranu i opis testów w pliku.", "Praktyka", "Arkusze CKE"],
+    ["u-p9", "Ustawiasz statyczny WAN rutera z nietypową maską (np. /28, /29) i wpisujesz ją kropkowo. Zapis „/28” w polu maski CKE liczy jako błąd.", "Praktyka, ok. 30 z 42 arkuszy", "Zakładka Podsieci"],
+    ["u-p10", "Nadajesz adres IP przełącznikowi zarządzalnemu, bo to jest prawie w każdym arkuszu.", "Praktyka, ok. 37 z 42 arkuszy", "Pracownia w szkole"],
+    ["u-p11", "Konfigurujesz VLAN-y 802.1Q na przełączniku: porty bez tagu i port trunk z tagami.", "Praktyka, 22 z 42 arkuszy", "Pracownia w szkole"],
+    ["u-p12", "Włączasz albo wyłączasz DHCP na ruterze zgodnie z zadaniem i robisz rezerwację po MAC.", "Praktyka, ok. 25 z 42 arkuszy", "Lab D"],
+    ["u-p13", "Ustawiasz drukarkę sieciową (często 192.168.0.200) i dodajesz ją na stacji po adresie IP.", "Praktyka, 18 z 42 arkuszy", "Lab"],
+    ["u-p14", "Zarabiasz kabel w T568A i T568B, odizolowujesz najwyżej 25 mm i rozkręcasz pary najwyżej 13 mm. Zatrzask wtyku musi trzymać izolację.", "Praktyka, 31 z 42 arkuszy", "Lab E, Ściąga: T568B"],
+    ["u-p15", "Zmieniasz nazwy połączeń sieciowych na serwerze z dwiema kartami i adresujesz każdą kartę osobno. Znasz też NIC Teaming.", "Praktyka", "Lab A1"],
+    ["u-p16", "Robisz ping przy egzaminatorze i zgłaszasz gotowość, zanim zacznie oceniać.", "Praktyka, ok. 40 z 42 arkuszy", "Lab B i C"]
   ]],
-  ["Bezpieczeństwo i licencje", [
+  ["Praktyka: diagnostyka, kosztorys, skrypty", "file-text", [
+    ["u-d1", "Diagnozujesz komputer programami CPU-Z, GPU-Z, CrystalDiskInfo i smartctl, a wyniki wpisujesz do tabeli zgodnie ze zrzutami. Jedna niezgodność unieważnia cały punkt.", "Praktyka, od 2025 co sesję", "Własny PC"],
+    ["u-d2", "Oceniasz, czy komputer spełnia wymagania programu, i uzasadniasz, co trzeba wymienić albo dołożyć.", "Praktyka, od 2025", "Własny PC"],
+    ["u-d3", "Wymieniasz albo dokładasz pamięć RAM i inne podzespoły zgodnie z BHP.", "Praktyka, 13 z 42 arkuszy", "Własny PC, wyłączony z prądu"],
+    ["u-d4", "Robisz kosztorys w arkuszu kalkulacyjnym: same formuły, funkcja SUMA, format zł, tylko pozycje z zadania. Plik zapisujesz na pendrive, bo bez niego cały rezultat ma 0 punktów.", "Praktyka, 13 z 42 arkuszy", "Excel albo LibreOffice Calc"],
+    ["u-d5", "Piszesz skrypt .bat: @echo off, cls, echo, set /p do pytania o dane, zmienne %nazwa%, proste if.", "Praktyka, rośnie od 2026", "Notatnik na Windowsie"],
+    ["u-d6", "Piszesz skrypt bash: #!/bin/bash, parametry $1 i $2, pętla for, echo, chmod +x i uruchomienie ./skrypt.sh.", "Praktyka, rośnie od 2026", "Lab C"],
+    ["u-d7", "Zapisujesz w tabeli każde polecenie, które wykonasz w konsoli, bo samo wykonanie nie daje punktu.", "Praktyka", "Arkusze CKE"],
+    ["u-d8", "Znasz programy ze stanowiska: PuTTY (SSH), 7-Zip, Nmap, VirtualBox, lynx.", "Praktyka", "Lab"]
+  ]],
+  ["Bezpieczeństwo i licencje", "shield-check", [
     ["u-b1", "Rozróżniasz zagrożenia: wirus, robak, trojan, ransomware, rootkit, keylogger, phishing, DoS i DDoS, spoofing.", "Teoria", "Quiz: Bezpieczeństwo"],
     ["u-b2", "Wiesz, jak się chronić: antywirus, zapora, aktualizacje, silne hasła, 2FA, szyfrowanie, kopia 3-2-1.", "Teoria", "Quiz: Bezpieczeństwo"],
-    ["u-b3", "Znasz licencje: OEM, BOX, GPL, freeware, shareware, trial, adware, licencja grupowa.", "Teoria", "Quiz: Bezpieczeństwo"],
+    ["u-b3", "Znasz licencje: OEM, BOX, GPL, freeware, shareware, trial, adware, donationware, public domain, licencja grupowa, CAL.", "Teoria", "Quiz: Bezpieczeństwo"],
     ["u-b4", "Znasz podstawy RODO i prawa autorskiego do programów.", "Teoria", "Quiz: Bezpieczeństwo"],
     ["u-b5", "Rozumiesz angielskie nazwy w panelach: Subnet mask, Default gateway, Lease time, Firmware, Shared folder, Port forwarding.", "Teoria i praktyka", "Panel routera"]
   ]]
@@ -763,6 +954,15 @@ const LAB_TASKS = [
 ];
 
 const CHEAT = [
+  ["s-liczby","Liczby od 0 do 15",["Dziesiętnie","Dwójkowo","Ósemkowo","Szesnastkowo"],[["0","0000","0","0"],["1","0001","1","1"],["2","0010","2","2"],["3","0011","3","3"],["4","0100","4","4"],["5","0101","5","5"],["6","0110","6","6"],["7","0111","7","7"],["8","1000","10","8"],["9","1001","11","9"],["10","1010","12","A"],["11","1011","13","B"],["12","1100","14","C"],["13","1101","15","D"],["14","1110","16","E"],["15","1111","17","F"]]],
+  ["s-bramki","Bramki logiczne",["Bramka","Kiedy daje 1","A=0 B=0","A=0 B=1","A=1 B=0","A=1 B=1"],[
+    ["AND","oba wejścia 1","0","0","0","1"],["OR","choć jedno wejście 1","0","1","1","1"],["NAND","nie oba wejścia 1","1","1","1","0"],
+    ["NOR","oba wejścia 0","1","0","0","0"],["XOR","wejścia różne","0","1","1","0"],["XNOR","wejścia takie same","1","0","0","1"],["NOT","wejście 0 (jedno wejście)","A=0 daje 1","","A=1 daje 0",""]]],
+  ["s-jednostki","Jednostki i napięcia",["Co","Wartość","Uwagi"],[
+    ["1 bajt (B)","8 bitów (b)","Mb/s dzielisz przez 8, żeby mieć MB/s"],["1 kB","1000 B","przedrostki dziesiętne: k, M, G"],["1 KiB","1024 B","przedrostki binarne: Ki, Mi, Gi"],
+    ["1 cyfra ósemkowa","3 bity","7₈ = 111₂"],["1 cyfra szesnastkowa","4 bity","F₁₆ = 1111₂"],["U2: liczba ujemna","zaneguj bity i dodaj 1","−1 = 11111111 (8 bitów)"],
+    ["Prawo Ohma","U = I · R","I = U / R, R = U / I"],["Moc","P = U · I","zasilacz: suma mocy plus 20–30% zapasu"],["Okres","T = 1 / f","50 Hz to 20 ms"],
+    ["DDR3 / DDR3L","1,5 V / 1,35 V",""],["DDR4 / DDR5","1,2 V / 1,1 V",""],["Linie zasilacza ATX","3,3 V, 5 V, 12 V","12 V zasila procesor i kartę graficzną"],["Sieć w gniazdku","230 V, 50 Hz","prąd przemienny"]]],
   ["s-porty","Porty",["Port","Usługa","Uwagi"],[
     ["20, 21","FTP","21 sterowanie, 20 dane"],["22","SSH, SFTP","szyfrowany terminal"],["23","Telnet","bez szyfrowania"],["25","SMTP","wysyłka poczty, też 587"],
     ["53","DNS","UDP i TCP"],["67, 68","DHCP","UDP, 67 serwer, 68 klient"],["80","HTTP",""],["110","POP3","odbiór poczty"],["123","NTP","synchronizacja czasu, UDP"],
@@ -794,7 +994,7 @@ const CHEAT = [
 const T568B = [["b-pom","#f4a259","#fff"],["pom","#e8892b","#e8892b"],["b-ziel","#4caf6a","#fff"],["nieb","#3a6fd8","#3a6fd8"],["b-nieb","#3a6fd8","#fff"],["ziel","#3c9a58","#3c9a58"],["b-brąz","#8a5a3c","#fff"],["brąz","#7a4b2e","#7a4b2e"]];
 
 // ---------- zapis postępów ----------
-let stats = { q: {}, s: [], lab: {}, d: {}, exam: "", sub: [0, 0] };
+let stats = { q: {}, s: [], lab: {}, d: {}, exam: "", sub: [0, 0], lic: [0, 0] };
 const GOAL = 30; // odpowiedzi dziennie
 function today() { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`; }
 function bumpDay() {
@@ -811,7 +1011,7 @@ function lsRead() { try { return JSON.parse(localStorage.getItem(LS_KEY) || "nul
 function lsWrite() { try { localStorage.setItem(LS_KEY, JSON.stringify(stats)); } catch (e) {} }
 function normalize(s) {
   if (!s || typeof s !== "object") s = {};
-  return { q: s.q || {}, s: Array.isArray(s.s) ? s.s : [], lab: s.lab || {}, d: s.d || {}, exam: typeof s.exam === "string" ? s.exam : "", sub: Array.isArray(s.sub) ? s.sub : [0, 0] };
+  return { q: s.q || {}, s: Array.isArray(s.s) ? s.s : [], lab: s.lab || {}, d: s.d || {}, exam: typeof s.exam === "string" ? s.exam : "", sub: Array.isArray(s.sub) ? s.sub : [0, 0], lic: Array.isArray(s.lic) ? s.lic : [0, 0] };
 }
 
 function scheduleSave() {
@@ -900,7 +1100,7 @@ function renderStats() {
     const cls = s.pct === null ? "" : s.pct < 50 ? " low" : s.pct < 75 ? " mid" : "";
     const d = document.createElement("div");
     d.className = "catrow" + cls;
-    d.innerHTML = `<span>${CATS[c]}</span><span class="bar" aria-hidden="true"><i style="width:${s.pct || 0}%"></i></span>
+    d.innerHTML = `<span class="cn">${ico(CAT_ICON[c] || "binary")}${CATS[c]}</span><span class="bar" aria-hidden="true"><i style="width:${s.pct || 0}%"></i></span>
       <span class="pct">${s.pct === null ? "–" : s.pct + "%"}</span>
       <span class="seen">przerobione ${s.seen} z ${s.total} pytań</span>`;
     el.appendChild(d);
@@ -920,12 +1120,12 @@ function renderStats() {
   const m = Q.filter(isMastered).length;
   const left = daysLeft(), dzis = stats.d[today()] || 0, st = streak();
   document.getElementById("overall").innerHTML =
-    (left === null ? `<span><a href="#plan">Wpisz datę egzaminu</a></span>`
-      : left > 0 ? `<span>Do teorii <strong>${left} ${dni(left)}</strong></span>`
-      : left === 0 ? `<span><strong>Egzamin dziś</strong></span>` : `<span>Teoria już była</span>`) +
-    `<span>Dziś <strong>${Math.min(dzis, 999)} z ${GOAL}</strong>${dzis >= GOAL ? ", cel zrobiony" : ""}</span>` +
-    `<span>Seria <strong>${st} ${dni(st)}</strong></span>` +
-    `<span>Opanowane <strong>${m} z ${Q.length}</strong></span>`;
+    `<span>${ico("calendar-clock")}` + (left === null ? `<a href="#plan">Wpisz datę egzaminu</a>`
+      : left > 0 ? `Do teorii <strong>${left} ${dni(left)}</strong>`
+      : left === 0 ? `<strong>Egzamin dziś</strong>` : `Teoria już była`) + `</span>` +
+    `<span>${ico("target")}Dziś <strong>${Math.min(dzis, 999)} z ${GOAL}</strong>${dzis >= GOAL ? ", cel zrobiony" : ""}</span>` +
+    `<span>${ico("flame")}Seria <strong>${st} ${dni(st)}</strong></span>` +
+    `<span>${ico("trophy")}Opanowane <strong>${m} z ${Q.length}</strong></span>`;
   document.getElementById("overall-bar").style.width = (100 * m / Q.length) + "%";
 
   const ex = stats.s.filter(x => x.m === "egzamin" && x.n === 40).slice(-8);
@@ -995,7 +1195,7 @@ function answer(ai) {
   const it = run.items[run.i];
   if (run.mode === "egzamin") { it.pick = ai; renderRun(); return; }
   if (it.pick !== null) return;
-  it.pick = ai; record(it.q[0], ai === 0); scheduleSave(); renderRun();
+  it.pick = ai; it.now = true; record(it.q[0], ai === 0); scheduleSave(); renderRun(); it.now = false;
   const nx = document.getElementById("btn-next") || document.getElementById("btn-finish");
   if (nx) nx.focus();
 }
@@ -1008,22 +1208,28 @@ function renderRun() {
   const answered = it.pick !== null, last = run.i === run.items.length - 1;
   const L = "ABCD";
   const label = { losowe: "Losowe", egzamin: "Egzamin próbny", bledy: "Moje błędy" }[run.mode];
-  let html = `<div class="qcard">
+  const fresh = run.shown !== run.i; run.shown = run.i;
+  let html = `<div class="qcard${fresh ? " in" : ""}">
     <div class="qhead"><span>${label} · ${CATS[q[1]]}</span><span>${exam ? `<span class="timer" id="timer"></span> · ` : ""}${run.i + 1} z ${run.items.length}</span></div>
     <div class="qprog" aria-hidden="true"><i style="width:${100 * (run.i + (answered ? 1 : 0)) / run.items.length}%"></i></div>
     <p class="qtext">${esc(q[2])}</p><div class="answers">`;
   it.order.forEach((ai, pos) => {
     let cls = "ans";
-    if (answered && !exam) cls += ai === 0 ? " right" : ai === it.pick ? " wrong" : " dim";
+    let key = L[pos];
+    if (answered && !exam) {
+      cls += ai === 0 ? " right" : ai === it.pick ? " wrong" : " dim";
+      if (ai === 0) key = MARK_OK; else if (ai === it.pick) key = MARK_NO;
+      if (it.now && (ai === 0 || ai === it.pick)) cls += " now";
+    }
     if (exam && it.pick === ai) cls += " sel";
-    html += `<button class="${cls}" data-a="${ai}" ${answered && !exam ? "disabled" : ""}><span class="key">${L[pos]}</span><span>${esc(q[3][ai])}</span></button>`;
+    html += `<button class="${cls}" data-a="${ai}" ${answered && !exam ? "disabled" : ""} aria-label="${L[pos]}: ${esc(q[3][ai])}"><span class="key">${key}</span><span>${esc(q[3][ai])}</span></button>`;
   });
   html += `</div>`;
-  if (answered && !exam) html += `<div class="expl" role="status">${it.pick === 0 ? `<b class="ok">Dobrze.</b>` : `<b class="no">Źle.</b>`}${esc(q[4])}</div>`;
+  if (answered && !exam) html += `<div class="expl" role="status">${it.pick === 0 ? `<b class="ok">${ico("check")}Dobrze.</b>` : `<b class="no">${ico("x")}Źle.</b>`}${esc(q[4])}</div>`;
   const canGo = exam || answered;
   html += `<div class="qnav"><button id="btn-quit">Przerwij</button><span class="right">
       ${exam && run.i > 0 ? `<button id="btn-prev">Wstecz</button>` : ""}
-      <button class="primary" id="${last ? "btn-finish" : "btn-next"}" ${canGo ? "" : "disabled"}>${last ? (exam ? "Oddaj test" : "Wynik") : "Dalej"}</button>
+      <button class="primary" id="${last ? "btn-finish" : "btn-next"}" ${canGo ? "" : "disabled"}>${last ? (exam ? "Oddaj test" : "Wynik") : "Dalej" + ico("arrow-right")}</button>
     </span></div>`;
   if (exam) {
     html += `<div class="grid40" aria-label="Pytania">` + run.items.map((x, i) =>
@@ -1120,14 +1326,14 @@ function renderTasks(elId, countId, list, render, extra) {
 function renderUmiec() {
   const el = document.getElementById("umiec");
   if (!el.childElementCount) {
-    el.innerHTML = UMIEC.map((g, i) => `<h2>${esc(g[0])}</h2><div class="counter" id="umiec-c${i}"></div><div id="umiec-g${i}"></div>`).join("");
+    el.innerHTML = UMIEC.map((g, i) => `<h2>${ico(g[1])}${esc(g[0])}</h2><div class="counter" id="umiec-c${i}"></div><div id="umiec-g${i}"></div>`).join("");
     el.addEventListener("change", umiecTotal);
   }
-  UMIEC.forEach((g, i) => renderTasks("umiec-g" + i, "umiec-c" + i, g[1], t => `<span class="title">${esc(t[1])}</span><span class="meta">${t[2]} · ${esc(t[3])}</span>`));
+  UMIEC.forEach((g, i) => renderTasks("umiec-g" + i, "umiec-c" + i, g[2], t => `<span class="title">${esc(t[1])}</span><span class="meta">${t[2]} · ${esc(t[3])}</span>`));
   umiecTotal();
 }
 function umiecTotal() {
-  const all = UMIEC.flatMap(g => g[1]);
+  const all = UMIEC.flatMap(g => g[2]);
   document.getElementById("umiec-total").textContent = `Umiesz: ${all.filter(t => stats.lab[t[0]]).length} z ${all.length}`;
 }
 
@@ -1148,7 +1354,7 @@ function stepHtml(s) {
   return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>");
 }
 function howTo(t) {
-  return `<details class="how" data-id="${t[0]}"><summary>Jak to zrobić</summary><ol>${t[3].map(s => `<li>${stepHtml(s)}</li>`).join("")}</ol></details>`;
+  return `<details class="how" data-id="${t[0]}"><summary>${ico("chevron-right")}Jak to zrobić</summary><ol>${t[3].map(s => `<li>${stepHtml(s)}</li>`).join("")}</ol></details>`;
 }
 
 // ---------- ściąga ----------
@@ -1249,29 +1455,147 @@ examInput.addEventListener("change", () => {
   renderStats(); scheduleSave();
 });
 
+// ---------- trener liczb i bramek ----------
+const SYS = { 2: "dwójkowo", 8: "ósemkowo", 10: "dziesiętnie", 16: "szesnastkowo" };
+const SUBS = { 2: "₂", 8: "₈", 10: "₁₀", 16: "₁₆" };
+const GATES = { AND: (a, b) => a & b, OR: (a, b) => a | b, NAND: (a, b) => 1 - (a & b), NOR: (a, b) => 1 - (a | b), XOR: (a, b) => a ^ b };
+const rnd = n => Math.floor(Math.random() * n);
+const fmt = (n, b) => n.toString(b).toUpperCase();
+let lic = null;
+
+function licSteps(n, from, to) {
+  const out = [];
+  if (from !== 10) {
+    const d = fmt(n, from).split("").reverse();
+    const parts = d.map((c, i) => [parseInt(c, from), from ** i]).filter(([v]) => v).reverse();
+    if (from === 2) out.push(`Jedynki stoją na wagach ${parts.map(p => p[1]).join(", ")}. Suma: ${parts.map(p => p[1]).join(" + ")} = ${n}.`);
+    else out.push(`Cyfry razy wagi: ${parts.map(([v, w]) => `${v}·${w}`).join(" + ")} = ${n}.`);
+  }
+  if (to === 10) return out;
+  if ((from === 2 && to !== 10) || (to === 2 && from !== 10)) {
+    const k = (from === 2 ? to : from) === 16 ? 4 : 3;
+    const b = fmt(n, 2), pad = b.padStart(Math.ceil(b.length / k) * k, "0");
+    const groups = pad.match(new RegExp(`.{${k}}`, "g"));
+    out.length = 0;
+    out.push(`Jedna cyfra ${k === 4 ? "szesnastkowa" : "ósemkowa"} to ${k} bity. Bity dzielisz na grupy od prawej i z przodu dopisujesz zera: ${groups.map(g => `${g} = ${parseInt(g, 2).toString(k === 4 ? 16 : 8).toUpperCase()}`).join(", ")}.`);
+    return out;
+  }
+  // dzielenie przez podstawę docelową
+  const rows = []; let x = n;
+  do { rows.push(`${x} : ${to} = ${Math.floor(x / to)} reszta ${fmt(x % to, to)}`); x = Math.floor(x / to); } while (x > 0);
+  out.push(`Dziel przez ${to}: ${rows.join("; ")}. Reszty czytasz od końca: ${fmt(n, to)}.`);
+  return out;
+}
+
+function newLic() {
+  const mode = document.getElementById("lic-mode").value;
+  const kinds = mode === "all" ? ["num", "num", "bit", "gate"] : [mode];
+  const kind = kinds[rnd(kinds.length)];
+  if (kind === "num") {
+    const pairs = [[10, 2], [2, 10], [2, 16], [16, 2], [8, 10], [10, 16], [16, 10], [8, 2], [2, 8], [10, 8]];
+    const [from, to] = pairs[rnd(pairs.length)];
+    const n = 5 + rnd(from === 2 || to === 2 ? 251 : 500);
+    lic = { ask: `Zapisz ${SYS[to]}:`, task: `${fmt(n, from)}${SUBS[from]}`, ans: fmt(n, to), base: to, steps: licSteps(n, from, to) };
+  } else if (kind === "bit") {
+    const op = ["AND", "OR", "XOR"][rnd(3)], a = rnd(16), b = rnd(16);
+    const r = op === "AND" ? a & b : op === "OR" ? a | b : a ^ b;
+    const p = v => v.toString(2).padStart(4, "0");
+    lic = { ask: "Wynik operacji bitowej (4 bity):", task: `${p(a)} ${op} ${p(b)}`, ans: p(r), base: 2, pad: 4,
+      steps: [`${op} bit po bicie: ${op === "AND" ? "1 tylko tam, gdzie obie liczby mają 1" : op === "OR" ? "1 tam, gdzie choć jedna ma 1" : "1 tam, gdzie bity są różne"}. Wynik ${p(r)}.`] };
+  } else {
+    const names = Object.keys(GATES), g1 = names[rnd(names.length)], A = rnd(2), B = rnd(2), C = rnd(2);
+    if (Math.random() < 0.5) {
+      const y = GATES[g1](A, B);
+      lic = { ask: "Co jest na wyjściu Y?", task: `Y = ${g1}(A=${A}, B=${B})`, ans: String(y), base: 2,
+        steps: [`${g1} dla ${A} i ${B} daje ${y}. Tabelę prawdy masz w Ściądze.`] };
+    } else {
+      const g2 = names[rnd(names.length)], m = GATES[g1](A, B), y = GATES[g2](m, C);
+      lic = { ask: "Co jest na wyjściu Y? Najpierw licz nawias.", task: `Y = ${g2}(${g1}(A=${A}, B=${B}), C=${C})`, ans: String(y), base: 2,
+        steps: [`Nawias: ${g1}(${A}, ${B}) = ${m}.`, `Potem ${g2}(${m}, ${C}) = ${y}.`] };
+    }
+  }
+  document.getElementById("lic-ask").textContent = lic.ask;
+  document.getElementById("lic-task").textContent = lic.task;
+  const inp = document.getElementById("lic-in");
+  inp.value = ""; inp.inputMode = lic.base === 16 ? "text" : "numeric";
+  document.getElementById("lic-field").className = "field";
+  document.getElementById("lic-fix").textContent = "";
+  document.getElementById("lic-sol").hidden = true;
+  document.getElementById("lic-check").textContent = "Sprawdź";
+  lic.done = false;
+}
+
+function checkLic() {
+  if (lic.done) { newLic(); document.getElementById("lic-in").focus(); return; }
+  const raw = document.getElementById("lic-in").value.replace(/\s+/g, "").toUpperCase();
+  if (!raw) return;
+  let v = raw.replace(/^0+(?=.)/, "");
+  const want = lic.pad ? lic.ans.replace(/^0+(?=.)/, "") : lic.ans;
+  const ok = v === want;
+  stats.lic[1]++; if (ok) stats.lic[0]++;
+  lic.done = true;
+  document.getElementById("lic-field").className = "field " + (ok ? "ok" : "no");
+  document.getElementById("lic-fix").textContent = ok ? "Dobrze." : `Poprawnie: ${lic.ans}`;
+  const sol = document.getElementById("lic-sol");
+  sol.innerHTML = `<strong>Jak to policzyć</strong><ol>${lic.steps.map(x => `<li>${esc(x)}</li>`).join("")}</ol>`;
+  sol.hidden = false;
+  document.getElementById("lic-check").textContent = "Następne zadanie";
+  renderLicScore(); scheduleSave();
+}
+function renderLicScore() {
+  const [ok, n] = stats.lic;
+  document.getElementById("lic-score").textContent = n ? `dobrze ${ok} z ${n}` : "";
+  document.getElementById("lic-bar").style.width = n ? (100 * ok / n) + "%" : "0";
+}
+document.getElementById("lic-check").addEventListener("click", checkLic);
+document.getElementById("lic-next").addEventListener("click", newLic);
+document.getElementById("lic-mode").addEventListener("change", newLic);
+document.getElementById("lic-in").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); checkLic(); } });
+// samokontrola: kroki i wynik muszą się zgadzać z wbudowaną konwersją
+console.assert(licSteps(173, 2, 16)[0].includes("1010 = A") && licSteps(111, 8, 10)[0].endsWith("= 111."), "licSteps");
+
 // ---------- zakładki ----------
-const TABS = ["quiz", "umiec", "podsieci", "sciaga", "arkusze", "plan", "lab"];
+const TABS = ["quiz", "umiec", "podsieci", "liczby", "sciaga", "arkusze", "plan", "lab"];
+let inTimer = null;
+function movePill() {
+  const nav = document.querySelector("nav"), a = nav.querySelector("a[aria-current]"), pill = nav.querySelector(".pill");
+  if (!a) return;
+  pill.style.width = a.offsetWidth + "px";
+  pill.style.transform = `translateX(${a.offsetLeft}px)`;
+  // aktywna zakładka zawsze widoczna na wąskim ekranie
+  if (a.offsetLeft < nav.scrollLeft || a.offsetLeft + a.offsetWidth > nav.scrollLeft + nav.clientWidth)
+    nav.scrollLeft = a.offsetLeft - 16;
+}
 function showTab() {
   const h = location.hash.slice(1);
   const tab = TABS.includes(h) ? h : "quiz";
   TABS.forEach(t => {
-    document.getElementById("tab-" + t).hidden = t !== tab;
+    const sec = document.getElementById("tab-" + t);
+    const was = sec.hidden;
+    sec.hidden = t !== tab;
+    // klasa "in" odpala wejście tylko przy zmianie zakładki, potem znika, żeby odświeżenia nie animowały się drugi raz
+    if (t === tab && was) { sec.classList.remove("in"); void sec.offsetWidth; sec.classList.add("in"); clearTimeout(inTimer); inTimer = setTimeout(() => sec.classList.remove("in"), 900); }
     const a = document.querySelector(`nav a[data-tab="${t}"]`);
     if (t === tab) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
   });
+  movePill();
 }
 window.addEventListener("hashchange", showTab);
+window.addEventListener("resize", movePill);
+if (document.fonts) document.fonts.ready.then(() => { movePill(); requestAnimationFrame(() => document.querySelector("nav .pill").classList.add("ready")); });
+else document.querySelector("nav .pill").classList.add("ready");
 
 function renderAll() {
   renderCatSelect();
   renderStats();
   renderWeeks();
-  renderTasks("sheets", "sheet-count", SHEETS, t => `<span class="title"><a href="${t[2]}" target="_blank" rel="noopener">INF.02 ${t[1]}</a></span><span class="meta">test i zadanie praktyczne</span>`);
+  renderTasks("sheets", "sheet-count", SHEETS, t => `<span class="title"><a href="${t[2]}" target="_blank" rel="noopener">INF.02 ${t[1]}${ico("external-link")}</a></span><span class="meta">test i zadanie praktyczne</span>`);
   renderTasks("setup-tasks", "setup-count", LAB_SETUP, t => `<span class="title"><strong>${esc(t[1])}</strong></span><span class="meta">${esc(t[2])}</span>`);
   renderTasks("lab-tasks", "lab-count", LAB_TASKS, t => `<span class="title"><strong>${t[0]}.</strong> ${esc(t[1])}</span><span class="meta">${esc(t[2])}</span>`, howTo);
   renderUmiec();
   renderCheat();
   renderSubScore();
+  renderLicScore();
   examInput.value = stats.exam || "";
 }
 
@@ -1283,6 +1607,7 @@ function renderAll() {
 
 showTab();
 newSub();
+newLic();
 initStore();
 </script>
 
