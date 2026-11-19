@@ -1148,7 +1148,7 @@ function bumpDay() {
 // ---------- konta i zapis ----------
 // Hasło zamienia się w skrót SHA-256 ("inf02:" + hasło). Postęp leży w Supabase (funkcje inf02_load / inf02_save),
 // kopia w tej przeglądarce pod kluczem konta. Bez internetu działa sama kopia.
-const SB_URL = "", SB_KEY = ""; // adres projektu i klucz anon public z Supabase
+const SB_URL = "https://etuhkpdbkhonxndskzxj.supabase.co", SB_KEY = "sb_publishable_TasREDCWWIS1Fx1Q9QvpVg__7RX8ele"; // klucz publishable, jawny z założenia
 const ACCOUNTS = ["49f74dc7a091b26ed0bfc0487140693957c41f1d3032ee5c5b623273d4bd2748", "2af6bc6ed448bb52a755d962d11a32a1bed0ad8c5c476fd100c5dd2a46fa3f59"];
 let acct = null, saveTimer = null, saving = false, pendingSave = false;
 const syncEl = document.getElementById("sync");
@@ -1186,7 +1186,7 @@ async function rpc(fn, body) {
   const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 10000);
   try {
     const res = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, { method: "POST", signal: ctl.signal,
-      headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      headers: { apikey: SB_KEY, "Content-Type": "application/json" }, body: JSON.stringify(body) });
     if (!res.ok) throw new Error("HTTP " + res.status);
     return await res.json();
   } finally { clearTimeout(t); }
