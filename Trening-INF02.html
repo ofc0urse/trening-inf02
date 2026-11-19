@@ -4,124 +4,182 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Trening INF.02</title>
+<script>try { const t = localStorage.getItem("inf02-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
-/* Układ: jedna kolumna 720px jak kartka w zeszycie. Pytanie dostaje cały ekran, reszta schodzi niżej. */
+/* Układ: aplikacja do nauki. Przegląd z kartami działów, każdy dział ma stały kolor. Wzór: Duolingo, Khan Academy, Librus. */
 :root {
-  --bg: #eef1ec;
-  --paper: #fbfcfa;
-  --ink: #18211c;
-  --muted: #4c5a52;
-  --line: #d3dad1;
-  --accent: #2a6748;
-  --accent-ink: #f4f8f5;
-  --accent-soft: #dbe8df;
-  --bad: #a3352a;
-  --bad-soft: #f6e0dc;
-  --warn: #8a5f12;
-  --warn-soft: #f3e8d2;
-  --shadow: 0 1px 2px rgba(24, 33, 28, .06), 0 6px 18px rgba(24, 33, 28, .06);
-  --f-head: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
-  --f-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-  --f-mono: "IBM Plex Mono", Consolas, monospace;
+  --bg: #f4f6f2;
+  --paper: #ffffff;
+  --ink: #1d2721;
+  --muted: #5a6760;
+  --line: #e1e6df;
+  --accent: #23884d;
+  --accent-deep: #186b3a;
+  --accent-ink: #ffffff;
+  --accent-soft: #e2f3e8;
+  --bad: #c92a2a;
+  --bad-soft: #fde8e8;
+  --warn: #a35d00;
+  --warn-soft: #fff1d6;
+  --shadow: 0 1px 2px rgba(29, 39, 33, .05), 0 4px 14px rgba(29, 39, 33, .06);
+  --c-sprzet: #e8590c; --c-windows: #1c7ed6; --c-linux: #d9a400; --c-sieci: #0ca678;
+  --c-serwer: #7048e8; --c-bezp: #d6336c; --c-podstawy: #ae3ec9;
+  --f-head: "Nunito", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Nunito", "Segoe UI", system-ui, sans-serif;
+  --f-mono: "JetBrains Mono", Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #111814; --paper: #19211d; --ink: #e1e8e3; --muted: #9eaea5; --line: #2c3832;
-    --accent: #7dbd98; --accent-ink: #0f1a14; --accent-soft: #213428; --bad: #e88a7d; --bad-soft: #3a2420;
-    --warn: #ddb064; --warn-soft: #362c19; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+    --bg: #111713; --paper: #1a221d; --ink: #e6ede8; --muted: #9aaba1; --line: #2a352e;
+    --accent: #4cc27b; --accent-deep: #2f8f55; --accent-ink: #0d1a12; --accent-soft: #1d3326; --bad: #ff8787; --bad-soft: #3b2222;
+    --warn: #ffc256; --warn-soft: #3a2e17; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .25);
+    --c-sprzet: #ff8a3d; --c-windows: #4dabf7; --c-linux: #ffd43b; --c-sieci: #38d9a9; --c-serwer: #9775fa; --c-bezp: #f06595; --c-podstawy: #da77f2;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #111814; --paper: #19211d; --ink: #e1e8e3; --muted: #9eaea5; --line: #2c3832;
-  --accent: #7dbd98; --accent-ink: #0f1a14; --accent-soft: #213428; --bad: #e88a7d; --bad-soft: #3a2420;
-  --warn: #ddb064; --warn-soft: #362c19; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 6px 18px rgba(0, 0, 0, .25);
+  --bg: #111713; --paper: #1a221d; --ink: #e6ede8; --muted: #9aaba1; --line: #2a352e;
+  --accent: #4cc27b; --accent-deep: #2f8f55; --accent-ink: #0d1a12; --accent-soft: #1d3326; --bad: #ff8787; --bad-soft: #3b2222;
+  --warn: #ffc256; --warn-soft: #3a2e17; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 14px rgba(0, 0, 0, .25);
+  --c-sprzet: #ff8a3d; --c-windows: #4dabf7; --c-linux: #ffd43b; --c-sieci: #38d9a9; --c-serwer: #9775fa; --c-bezp: #f06595; --c-podstawy: #da77f2;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 ::selection { background: var(--accent); color: var(--accent-ink); }
 html { scrollbar-color: var(--line) var(--bg); }
-body { background: var(--bg); color: var(--ink); font: 17px/1.6 var(--f-body); caret-color: var(--accent); }
-.wrap { max-width: 720px; margin: 0 auto; padding-block: 28px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 500 17px/1.6 var(--f-body); caret-color: var(--accent); font-variant-numeric: tabular-nums; }
+.wrap { max-width: 1200px; margin: 0 auto; padding-block: 0 80px; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+section > p, section > ol, section > ul { max-width: 70ch; }
 
-header { display: grid; gap: 10px; margin-bottom: 18px; }
-h1 { font: 700 clamp(30px, 6vw, 40px)/1.05 var(--f-head); margin: 0; letter-spacing: -0.02em; }
-.overall { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 15px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.overall > span { display: inline-flex; align-items: center; gap: 6px; }
-.overall .ic { width: 16px; height: 16px; color: var(--accent); }
-.overall strong { color: var(--ink); font-weight: 600; }
-.track { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
-.track i { display: block; height: 100%; background: var(--accent); border-radius: 4px; }
-
-nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; gap: 2px; margin: 0 -4px 26px; padding: 8px 4px; background: var(--bg); border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+/* górny pasek: marka, zakładki, motyw */
+.bar-top { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 18px; margin: 0 calc(-1 * max(20px, env(safe-area-inset-left, 0px))) 30px; padding: 10px max(20px, env(safe-area-inset-left, 0px)); background: var(--paper); border-bottom: 1px solid var(--line); }
+.brand { display: inline-flex; align-items: center; gap: 9px; font: 900 20px var(--f-head); letter-spacing: -0.01em; white-space: nowrap; color: var(--ink); text-decoration: none; }
+.brand i { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--accent); color: var(--accent-ink); }
+.brand i .ic { width: 19px; height: 19px; }
+nav { position: relative; display: flex; gap: 2px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; padding: 4px 0; }
 nav::-webkit-scrollbar { display: none; }
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
-nav a { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 7px; font: 600 16px var(--f-head); text-decoration: none; color: var(--muted); padding: 7px 13px; border-radius: 6px; white-space: nowrap; transition: color .2s; }
-nav a .ic { width: 17px; height: 17px; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+nav a { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 7px; font: 800 15px var(--f-head); text-decoration: none; color: var(--muted); padding: 8px 12px; border-radius: 10px; white-space: nowrap; transition: color .2s; }
+nav a .ic { width: 18px; height: 18px; }
 nav a:hover { color: var(--ink); }
-nav a[aria-current="page"] { color: var(--bg); }
+nav a[aria-current="page"] { color: var(--accent); }
 /* pigułka aktywnej zakładki jeździ pod linkami */
-nav .pill { position: absolute; z-index: 0; left: 0; top: 8px; height: calc(100% - 16px); width: 0; border-radius: 6px; background: var(--ink); pointer-events: none; }
+nav .pill { position: absolute; z-index: 0; left: 0; top: 4px; height: calc(100% - 8px); width: 0; border-radius: 10px; background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent); pointer-events: none; }
+.theme { flex: none; display: grid; place-items: center; width: 40px; height: 40px; min-height: 40px; padding: 0; border-radius: 10px; }
+.theme .ic { width: 19px; height: 19px; }
 
 /* ikony: Lucide, kolor bierze z tekstu */
 .ic { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.2em; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 
-h2 { font: 700 24px/1.2 var(--f-head); margin: 40px 0 10px; text-wrap: balance; }
+h1 { font: 900 clamp(34px, 5vw, 52px)/1.05 var(--f-head); margin: 0; letter-spacing: -0.02em; }
+h2 { font: 900 24px/1.2 var(--f-head); margin: 44px 0 12px; text-wrap: balance; letter-spacing: -0.01em; }
 h2:first-child { margin-top: 0; }
-p { margin: 0 0 12px; max-width: 65ch; }
+p { margin: 0 0 12px; }
 .muted { color: var(--muted); }
 .small { font-size: 14px; }
-code { font-family: var(--f-mono); font-size: 0.88em; background: var(--accent-soft); padding: 1px 5px; border-radius: 3px; overflow-wrap: anywhere; }
-a { color: var(--accent); text-underline-offset: 3px; }
-button { font: 600 16px var(--f-body); cursor: pointer; border-radius: 6px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); padding: 10px 16px; min-height: 44px; }
-button:hover:not(:disabled) { border-color: var(--ink); }
-button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-button.primary:hover:not(:disabled) { filter: brightness(1.08); border-color: var(--accent); }
-button:disabled { opacity: 0.4; cursor: default; }
-select { font: 16px var(--f-body); padding: 9px 10px; min-height: 44px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); color: var(--ink); }
+code { font-family: var(--f-mono); font-size: 0.86em; background: var(--accent-soft); padding: 1px 6px; border-radius: 5px; overflow-wrap: anywhere; }
+a { color: var(--accent); text-underline-offset: 3px; font-weight: 700; }
+/* przyciski z grubą dolną krawędzią, jak w Duolingo: wciśnięcie zjeżdża w dół */
+button { font: 800 16px var(--f-body); cursor: pointer; border-radius: 12px; border: 2px solid var(--line); border-bottom-width: 4px; background: var(--paper); color: var(--ink); padding: 9px 18px; min-height: 46px; }
+button:hover:not(:disabled) { background: var(--bg); }
+button:active:not(:disabled) { transform: translateY(2px); }
+button.primary { background: var(--accent); border-color: var(--accent-deep); color: var(--accent-ink); }
+button.primary:hover:not(:disabled) { background: var(--accent); filter: brightness(1.06); }
+button:disabled { opacity: 0.45; cursor: default; }
+select { font: 700 16px var(--f-body); padding: 9px 12px; min-height: 46px; border: 2px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); }
+.card { background: var(--paper); border: 2px solid var(--line); border-radius: 18px; }
 
-/* tryby quizu: wiersze listy, nie kafelki */
-.modes { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; }
-.mode { display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: 2px 14px; width: 100%; text-align: left; border: 0; border-radius: 0; border-bottom: 1px solid var(--line); background: transparent; padding: 16px 18px; font-weight: 400; }
-.mode:last-child { border-bottom: 0; }
-.mode:hover:not(:disabled) { background: var(--accent-soft); }
-.mode .mi { grid-row: 1 / span 2; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); }
-.mode .mi .ic { width: 19px; height: 19px; }
-.mode.main .mi { background: var(--accent); color: var(--accent-ink); }
-.mode strong { grid-column: 2; font: 700 19px/1.2 var(--f-head); }
+/* przegląd */
+.hero { display: grid; grid-template-columns: 1fr minmax(320px, 420px); gap: 20px; align-items: stretch; }
+.when { padding: 26px 28px; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+.when .lbl { font: 800 15px var(--f-head); color: var(--muted); display: inline-flex; gap: 7px; align-items: center; }
+.when .lbl .ic { color: var(--accent); }
+.when .dates { color: var(--muted); font-weight: 700; }
+.when .dates a { font-weight: 800; }
+.today { padding: 22px 24px; display: grid; gap: 14px; align-content: start; }
+.today .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 800; }
+.today .row .ic { color: var(--accent); }
+.today .row .fl { color: var(--c-sprzet); }
+.today .num { font: 900 30px/1 var(--f-head); }
+.today .num small { font-size: 17px; color: var(--muted); }
+.today button { width: 100%; font-size: 18px; min-height: 54px; }
+.today .hint2 { font-size: 14px; color: var(--muted); margin: 2px 0 0; text-align: center; }
+.track { height: 12px; background: var(--line); border-radius: 6px; overflow: hidden; }
+.track i { display: block; height: 100%; background: var(--accent); border-radius: 6px; }
+
+.cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.catrow { --c: var(--accent); display: grid; grid-template-columns: 46px 1fr auto; grid-template-rows: auto auto auto; align-items: center; gap: 4px 12px; width: 100%; text-align: left; padding: 18px; min-height: 0; border-radius: 18px; font-weight: 600; }
+.catrow { border-bottom-width: 4px; }
+.catrow:hover:not(:disabled) { background: var(--paper); border-color: var(--c); }
+.catrow .ci { grid-row: 1 / span 2; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 13px; background: var(--c); color: #fff; }
+.catrow .ci .ic { width: 24px; height: 24px; }
+.catrow .cn { grid-column: 2; grid-row: 1; align-self: end; font: 900 17px/1.2 var(--f-head); }
+.catrow .pct { grid-column: 3; grid-row: 1 / span 2; font: 900 26px var(--f-head); color: var(--c); }
+.catrow .seen { grid-column: 2; grid-row: 2; align-self: start; font-size: 14px; color: var(--muted); }
+.catrow .bar { grid-column: 1 / -1; height: 10px; margin-top: 10px; background: var(--line); border-radius: 5px; overflow: hidden; }
+.catrow .bar i { display: block; height: 100%; border-radius: 5px; background: var(--c); }
+.catrow .tag { grid-column: 1 / -1; justify-self: start; margin-top: 4px; font: 800 12px var(--f-head); letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 6px; }
+.catrow.low .tag { background: var(--bad-soft); color: var(--bad); }
+.catrow.mid .tag { background: var(--warn-soft); color: var(--warn); }
+.catrow.top .tag { background: var(--accent-soft); color: var(--accent); }
+.c-sprzet { --c: var(--c-sprzet); } .c-windows { --c: var(--c-windows); } .c-linux { --c: var(--c-linux); } .c-sieci { --c: var(--c-sieci); }
+.c-serwer { --c: var(--c-serwer); } .c-bezp { --c: var(--c-bezp); } .c-podstawy { --c: var(--c-podstawy); }
+.c-linux .ci { color: #2b2300; }
+
+.more { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+.prog { padding: 8px 22px; }
+.prog a { display: grid; grid-template-columns: 40px 1fr auto; grid-template-rows: auto auto; align-items: center; gap: 2px 14px; padding: 14px 0; border-bottom: 2px solid var(--line); color: var(--ink); text-decoration: none; }
+.prog a:last-child { border-bottom: 0; }
+.prog a i { grid-row: 1 / span 2; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; background: var(--accent-soft); color: var(--accent); }
+.prog a b { font: 900 16px var(--f-head); }
+.prog a span { font: 800 15px var(--f-head); color: var(--muted); }
+.prog a .track { grid-column: 2 / -1; height: 8px; }
+.prog a:hover b { color: var(--accent); }
+.histc { padding: 20px 22px; }
+.histc h3 { font: 900 17px var(--f-head); margin: 0 0 10px; }
+
+/* tryby quizu */
+.modes { display: grid; gap: 12px; }
+.mode { display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 2px 16px; width: 100%; text-align: left; padding: 16px 18px; font-weight: 600; border-radius: 18px; }
+.mode .mi { grid-row: 1 / span 2; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 13px; background: var(--accent-soft); color: var(--accent); }
+.mode .mi .ic { width: 24px; height: 24px; }
+.mode.main { border-color: var(--accent-deep); background: var(--accent); color: var(--accent-ink); }
+.mode.main:hover:not(:disabled) { background: var(--accent); filter: brightness(1.06); }
+.mode.main .mi { background: rgba(255, 255, 255, .18); color: inherit; }
+.mode.main span { color: inherit; opacity: .9; }
+.mode strong { grid-column: 2; font: 900 20px/1.2 var(--f-head); }
 .mode span { grid-column: 2; color: var(--muted); font-size: 15px; }
-.mode .go { grid-column: 3; grid-row: 1 / span 2; width: 22px; height: 22px; color: var(--accent); transition: transform .2s cubic-bezier(.16, 1, .3, 1); }
+.mode .go { grid-column: 3; grid-row: 1 / span 2; width: 24px; height: 24px; transition: transform .2s cubic-bezier(.16, 1, .3, 1); }
 .mode:hover:not(:disabled) .go { transform: translateX(3px); }
-.mode.main strong { color: var(--accent); }
-.filter { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 14px 0 0; font-size: 15px; }
-
-/* działy */
-.cats { display: grid; gap: 0; margin-top: 6px; }
-.catrow { display: grid; grid-template-columns: minmax(110px, 190px) 1fr 52px; align-items: center; gap: 4px 14px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 16px; }
-.catrow .bar { height: 8px; background: var(--line); border-radius: 4px; overflow: hidden; }
-.catrow .bar i { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
-.catrow.low .bar i { background: var(--bad); }
-.catrow.mid .bar i { background: var(--warn); }
-.catrow .cn { display: inline-flex; align-items: center; gap: 8px; }
-.catrow .cn .ic { color: var(--muted); width: 17px; height: 17px; }
-.catrow .pct { font-family: var(--f-mono); font-size: 15px; text-align: right; font-variant-numeric: tabular-nums; }
-.catrow .seen { grid-column: 2 / span 2; font-size: 13px; color: var(--muted); margin-top: -2px; }
-.weak { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 12px 14px; border-radius: 8px; background: var(--warn-soft); }
-.weak p { margin: 0; flex: 1 1 260px; }
-.sync { font-size: 13px; color: var(--muted); margin-top: 18px; }
+.filter { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 16px 0 0; font-size: 15px; font-weight: 700; }
+#tab-quiz, #tab-podsieci, #tab-liczby { max-width: 780px; margin-inline: auto; }
+@media (max-width: 860px) {
+  .hero, .more { grid-template-columns: 1fr; }
+  .when { padding: 22px; }
+}
+@media (max-width: 640px) {
+  .brand span { display: none; }
+  .bar-top { gap: 10px; margin-bottom: 22px; }
+  .cats { grid-template-columns: 1fr; gap: 12px; }
+}
+.grid40 button { border-width: 2px; border-radius: 8px; }
+#quiz-run, #tab-podsieci > .qcard, #tab-liczby > .qcard { max-width: 780px; }
+.sync { font-size: 13px; color: var(--muted); margin-top: 24px; }
 
 /* pytanie */
-.qcard { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow); padding: 22px clamp(16px, 4vw, 30px) 20px; }
+.qcard { max-width: 780px; background: var(--paper); border: 2px solid var(--line); border-radius: 20px; padding: 24px clamp(16px, 4vw, 32px) 22px; }
 .qhead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .qprog { height: 4px; background: var(--line); border-radius: 2px; margin: 10px 0 20px; overflow: hidden; }
 .qprog i { display: block; height: 100%; background: var(--accent); }
 .qtext { font-size: clamp(19px, 3.2vw, 22px); line-height: 1.45; font-weight: 500; margin: 0 0 20px; text-wrap: pretty; }
 .answers { display: grid; gap: 10px; }
-.ans { display: grid; grid-template-columns: 32px 1fr; align-items: start; gap: 12px; text-align: left; font: 400 17px/1.45 var(--f-body); padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); }
-.ans .key { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--line); background: var(--paper); font: 600 15px var(--f-mono); color: var(--muted); }
+.ans { display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 14px; text-align: left; font: 700 17px/1.45 var(--f-body); padding: 12px 16px; border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 14px; background: var(--paper); color: var(--ink); }
+.ans .key { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; border: 2px solid var(--line); background: var(--bg); font: 900 15px var(--f-head); color: var(--muted); }
 .ans:hover:not(:disabled) { border-color: var(--ink); }
 .ans.sel { border-color: var(--accent); background: var(--accent-soft); }
 .ans.sel .key, .ans.right .key { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
@@ -130,7 +188,7 @@ select { font: 16px var(--f-body); padding: 9px 10px; min-height: 44px; border: 
 .ans.wrong .key { background: var(--bad); border-color: var(--bad); color: var(--paper); }
 .ans:disabled { cursor: default; }
 .ans.dim { opacity: .55; }
-.expl { margin-top: 16px; padding: 12px 14px; border-radius: 8px; background: var(--bg); font-size: 16px; }
+.expl { margin-top: 16px; padding: 14px 16px; border-radius: 14px; background: var(--bg); font-size: 16px; }
 .expl b { margin-right: 4px; display: inline-flex; align-items: center; gap: 5px; }
 .ans .key svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 button .ic { margin-left: 6px; }
@@ -152,7 +210,7 @@ button .ic { margin-left: 6px; }
 .score small { font-size: 0.4em; color: var(--muted); letter-spacing: 0; }
 .verdict { font-size: 18px; margin-bottom: 18px; }
 .mistakes { display: grid; gap: 12px; margin-top: 22px; }
-.mistake { padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); font-size: 16px; }
+.mistake { padding: 16px 18px; border: 2px solid var(--line); border-radius: 14px; background: var(--bg); font-size: 16px; }
 .mistake .q { font-weight: 600; margin-bottom: 8px; }
 .mistake .line { display: grid; grid-template-columns: 92px 1fr; gap: 8px; font-size: 15px; }
 .mistake .line .lab { color: var(--muted); }
@@ -179,7 +237,7 @@ button .ic { margin-left: 6px; }
 .task label { min-width: 0; flex: 1; }
 .task .meta { display: block; font-size: 14px; color: var(--muted); }
 .task.done .title { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
-.counter { font: 600 15px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.counter { font: 800 15px var(--f-head); color: var(--muted); font-variant-numeric: tabular-nums; }
 ul.links { padding-left: 20px; max-width: 65ch; }
 ul.links li { margin-bottom: 8px; }
 
@@ -238,9 +296,6 @@ details.how pre { font: 14px/1.5 var(--f-mono); background: var(--bg); border: 1
 @media (max-width: 520px) {
   .week { grid-template-columns: 1fr; gap: 6px; }
   .hrow { grid-template-columns: 52px 1fr 52px; gap: 8px; }
-  .catrow { grid-template-columns: 1fr 52px; }
-  .catrow .bar { grid-column: 1 / span 2; grid-row: 2; }
-  .catrow .seen { grid-column: 1 / span 2; }
   .mistake .line { grid-template-columns: 1fr; gap: 0; }
 }
 /* Ruch: zakładka wjeżdża, paski rosną przy wejściu, odpowiedź dostaje znak, który się rysuje.
@@ -291,14 +346,18 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
 <symbol id="i-file-text" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /><path d="M14 2v4a2 2 0 0 0 2 2h4" /><path d="M10 9H8" /><path d="M16 13H8" /><path d="M16 17H8" /></symbol>
 <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" /></symbol>
 <symbol id="i-flask-conical" viewBox="0 0 24 24"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /><path d="M6.453 15h11.094" /><path d="M8.5 2h7" /></symbol>
+<symbol id="i-layout-dashboard" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1" /><rect width="7" height="5" x="14" y="3" rx="1" /><rect width="7" height="9" x="14" y="12" rx="1" /><rect width="7" height="5" x="3" y="16" rx="1" /></symbol>
 <symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></symbol>
 <symbol id="i-list-checks" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4" /><path d="m3 7 2 2 4-4" /><path d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></symbol>
 <symbol id="i-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" /></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></symbol>
 <symbol id="i-network" viewBox="0 0 24 24"><rect x="16" y="16" width="6" height="6" rx="1" /><rect x="2" y="16" width="6" height="6" rx="1" /><rect x="9" y="2" width="6" height="6" rx="1" /><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" /><path d="M12 12V8" /></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3" /></symbol>
 <symbol id="i-rotate-ccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></symbol>
 <symbol id="i-server" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2" /><rect width="20" height="8" x="2" y="14" rx="2" ry="2" /><line x1="6" x2="6.01" y1="6" y2="6" /><line x1="6" x2="6.01" y1="18" y2="18" /></symbol>
 <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /><path d="m9 12 2 2 4-4" /></symbol>
 <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="m18 14 4 4-4 4" /><path d="m18 2 4 4-4 4" /><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22" /><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2" /><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45" /></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></symbol>
 <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></symbol>
 <symbol id="i-terminal" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5" /><line x1="12" x2="20" y1="19" y2="19" /></symbol>
 <symbol id="i-timer" viewBox="0 0 24 24"><line x1="10" x2="14" y1="2" y2="2" /><line x1="12" x2="15" y1="14" y2="11" /><circle cx="12" cy="14" r="8" /></symbol>
@@ -308,46 +367,65 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
 </svg>
 
 <div class="wrap">
-  <header>
-    <h1>Trening INF.02</h1>
-    <div class="overall" id="overall"><span>Ładuję postępy</span></div>
-    <div class="track" aria-hidden="true"><i id="overall-bar" style="width:0"></i></div>
-  </header>
-  <nav aria-label="Sekcje">
-    <span class="pill" aria-hidden="true"></span>
-    <a href="#quiz" data-tab="quiz"><svg class="ic" aria-hidden="true"><use href="#i-circle-help"/></svg>Quiz</a>
-    <a href="#umiec" data-tab="umiec"><svg class="ic" aria-hidden="true"><use href="#i-list-checks"/></svg>Co umieć</a>
-    <a href="#podsieci" data-tab="podsieci"><svg class="ic" aria-hidden="true"><use href="#i-network"/></svg>Podsieci</a>
-    <a href="#liczby" data-tab="liczby"><svg class="ic" aria-hidden="true"><use href="#i-binary"/></svg>Liczby</a>
-    <a href="#sciaga" data-tab="sciaga"><svg class="ic" aria-hidden="true"><use href="#i-book-open"/></svg>Ściąga</a>
-    <a href="#arkusze" data-tab="arkusze"><svg class="ic" aria-hidden="true"><use href="#i-file-text"/></svg>Arkusze CKE</a>
-    <a href="#plan" data-tab="plan"><svg class="ic" aria-hidden="true"><use href="#i-calendar-days"/></svg>Plan</a>
-    <a href="#lab" data-tab="lab"><svg class="ic" aria-hidden="true"><use href="#i-flask-conical"/></svg>Lab</a>
-  </nav>
+  <div class="bar-top">
+    <a class="brand" href="#przeglad"><i><svg class="ic" aria-hidden="true"><use href="#i-check"/></svg></i><span>Trening INF.02</span></a>
+    <nav aria-label="Sekcje">
+      <span class="pill" aria-hidden="true"></span>
+      <a href="#przeglad" data-tab="przeglad"><svg class="ic" aria-hidden="true"><use href="#i-layout-dashboard"/></svg>Przegląd</a>
+      <a href="#quiz" data-tab="quiz"><svg class="ic" aria-hidden="true"><use href="#i-circle-help"/></svg>Quiz</a>
+      <a href="#umiec" data-tab="umiec"><svg class="ic" aria-hidden="true"><use href="#i-list-checks"/></svg>Co umieć</a>
+      <a href="#podsieci" data-tab="podsieci"><svg class="ic" aria-hidden="true"><use href="#i-network"/></svg>Podsieci</a>
+      <a href="#liczby" data-tab="liczby"><svg class="ic" aria-hidden="true"><use href="#i-binary"/></svg>Liczby</a>
+      <a href="#sciaga" data-tab="sciaga"><svg class="ic" aria-hidden="true"><use href="#i-book-open"/></svg>Ściąga</a>
+      <a href="#arkusze" data-tab="arkusze"><svg class="ic" aria-hidden="true"><use href="#i-file-text"/></svg>Arkusze</a>
+      <a href="#plan" data-tab="plan"><svg class="ic" aria-hidden="true"><use href="#i-calendar-days"/></svg>Plan</a>
+      <a href="#lab" data-tab="lab"><svg class="ic" aria-hidden="true"><use href="#i-flask-conical"/></svg>Lab</a>
+    </nav>
+    <button class="theme" id="theme" aria-label="Przełącz jasny i ciemny wygląd"><svg class="ic" aria-hidden="true"><use href="#i-moon"/></svg></button>
+  </div>
+
+  <!-- PRZEGLĄD -->
+  <section id="tab-przeglad">
+    <div class="hero">
+      <div class="card when">
+        <span class="lbl"><svg class="ic" aria-hidden="true"><use href="#i-calendar-clock"/></svg>Egzamin pisemny</span>
+        <h1 id="ov-days">Ładuję</h1>
+        <span class="dates" id="ov-dates"></span>
+      </div>
+      <div class="card today">
+        <div class="row"><span><svg class="ic" aria-hidden="true"><use href="#i-target"/></svg> Dziś</span><span class="num" id="ov-today">0<small> z 30</small></span></div>
+        <div class="track" aria-hidden="true"><i id="ov-today-bar" style="width:0"></i></div>
+        <div class="row"><span><svg class="ic fl" aria-hidden="true"><use href="#i-flame"/></svg> Seria</span><span id="ov-streak">0 dni</span></div>
+        <div id="weak"></div>
+      </div>
+    </div>
+
+    <h2>Działy</h2>
+    <div class="cats" id="cats"></div>
+
+    <div class="more">
+      <div class="card prog" id="ov-prog"></div>
+      <div class="card histc">
+        <h3>Egzaminy próbne</h3>
+        <div id="hist-box" hidden><div class="hist" id="hist"></div><p class="legend">Kreski: 20 to próg, 30 to Twój cel.</p></div>
+        <p class="muted" id="hist-empty">Jeszcze żadnego. Zrób pierwszy w zakładce Quiz.</p>
+      </div>
+    </div>
+    <p class="sync" id="sync"></p>
+  </section>
 
   <!-- QUIZ -->
-  <section id="tab-quiz">
-    <div id="quiz-home">
+  <section id="tab-quiz" hidden>
+    <div id="quiz-home" class="quizhome">
       <div class="modes">
-        <button class="mode main" id="btn-rand"><i class="mi" aria-hidden="true"><svg class="ic"><use href="#i-shuffle"/></svg></i><strong>Losowe 20</strong><span>Częściej trafiasz na pytania, w których się mylisz. Odpowiedź widzisz od razu.</span><svg class="ic go" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
-        <button class="mode" id="btn-exam"><i class="mi" aria-hidden="true"><svg class="ic"><use href="#i-timer"/></svg></i><strong>Egzamin próbny</strong><span>40 pytań, 60 minut, wynik na końcu. Cel: 30 poprawnych.</span><svg class="ic go" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
-        <button class="mode" id="btn-bad"><i class="mi" aria-hidden="true"><svg class="ic"><use href="#i-rotate-ccw"/></svg></i><strong>Moje błędy</strong><span id="bad-desc">Wracasz tylko do pytań, które ostatnio zawaliłeś.</span><svg class="ic go" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+        <button class="mode main" id="btn-rand"><i class="mi" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-shuffle"/></svg></i><strong>Losowe 20</strong><span>Częściej trafiasz na swoje błędy</span><svg class="ic go" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+        <button class="mode" id="btn-exam"><i class="mi" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-timer"/></svg></i><strong>Egzamin próbny</strong><span>40 pytań, 60 minut</span><svg class="ic go" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
+        <button class="mode" id="btn-bad"><i class="mi" aria-hidden="true"><svg class="ic" aria-hidden="true"><use href="#i-rotate-ccw"/></svg></i><strong>Moje błędy</strong><span id="bad-desc">Pytania, które ostatnio zawaliłeś</span><svg class="ic go" aria-hidden="true"><use href="#i-chevron-right"/></svg></button>
       </div>
       <div class="filter">
-        <label for="catsel" class="muted">Dział do losowania:</label>
+        <label for="catsel" class="muted">Dział:</label>
         <select id="catsel"></select>
       </div>
-
-      <h2>Twoje działy</h2>
-      <div class="cats" id="cats"></div>
-      <div class="weak" id="weak" hidden></div>
-
-      <div id="hist-box" hidden>
-        <h2>Egzaminy próbne</h2>
-        <div class="hist" id="hist"></div>
-        <p class="legend">Kreski na pasku: 20 punktów to próg zdania, 30 to Twój cel.</p>
-      </div>
-      <p class="sync" id="sync"></p>
     </div>
     <div id="quiz-run" hidden></div>
   </section>
@@ -435,9 +513,9 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
   <!-- ARKUSZE -->
   <section id="tab-arkusze" hidden>
     <h2>Prawdziwe arkusze CKE</h2>
-    <p>Pytania z egzaminów się powtarzają, więc przerób wszystkie sesje. W każdej sesji jest kilka wersji testu i zadanie praktyczne. Odhacz sesję, gdy zrobisz test na czas i sprawdzisz wynik.</p>
+    <p>Pytania się powtarzają. Odhacz sesję, gdy zrobisz ją na czas i sprawdzisz wynik.</p>
     <div class="callout">
-      <p><strong>Test z całej bazy:</strong> <a href="https://egzamin-informatyk.pl/testy-inf02-ee08-sprzet-systemy-sieci/" target="_blank" rel="noopener">egzamin-informatyk.pl</a> losuje 40 pytań z 2265 pytań CKE z lat poprzednich. Rób tam jeden test dziennie obok tego quizu.</p>
+      <p><strong>Test z całej bazy CKE:</strong> <a href="https://egzamin-informatyk.pl/testy-inf02-ee08-sprzet-systemy-sieci/" target="_blank" rel="noopener">egzamin-informatyk.pl</a>, jeden dziennie.</p>
       <p><strong>Generator testu:</strong> <a href="https://arkusze.pl/egzamin-zawodowy-inf-02-egzamin-pisemny/" target="_blank" rel="noopener">arkusze.pl, egzamin pisemny INF.02</a>.</p>
     </div>
     <div class="counter" id="sheet-count"></div>
@@ -448,9 +526,9 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
   <!-- PLAN -->
   <section id="tab-plan" hidden>
     <div class="callout">
-      <p>Teorię zdajesz od 20 na 40 punktów. Praktykę dopiero od 75%, czyli Twój cel to samo minimum. Na ćwiczeniach mierz w 85–90%, bo stres na egzaminie zabiera parę punktów.</p>
-      <p>Teoria wypada zwykle w drugim tygodniu stycznia, praktyka w styczniu albo na początku lutego. Datę i godzinę sprawdź w szkole i wpisz tutaj, a w nagłówku pojawi się odliczanie.</p>
-      <div class="datebox"><label for="examdate">Data teorii:</label><input type="date" id="examdate" min="2026-11-01" max="2027-12-31"></div>
+      <p><strong>Harmonogram CKE, zima 2027:</strong> część pisemna 7–13 stycznia, praktyczna 15–19 stycznia (dodatkowy termin 29 stycznia), wyniki 31 marca. Dokładny dzień poda szkoła.</p>
+      <p>Teoria: próg 20 z 40, Twój cel 30. Praktyka: próg 75%, na ćwiczeniach mierz w 85–90%.</p>
+      <div class="datebox"><label for="examdate">Twój dzień teorii:</label><input type="date" id="examdate" min="2026-11-01" max="2027-12-31"></div>
     </div>
     <p>W tygodniu: 20 minut quizu i godzina labu. W weekend: jedno dłuższe ćwiczenie albo cały arkusz na czas.</p>
     <h2>Tydzień po tygodniu</h2>
@@ -464,11 +542,11 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
   <!-- LAB -->
   <section id="tab-lab" hidden>
     <h2>Postaw lab</h2>
-    <p>Trzy maszyny zajmą ok. 10 GB z Twoich 32 GB RAM. Na całość licz 2 godziny, głównie czekania na instalację.</p>
+    <p>Trzy maszyny, ok. 10 GB RAM, 2 godziny.</p>
     <div class="counter" id="setup-count"></div>
     <div id="setup-tasks"></div>
     <h2>Ćwiczenia jak na egzaminie</h2>
-    <p>Odhacz ćwiczenie dopiero wtedy, gdy zrobisz je bez podglądania.</p>
+    <p>Odhaczaj dopiero bez podglądania.</p>
     <div class="counter" id="lab-count"></div>
     <div id="lab-tasks"></div>
   </section>
@@ -690,7 +768,7 @@ const Q = [
 [324,"bezp","Atak, w którym tysiące zainfekowanych komputerów zalewają serwer żądaniami, to:",["DDoS","phishing","keylogging","SQL injection"],"Przed atakami z sieci, np. typu Smurf, chroni poprawnie ustawiona zapora."],
 [325,"bezp","Szkodnik, który sam rozsyła swoje kopie przez sieć bez udziału użytkownika, to:",["robak","trojan","adware","keylogger"],"Trojan udaje przydatny program i czeka, aż go uruchomisz."],
 [326,"bezp","Zasada kopii zapasowych 3-2-1 mówi o:",["3 kopiach na 2 różnych nośnikach, z czego 1 poza domem lub firmą","3 dyskach w RAID 2 i 1 zapasowym","kopii co 3 dni przez 2 tygodnie","3 hasłach do 2 kont"],"Kopia poza miejscem pracy przetrwa pożar albo kradzież."],
-[327,"bezp","Znak CE na urządzeniu oznacza, że:",["spełnia wymagania Unii Europejskiej i można je sprzedawać w UE","zostało wyprodukowane w Europie","jest energooszczędne","można je wyrzucić z odpadami komunalnymi"],"Energooszczędność opisuje Energy Star."],,
+[327,"bezp","Znak CE na urządzeniu oznacza, że:",["spełnia wymagania Unii Europejskiej i można je sprzedawać w UE","zostało wyprodukowane w Europie","jest energooszczędne","można je wyrzucić z odpadami komunalnymi"],"Energooszczędność opisuje Energy Star."],
 [401,"podstawy","Liczba 10101101₂ zapisana szesnastkowo to:",["AD","DA","173","255"],"Dziel bity na czwórki od prawej: 1010 = A, 1101 = D. 173 to ta sama liczba dziesiętnie, 255 ósemkowo."],
 [402,"podstawy","Liczba 157₈ zapisana dziesiętnie to:",["111","157","103","127"],"1·64 + 5·8 + 7·1 = 64 + 40 + 7 = 111. W ósemkowym wagi to 64, 8, 1."],
 [403,"podstawy","Liczba 2F₁₆ zapisana dwójkowo to:",["101111","111101","100111","1011111"],"Każda cyfra hex to 4 bity: 2 = 0010, F = 1111. Razem 0010 1111, czyli 101111."],
@@ -876,7 +954,7 @@ const WEEKS = [
   ["2026-12-11","2026-12-17","Ubuntu Server: konta, prawa, netplan, ping, SSH (C).","Polecenia Linuksa i chmod."],
   ["2026-12-18","2026-12-24","Router i Wi-Fi w emulatorze TP-Link (D). Kabel RJ45 na lekcji (E).","Sprzęt, drukarki, RAID, systemy liczbowe."],
   ["2026-12-25","2026-12-31","Dwa pełne arkusze praktyczne na czas: 150 minut bez podglądania.","Dwa egzaminy próbne i dwie sesje z zakładki Arkusze CKE."],
-  ["2027-01-01","2027-01-10","Jeszcze 2–3 arkusze. Po każdym spisz, czego nie zrobiłeś, i powtórz tylko to.","Egzamin próbny co drugi dzień, „Moje błędy” codziennie."],
+  ["2027-01-01","2027-01-06","Jeszcze 2–3 arkusze. Po każdym spisz, czego nie zrobiłeś, i powtórz tylko to.","Egzamin próbny co drugi dzień, „Moje błędy” codziennie."],
 ];
 
 const LAB_SETUP = [
@@ -1076,9 +1154,11 @@ function streak() {
     n++; d.setDate(d.getDate() - 1);
   }
 }
+// część pisemna według harmonogramu CKE: 7–13 stycznia 2027; bez wpisanej daty liczymy do pierwszego dnia
+const EXAM_DEFAULT = "2027-01-07";
+function examDate() { return /^\d{4}-\d{2}-\d{2}$/.test(stats.exam) ? stats.exam : EXAM_DEFAULT; }
 function daysLeft() {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(stats.exam)) return null;
-  const [y, m, dd] = stats.exam.split("-").map(Number);
+  const [y, m, dd] = examDate().split("-").map(Number);
   const t = new Date(); t.setHours(0, 0, 0, 0);
   return Math.round((new Date(y, m - 1, dd) - t) / 86400000);
 }
@@ -1094,46 +1174,65 @@ function catStats(cat) {
 function isMastered(q) { const v = stats.q[q[0]]; return v && v[2] === 1 && v[0] >= 2 && v[0] > v[1]; }
 function badPool(list) { return list.filter(q => { const v = stats.q[q[0]]; return v && v[1] > 0 && (v[2] === 0 || v[1] >= v[0]); }); }
 
+const MIES = ["stycznia", "lutego", "marca", "kwietnia", "maja", "czerwca", "lipca", "sierpnia", "września", "października", "listopada", "grudnia"];
+function plDate(iso) { const [y, m, d] = iso.split("-").map(Number); return `${d} ${MIES[m - 1]} ${y}`; }
+function practise(c) { document.getElementById("catsel").value = c || ""; location.hash = "#quiz"; startRun("losowe"); }
+
 function renderStats() {
+  // karty działów
   const el = document.getElementById("cats");
   el.innerHTML = "";
-  let weakest = null;
+  let weakest = null, fresh = null;
   Object.keys(CATS).forEach(c => {
     const s = catStats(c);
     if (s.pct !== null && s.seen >= 3 && (!weakest || s.pct < weakest.pct)) weakest = { c, pct: s.pct };
-    const cls = s.pct === null ? "" : s.pct < 50 ? " low" : s.pct < 75 ? " mid" : "";
-    const d = document.createElement("div");
-    d.className = "catrow" + cls;
-    d.innerHTML = `<span class="cn">${ico(CAT_ICON[c] || "binary")}${CATS[c]}</span><span class="bar" aria-hidden="true"><i style="width:${s.pct || 0}%"></i></span>
+    if (!fresh || s.seen / s.total < fresh.r) fresh = { c, r: s.seen / s.total };
+    const cls = s.pct === null ? "" : s.pct < 50 ? " low" : s.pct < 75 ? " mid" : " top";
+    const tag = s.pct === null ? "" : s.pct < 50 ? "słabo" : s.pct < 75 ? "w drodze" : "dobrze";
+    const d = document.createElement("button");
+    d.className = `card catrow c-${c}${cls}`;
+    d.setAttribute("aria-label", `${CATS[c]}: ${s.pct === null ? "jeszcze nie ćwiczony" : s.pct + "% poprawnych"}. Ćwicz 20 pytań.`);
+    d.innerHTML = `<span class="ci">${ico(CAT_ICON[c] || "binary")}</span><span class="cn">${CATS[c]}</span>
       <span class="pct">${s.pct === null ? "–" : s.pct + "%"}</span>
-      <span class="seen">przerobione ${s.seen} z ${s.total} pytań</span>`;
+      <span class="seen">${s.seen} z ${s.total} pytań</span>
+      <span class="bar" aria-hidden="true"><i style="width:${s.pct || 0}%"></i></span>${tag ? `<span class="tag">${tag}</span>` : ""}`;
+    d.addEventListener("click", () => practise(c));
     el.appendChild(d);
   });
+
+  // dziś i następny krok
+  const next = weakest && weakest.pct < 75 ? weakest.c : fresh.c;
   const weak = document.getElementById("weak");
-  if (weakest && weakest.pct < 75) {
-    weak.hidden = false;
-    weak.innerHTML = `<p>Najsłabiej idzie Ci dział <strong>${CATS[weakest.c]}</strong> (${weakest.pct}%).</p><button class="primary" id="btn-weak">Ćwicz ten dział</button>`;
-    document.getElementById("btn-weak").addEventListener("click", () => { document.getElementById("catsel").value = weakest.c; startRun("losowe"); });
-  } else weak.hidden = true;
+  weak.innerHTML = `<button class="primary" id="btn-weak">Ćwicz: ${CATS[next]}</button><p class="hint2">${weakest && weakest.pct < 75 ? `Najsłabszy dział, ${weakest.pct}% poprawnych` : "Dział, który najmniej przerobiłeś"}</p>`;
+  document.getElementById("btn-weak").addEventListener("click", () => practise(next));
 
   const n = badPool(Q).length;
   const btnBad = document.getElementById("btn-bad");
   btnBad.disabled = n === 0;
-  document.getElementById("bad-desc").textContent = n ? `Do poprawy: ${n} ${n === 1 ? "pytanie" : n < 5 ? "pytania" : "pytań"}.` : "Pojawią się tu pytania, w których się pomylisz.";
+  document.getElementById("bad-desc").textContent = n ? `Do poprawy: ${n} ${n === 1 ? "pytanie" : n < 5 ? "pytania" : "pytań"}` : "Pojawią się tu pytania, w których się pomylisz";
 
-  const m = Q.filter(isMastered).length;
   const left = daysLeft(), dzis = stats.d[today()] || 0, st = streak();
-  document.getElementById("overall").innerHTML =
-    `<span>${ico("calendar-clock")}` + (left === null ? `<a href="#plan">Wpisz datę egzaminu</a>`
-      : left > 0 ? `Do teorii <strong>${left} ${dni(left)}</strong>`
-      : left === 0 ? `<strong>Egzamin dziś</strong>` : `Teoria już była`) + `</span>` +
-    `<span>${ico("target")}Dziś <strong>${Math.min(dzis, 999)} z ${GOAL}</strong>${dzis >= GOAL ? ", cel zrobiony" : ""}</span>` +
-    `<span>${ico("flame")}Seria <strong>${st} ${dni(st)}</strong></span>` +
-    `<span>${ico("trophy")}Opanowane <strong>${m} z ${Q.length}</strong></span>`;
-  document.getElementById("overall-bar").style.width = (100 * m / Q.length) + "%";
+  document.getElementById("ov-days").textContent = left > 0 ? `Za ${left} ${dni(left)}` : left === 0 ? "Dziś" : "Już był";
+  document.getElementById("ov-dates").innerHTML = stats.exam
+    ? `${plDate(stats.exam)}. Praktyka 15–19 stycznia. <a href="#plan">Zmień datę</a>`
+    : `7–13 stycznia 2027, dokładny dzień poda szkoła. Praktyka 15–19 stycznia. <a href="#plan">Wpisz swój dzień</a>`;
+  document.getElementById("ov-today").innerHTML = `${Math.min(dzis, 999)}<small> z ${GOAL}</small>`;
+  document.getElementById("ov-today-bar").style.width = Math.min(100, 100 * dzis / GOAL) + "%";
+  document.getElementById("ov-streak").textContent = `${st} ${dni(st)}`;
+
+  // pozostałe postępy
+  const done = list => list.filter(t => stats.lab[t[0]]).length;
+  const umiec = UMIEC.flatMap(g => g[2]), lab = LAB_SETUP.concat(LAB_TASKS), m = Q.filter(isMastered).length;
+  const row = (href, icon, label, a, b) => `<a href="${href}"><i>${ico(icon)}</i><b>${label}</b><span>${a} z ${b}</span><span class="track" aria-hidden="true"><i style="width:${100 * a / b}%"></i></span></a>`;
+  document.getElementById("ov-prog").innerHTML =
+    row("#quiz", "trophy", "Opanowane pytania", m, Q.length) +
+    row("#umiec", "list-checks", "Co umieć", done(umiec), umiec.length) +
+    row("#lab", "flask-conical", "Lab", done(lab), lab.length) +
+    row("#arkusze", "file-text", "Arkusze CKE", done(SHEETS), SHEETS.length);
 
   const ex = stats.s.filter(x => x.m === "egzamin" && x.n === 40).slice(-8);
   document.getElementById("hist-box").hidden = !ex.length;
+  document.getElementById("hist-empty").hidden = !!ex.length;
   document.getElementById("hist").innerHTML = ex.map(x => {
     const [, mm, dd] = x.t.split("-");
     const cls = x.ok < 20 ? " low" : x.ok < 30 ? " mid" : "";
@@ -1559,7 +1658,7 @@ document.getElementById("lic-in").addEventListener("keydown", e => { if (e.key =
 console.assert(licSteps(173, 2, 16)[0].includes("1010 = A") && licSteps(111, 8, 10)[0].endsWith("= 111."), "licSteps");
 
 // ---------- zakładki ----------
-const TABS = ["quiz", "umiec", "podsieci", "liczby", "sciaga", "arkusze", "plan", "lab"];
+const TABS = ["przeglad", "quiz", "umiec", "podsieci", "liczby", "sciaga", "arkusze", "plan", "lab"];
 let inTimer = null;
 function movePill() {
   const nav = document.querySelector("nav"), a = nav.querySelector("a[aria-current]"), pill = nav.querySelector(".pill");
@@ -1572,7 +1671,7 @@ function movePill() {
 }
 function showTab() {
   const h = location.hash.slice(1);
-  const tab = TABS.includes(h) ? h : "quiz";
+  const tab = TABS.includes(h) ? h : "przeglad";
   TABS.forEach(t => {
     const sec = document.getElementById("tab-" + t);
     const was = sec.hidden;
@@ -1585,6 +1684,18 @@ function showTab() {
   movePill();
 }
 window.addEventListener("hashchange", showTab);
+// motyw: jasny albo ciemny, zapamiętany w tej przeglądarce
+const themeBtn = document.getElementById("theme");
+function isDark() { const t = document.documentElement.dataset.theme; return t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; }
+function paintTheme() { themeBtn.innerHTML = ico(isDark() ? "sun" : "moon"); }
+try { const t = localStorage.getItem("inf02-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+themeBtn.addEventListener("click", () => {
+  const t = isDark() ? "light" : "dark";
+  document.documentElement.dataset.theme = t;
+  try { localStorage.setItem("inf02-theme", t); } catch (e) {}
+  paintTheme();
+});
+paintTheme();
 window.addEventListener("resize", movePill);
 if (document.fonts) document.fonts.ready.then(() => { movePill(); requestAnimationFrame(() => document.querySelector("nav .pill").classList.add("ready")); });
 else document.querySelector("nav .pill").classList.add("ready");
@@ -1605,6 +1716,7 @@ function renderAll() {
 
 // kontrola bazy: 4 odpowiedzi, znany dział, unikalne id
 (function () {
+  for (let i = 0; i < Q.length; i++) console.assert(Q[i], "Dziura w liście pytań", i);
   const ids = new Set();
   Q.forEach(q => { console.assert(q[3].length === 4 && CATS[q[1]] && !ids.has(q[0]), "Złe pytanie", q[0]); ids.add(q[0]); });
 })();
