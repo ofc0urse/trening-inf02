@@ -101,7 +101,8 @@ select { font: 700 16px var(--f-body); padding: 9px 12px; min-height: 46px; bord
 .when .lbl { font: 800 15px var(--f-head); color: var(--muted); display: inline-flex; gap: 7px; align-items: center; }
 .when .lbl .ic { color: var(--accent); }
 .when .dates { color: var(--muted); font-weight: 700; }
-.when .dates a { font-weight: 800; white-space: nowrap; }
+.when .dates a, .nw { font-weight: 800; white-space: nowrap; }
+.nw { font-weight: inherit; }
 .today { padding: 22px 24px; display: grid; gap: 14px; align-content: start; }
 .today .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 800; }
 .today .row .ic { color: var(--accent); }
@@ -114,14 +115,15 @@ select { font: 700 16px var(--f-body); padding: 9px 12px; min-height: 46px; bord
 .track { height: 12px; background: var(--line); border-radius: 6px; overflow: hidden; }
 .track i { display: block; height: 100%; background: var(--accent); border-radius: 6px; }
 
-.cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-.catrow { --c: var(--accent); display: grid; grid-template-columns: 46px minmax(0, 1fr) auto; grid-template-rows: auto auto auto; align-items: center; gap: 4px 12px; width: 100%; text-align: left; padding: 18px; min-height: 0; border-radius: 18px; font-weight: 600; }
+.cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+@media (min-width: 1100px) { .cats { grid-template-columns: repeat(4, 1fr); } }
+.catrow { --c: var(--accent); display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; grid-template-rows: auto auto auto; align-items: center; gap: 4px 10px; width: 100%; text-align: left; padding: 18px; min-height: 0; border-radius: 18px; font-weight: 600; }
 .catrow { border-bottom-width: 4px; }
 .catrow:hover:not(:disabled) { background: var(--paper); border-color: var(--c); }
-.catrow .ci { grid-row: 1 / span 2; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 13px; background: var(--c); color: #fff; }
+.catrow .ci { grid-row: 1 / span 2; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--c); color: #fff; }
 .catrow .ci .ic { width: 24px; height: 24px; }
-.catrow .cn { grid-column: 2; grid-row: 1; align-self: end; font: 900 17px/1.2 var(--f-head); }
-.catrow .pct { grid-column: 3; grid-row: 1 / span 2; font: 900 26px var(--f-head); color: var(--c); }
+.catrow .cn { grid-column: 2; grid-row: 1; align-self: end; font: 900 16px/1.2 var(--f-head); }
+.catrow .pct { grid-column: 3; grid-row: 1 / span 2; font: 900 23px var(--f-head); color: var(--c); }
 .catrow .seen { grid-column: 2; grid-row: 2; align-self: start; font-size: 14px; color: var(--muted); }
 .catrow .bar { grid-column: 1 / -1; height: 10px; margin-top: 10px; background: color-mix(in srgb, var(--c) 18%, var(--line)); border-radius: 5px; overflow: hidden; }
 .catrow .bar i { display: block; height: 100%; border-radius: 5px; background: var(--c); }
@@ -129,6 +131,7 @@ select { font: 700 16px var(--f-body); padding: 9px 12px; min-height: 46px; bord
 .catrow.low .tag { background: var(--bad-soft); color: var(--bad); }
 .catrow.mid .tag { background: var(--warn-soft); color: var(--warn); }
 .catrow.top .tag { background: var(--accent-soft); color: var(--accent); }
+.catrow:not(.low):not(.mid):not(.top) .bar { background: var(--line); }
 .c-sprzet { --c: var(--c-sprzet); } .c-windows { --c: var(--c-windows); } .c-linux { --c: var(--c-linux); } .c-sieci { --c: var(--c-sieci); }
 .c-serwer { --c: var(--c-serwer); } .c-bezp { --c: var(--c-bezp); } .c-podstawy { --c: var(--c-podstawy); }
 .c-linux .ci { color: #2b2300; }
@@ -137,7 +140,7 @@ select { font: 700 16px var(--f-body); padding: 9px 12px; min-height: 46px; bord
 .prog { padding: 8px 22px; }
 .prog a { display: grid; grid-template-columns: 40px 1fr auto; grid-template-rows: auto auto; align-items: center; gap: 2px 14px; padding: 14px 0; border-bottom: 2px solid var(--line); color: var(--ink); text-decoration: none; }
 .prog a:last-child { border-bottom: 0; }
-.prog a i { grid-row: 1 / span 2; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; background: var(--accent-soft); color: var(--accent); }
+.prog a > i { grid-row: 1 / span 2; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; background: var(--accent-soft); color: var(--accent); }
 .prog a b { font: 900 16px var(--f-head); }
 .prog a span { font: 800 15px var(--f-head); color: var(--muted); }
 .prog a .track { grid-column: 2 / -1; height: 8px; }
@@ -1218,8 +1221,8 @@ function renderStats() {
   const left = daysLeft(), dzis = stats.d[today()] || 0, st = streak();
   document.getElementById("ov-days").textContent = left > 0 ? `Teoria za ${left} ${dni(left)}` : left === 0 ? "Teoria dziś" : "Teoria już była";
   document.getElementById("ov-dates").innerHTML = stats.exam
-    ? `Twój dzień: ${plDate(stats.exam)} · praktyka 15–19 stycznia · <a href="#plan">zmień</a>`
-    : `Pisemny 7–13 stycznia · praktyka 15–19 stycznia · <a href="#plan">wpisz swój dzień</a>`;
+    ? `Twój dzień: <span class="nw">${plDate(stats.exam)}</span> · <span class="nw">praktyka 15–19 stycznia</span> · <a href="#plan">zmień</a>`
+    : `<span class="nw">Pisemny 7–13 stycznia</span> · <span class="nw">praktyka 15–19 stycznia</span> · <a href="#plan">wpisz swój dzień</a>`;
   document.getElementById("ov-today").innerHTML = `${Math.min(dzis, 999)}<small> z ${GOAL}</small>`;
   document.getElementById("ov-today-bar").style.width = Math.min(100, 100 * dzis / GOAL) + "%";
   document.getElementById("ov-streak").textContent = `${st} ${dni(st)}`;
