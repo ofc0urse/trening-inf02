@@ -237,6 +237,7 @@ details.how pre { font: 14px/1.5 var(--f-mono); background: var(--bg); border: 1
   </header>
   <nav aria-label="Sekcje">
     <a href="#quiz" data-tab="quiz">Quiz</a>
+    <a href="#umiec" data-tab="umiec">Co umieć</a>
     <a href="#podsieci" data-tab="podsieci">Podsieci</a>
     <a href="#sciaga" data-tab="sciaga">Ściąga</a>
     <a href="#arkusze" data-tab="arkusze">Arkusze CKE</a>
@@ -269,6 +270,14 @@ details.how pre { font: 14px/1.5 var(--f-mono); background: var(--bg); border: 1
       <p class="sync" id="sync"></p>
     </div>
     <div id="quiz-run" hidden></div>
+  </section>
+
+  <!-- CO UMIEĆ -->
+  <section id="tab-umiec" hidden>
+    <h2>Wszystko, co musisz umieć</h2>
+    <p>Lista zbiera podstawę programową INF.02 i tematy, które wracają w arkuszach CKE. „Teoria” trafia na test, „Praktyka” na zadanie przy stanowisku. Odhaczaj punkt dopiero wtedy, gdy umiesz go zrobić albo wytłumaczyć bez podglądania.</p>
+    <div class="counter" id="umiec-total"></div>
+    <div id="umiec"></div>
   </section>
 
   <!-- PODSIECI -->
@@ -562,6 +571,92 @@ const Q = [
 [325,"bezp","Szkodnik, który sam rozsyła swoje kopie przez sieć bez udziału użytkownika, to:",["robak","trojan","adware","keylogger"],"Trojan udaje przydatny program i czeka, aż go uruchomisz."],
 [326,"bezp","Zasada kopii zapasowych 3-2-1 mówi o:",["3 kopiach na 2 różnych nośnikach, z czego 1 poza domem lub firmą","3 dyskach w RAID 2 i 1 zapasowym","kopii co 3 dni przez 2 tygodnie","3 hasłach do 2 kont"],"Kopia poza miejscem pracy przetrwa pożar albo kradzież."],
 [327,"bezp","Znak CE na urządzeniu oznacza, że:",["spełnia wymagania Unii Europejskiej i można je sprzedawać w UE","zostało wyprodukowane w Europie","jest energooszczędne","można je wyrzucić z odpadami komunalnymi"],"Energooszczędność opisuje Energy Star."],
+];
+
+// [id, co umieć, teoria/praktyka, gdzie ćwiczyć]. Id nie zmieniać: po nich zapisuje się odhaczenie.
+const UMIEC = [
+  ["Sprzęt i budowa komputera", [
+    ["u-s1", "Rozpoznajesz na zdjęciu podzespoły: płytę główną, procesor, RAM, zasilacz, karty rozszerzeń, chipset, baterię CMOS.", "Teoria", "Quiz: Sprzęt"],
+    ["u-s2", "Znasz złącza: SATA, M.2, PCIe x1 i x16, DIMM, ATX 24-pin, EPS 8-pin, USB-A i USB-C, HDMI, DisplayPort, DVI, VGA, RJ-45, RJ-11.", "Teoria", "Quiz: Sprzęt"],
+    ["u-s3", "Rozróżniasz pamięci DDR3, DDR4 i DDR5, SO-DIMM, ECC. Wiesz, co oznaczają taktowanie, opóźnienie CL i dual channel.", "Teoria", "Quiz: Sprzęt"],
+    ["u-s4", "Znasz dyski HDD, SSD SATA i NVMe, tablice partycji MBR i GPT oraz systemy plików NTFS, FAT32, exFAT, ext4.", "Teoria", "Quiz: Sprzęt"],
+    ["u-s5", "Przeliczasz liczby między systemami dwójkowym, ósemkowym, dziesiętnym i szesnastkowym. Rozróżniasz bit i bajt, KB i KiB.", "Teoria", "Quiz: Sprzęt"],
+    ["u-s6", "Znasz RAID 0, 1, 5 i 10: ile dysków potrzeba, ile zostaje pojemności, ile dysków może paść.", "Teoria", "Ściąga: RAID"],
+    ["u-s7", "Składasz komputer: procesor, pasta i chłodzenie, RAM, dysk, zasilacz, przewody z panelu przedniego.", "Praktyka", "Własny PC, wyłączony z prądu"],
+    ["u-s8", "Ustawiasz BIOS/UEFI: kolejność bootowania, wirtualizację, Secure Boot, hasło. Wiesz, po co jest aktualizacja BIOS.", "Teoria i praktyka", "Własny PC"],
+    ["u-s9", "Diagnozujesz usterki: sygnały POST, test pamięci, SMART dysku, pomiar zasilacza multimetrem, przegrzewanie.", "Teoria", "Quiz: Sprzęt"],
+    ["u-s10", "Znasz peryferia: drukarki laserowe, atramentowe, termiczne i igłowe, skanery, monitory LCD i OLED, rozdzielczość, odświeżanie, DPI.", "Teoria", "Quiz: Sprzęt"],
+    ["u-s11", "Dobierasz zasilanie: moc w W i VA, UPS offline, line-interactive i online, listwa przeciwprzepięciowa.", "Teoria", "Quiz: Sprzęt"],
+    ["u-s12", "Znasz BHP: opaska antystatyczna, pomoc przy porażeniu prądem, ergonomia stanowiska, utylizacja elektroodpadów i tonerów.", "Teoria", "Quiz: Bezpieczeństwo"]
+  ]],
+  ["Windows na stacji roboczej", [
+    ["u-w1", "Instalujesz Windows 10 albo 11 i dzielisz dysk na partycje w instalatorze i w diskmgmt.msc.", "Praktyka", "Lab: maszyna Win 11"],
+    ["u-w2", "Zakładasz konta lokalne i grupy w lusrmgr.msc. Ustawiasz „hasło nigdy nie wygasa”, „zmień hasło przy logowaniu”, wyłączenie konta.", "Praktyka", "Lab: maszyna Win 11"],
+    ["u-w3", "Ustawiasz statyczny adres IP, maskę, bramę i DNS w ncpa.cpl, potem sprawdzasz ipconfig /all.", "Praktyka", "Lab: maszyna Win 11"],
+    ["u-w4", "Odróżniasz uprawnienia NTFS od uprawnień udostępniania i liczysz uprawnienia efektywne. Rozumiesz dziedziczenie.", "Teoria i praktyka", "Quiz: Windows"],
+    ["u-w5", "Udostępniasz folder i drukarkę w sieci, mapujesz dysk sieciowy, także poleceniem net use.", "Praktyka", "Lab A4 i B"],
+    ["u-w6", "W zaporze wf.msc włączasz regułę ICMP, żeby działał ping, i otwierasz port.", "Praktyka", "Lab B"],
+    ["u-w7", "Znasz polecenia: ipconfig, ping, tracert, nslookup, netstat, arp -a, net user, chkdsk, sfc /scannow, gpupdate /force, diskpart.", "Teoria i praktyka", "Ściąga: Polecenia"],
+    ["u-w8", "Wiesz, do czego służą Menedżer urządzeń, Podgląd zdarzeń, Menedżer zadań, msconfig, regedit, services.msc.", "Teoria", "Ściąga: Przystawki"],
+    ["u-w9", "Robisz kopię zapasową i przywracasz system: punkt przywracania, obraz systemu. Odróżniasz kopię pełną, przyrostową i różnicową.", "Teoria", "Quiz: Windows"],
+    ["u-w10", "Dołączasz komputer do domeny i logujesz się kontem domenowym.", "Praktyka", "Lab B"],
+    ["u-w11", "Znasz aktualizacje, sterowniki, BitLocker i Windows Defender na poziomie testu.", "Teoria", "Quiz: Windows"]
+  ]],
+  ["Windows Server", [
+    ["u-ws1", "Zmieniasz nazwę serwera i ustawiasz statyczny IP przed instalacją ról.", "Praktyka", "Lab A1"],
+    ["u-ws2", "Instalujesz rolę AD DS i promujesz serwer na kontroler domeny w nowym lesie.", "Praktyka", "Lab A1"],
+    ["u-ws3", "Tworzysz jednostki organizacyjne, użytkowników i grupy w dsa.msc. Ustawiasz godziny logowania, datę wygaśnięcia konta, folder domowy i profil mobilny.", "Praktyka", "Lab A2"],
+    ["u-ws4", "Konfigurujesz DHCP: zakres, wykluczenia, rezerwację po MAC, opcje 003 (router) i 006 (DNS), autoryzację serwera.", "Praktyka", "Lab A5"],
+    ["u-ws5", "Konfigurujesz DNS: strefę wyszukiwania do przodu i wstecz, rekordy A, AAAA, CNAME, MX, PTR.", "Praktyka", "Lab A6, Ściąga: DNS"],
+    ["u-ws6", "Ustawiasz zasady grupy w gpmc.msc: długość, złożoność i wiek hasła, blokadę konta, tapetę, blokadę Panelu sterowania, mapowanie dysku.", "Praktyka", "Lab A3"],
+    ["u-ws7", "Stawiasz serwer plików: udział, uprawnienia, przydziały dyskowe.", "Praktyka", "Lab A4"],
+    ["u-ws8", "Znasz pozostałe role: serwer wydruku, IIS, FTP, routing i NAT (RRAS), WSUS, Hyper-V.", "Teoria", "Quiz: Serwer"],
+    ["u-ws9", "Tworzysz dyski dynamiczne: lustrzany, łączony, rozłożony. Wiesz, który odpowiada któremu RAID.", "Teoria i praktyka", "Ściąga: RAID"]
+  ]],
+  ["Linux", [
+    ["u-l1", "Instalujesz Ubuntu Server albo Debiana, logujesz się, używasz sudo.", "Praktyka", "Lab: maszyna Ubuntu"],
+    ["u-l2", "Ustawiasz statyczny IP przez netplan (Ubuntu) albo /etc/network/interfaces (Debian). Sprawdzasz ip a i ip route.", "Praktyka", "Lab C"],
+    ["u-l3", "Zarządzasz kontami: adduser, passwd, usermod -aG, groupadd, userdel. Wiesz, co jest w /etc/passwd, /etc/shadow i /etc/group.", "Teoria i praktyka", "Lab C"],
+    ["u-l4", "Nadajesz prawa: chmod liczbowo i literowo, chown, chgrp. Rozumiesz umask.", "Teoria i praktyka", "Lab C, Ściąga: chmod"],
+    ["u-l5", "Pracujesz na plikach: ls -l, cd, mkdir, cp, mv, rm, cat, nano, find, grep, tar, ln.", "Teoria i praktyka", "Ściąga: Polecenia"],
+    ["u-l6", "Instalujesz pakiety przez apt i zarządzasz usługami przez systemctl start, enable i status.", "Praktyka", "Lab C"],
+    ["u-l7", "Sprawdzasz system: ping, traceroute, ss, df -h, du, free, top, ps, kill, dmesg.", "Teoria", "Quiz: Linux"],
+    ["u-l8", "Znasz katalogi /etc, /home, /var/log, /dev, /proc, /boot oraz montowanie przez mount i /etc/fstab.", "Teoria", "Quiz: Linux"],
+    ["u-l9", "Wiesz, do czego służą SSH, Samba, Apache, isc-dhcp-server i bind9.", "Teoria", "Quiz: Linux"]
+  ]],
+  ["Sieci: teoria", [
+    ["u-n1", "Znasz model OSI i TCP/IP. Przypisujesz urządzenie i protokół do warstwy.", "Teoria", "Quiz: Sieci"],
+    ["u-n2", "Znasz klasy adresów, adresy prywatne i specjalne: 127.0.0.1, 169.254.x.x, 0.0.0.0, 255.255.255.255.", "Teoria", "Ściąga: Adresy specjalne"],
+    ["u-n3", "Liczysz podsieci: maskę, adres sieci, rozgłoszenie, pierwszy i ostatni host, liczbę hostów, podział na równe podsieci.", "Teoria i praktyka", "Zakładka Podsieci"],
+    ["u-n4", "Czytasz IPv6: skracanie zapisu, ::1, fe80:: (link-local), 2000::/3 (globalne), ff00::/8 (multicast).", "Teoria", "Quiz: Sieci"],
+    ["u-n5", "Znasz porty: 20/21 FTP, 22 SSH, 23 Telnet, 25 SMTP, 53 DNS, 67/68 DHCP, 80 HTTP, 110 POP3, 143 IMAP, 443 HTTPS, 3389 RDP.", "Teoria", "Ściąga: Porty"],
+    ["u-n6", "Rozumiesz TCP i UDP, ARP, ICMP, NAT i PAT oraz kolejność DHCP: Discover, Offer, Request, Ack.", "Teoria", "Quiz: Sieci"],
+    ["u-n7", "Znasz media: skrętkę UTP, FTP, STP i S/FTP, kategorie 5e, 6, 6A, 7 i ich prędkości, światłowód jedno- i wielomodowy, złącza SC, LC, ST.", "Teoria", "Quiz: Sieci"],
+    ["u-n8", "Rozróżniasz urządzenia: koncentrator, przełącznik, router, punkt dostępowy, most, modem, zaporę, konwerter mediów.", "Teoria", "Quiz: Sieci"],
+    ["u-n9", "Znasz topologie i okablowanie strukturalne: panel krosowy, gniazdo, szafa rack i jednostka U, punkt dystrybucyjny.", "Teoria", "Quiz: Sieci"],
+    ["u-n10", "Znasz Wi-Fi: 802.11n, ac i ax, pasma 2,4 i 5 GHz, kanały, WPA2 i WPA3, SSID, filtrowanie MAC.", "Teoria", "Quiz: Sieci"],
+    ["u-n11", "Rozumiesz przełączniki zarządzalne: VLAN, trunk 802.1Q, STP, agregację łączy, PoE, tablicę adresów MAC.", "Teoria", "Quiz: Sieci"],
+    ["u-n12", "Rozumiesz routing: trasę statyczną i domyślną, metrykę, RIP i OSPF ogólnie, polecenie route print.", "Teoria", "Quiz: Sieci"],
+    ["u-n13", "Znasz normy i pomiary: PN-EN 50173, TIA/EIA-568, tester okablowania, mapa połączeń, reflektometr.", "Teoria", "Quiz: Sieci"],
+    ["u-n14", "Liczysz kosztorys sieci: metry kabla, gniazda, wtyki, robocizna.", "Teoria", "Arkusze CKE"]
+  ]],
+  ["Sieci: praktyka", [
+    ["u-p1", "Zarabiasz patchcord w standardzie T568B i sprawdzasz go testerem.", "Praktyka", "Lab E, Ściąga: T568B"],
+    ["u-p2", "Podłączasz gniazdo keystone albo natynkowe i panel krosowy narzędziem uderzeniowym.", "Praktyka", "Pracownia w szkole"],
+    ["u-p3", "W panelu WWW routera ustawiasz IP LAN, DHCP z zakresem, statyczny WAN i nowe hasło administratora, potem zapisujesz konfigurację.", "Praktyka", "Lab D, emulator TP-Link"],
+    ["u-p4", "Ustawiasz Wi-Fi: SSID, WPA2-PSK, hasło, kanał, wyłączenie WPS.", "Praktyka", "Lab D, emulator TP-Link"],
+    ["u-p5", "Na przełączniku zarządzalnym ustawiasz IP zarządzania, VLAN-y na portach i hasło, potem zapisujesz.", "Praktyka", "Pracownia w szkole"],
+    ["u-p6", "Ustawiasz przekierowanie portów, DMZ, filtrowanie MAC i rezerwację DHCP na routerze.", "Praktyka", "Lab D, emulator TP-Link"],
+    ["u-p7", "Sprawdzasz łączność: ping między wszystkimi urządzeniami, brama, DNS. Wiesz, co zrobić, gdy ping nie przechodzi.", "Praktyka", "Lab B i C"],
+    ["u-p8", "Czytasz zadanie podpunkt po podpunkcie i dokumentujesz wyniki: zrzuty ekranu i opis testów w pliku.", "Praktyka", "Arkusze CKE"]
+  ]],
+  ["Bezpieczeństwo i licencje", [
+    ["u-b1", "Rozróżniasz zagrożenia: wirus, robak, trojan, ransomware, rootkit, keylogger, phishing, DoS i DDoS, spoofing.", "Teoria", "Quiz: Bezpieczeństwo"],
+    ["u-b2", "Wiesz, jak się chronić: antywirus, zapora, aktualizacje, silne hasła, 2FA, szyfrowanie, kopia 3-2-1.", "Teoria", "Quiz: Bezpieczeństwo"],
+    ["u-b3", "Znasz licencje: OEM, BOX, GPL, freeware, shareware, trial, adware, licencja grupowa.", "Teoria", "Quiz: Bezpieczeństwo"],
+    ["u-b4", "Znasz podstawy RODO i prawa autorskiego do programów.", "Teoria", "Quiz: Bezpieczeństwo"],
+    ["u-b5", "Rozumiesz angielskie nazwy w panelach: Subnet mask, Default gateway, Lease time, Firmware, Shared folder, Port forwarding.", "Teoria i praktyka", "Panel routera"]
+  ]]
 ];
 
 const SHEETS = [
@@ -1022,6 +1117,20 @@ function renderTasks(elId, countId, list, render, extra) {
   count();
 }
 
+function renderUmiec() {
+  const el = document.getElementById("umiec");
+  if (!el.childElementCount) {
+    el.innerHTML = UMIEC.map((g, i) => `<h2>${esc(g[0])}</h2><div class="counter" id="umiec-c${i}"></div><div id="umiec-g${i}"></div>`).join("");
+    el.addEventListener("change", umiecTotal);
+  }
+  UMIEC.forEach((g, i) => renderTasks("umiec-g" + i, "umiec-c" + i, g[1], t => `<span class="title">${esc(t[1])}</span><span class="meta">${t[2]} · ${esc(t[3])}</span>`));
+  umiecTotal();
+}
+function umiecTotal() {
+  const all = UMIEC.flatMap(g => g[1]);
+  document.getElementById("umiec-total").textContent = `Umiesz: ${all.filter(t => stats.lab[t[0]]).length} z ${all.length}`;
+}
+
 function renderWeeks() {
   const today = new Date().toISOString().slice(0, 10);
   const fmt = s => { const [y, m, d] = s.split("-"); return `${+d}.${m}`; };
@@ -1141,7 +1250,7 @@ examInput.addEventListener("change", () => {
 });
 
 // ---------- zakładki ----------
-const TABS = ["quiz", "podsieci", "sciaga", "arkusze", "plan", "lab"];
+const TABS = ["quiz", "umiec", "podsieci", "sciaga", "arkusze", "plan", "lab"];
 function showTab() {
   const h = location.hash.slice(1);
   const tab = TABS.includes(h) ? h : "quiz";
@@ -1160,6 +1269,7 @@ function renderAll() {
   renderTasks("sheets", "sheet-count", SHEETS, t => `<span class="title"><a href="${t[2]}" target="_blank" rel="noopener">INF.02 ${t[1]}</a></span><span class="meta">test i zadanie praktyczne</span>`);
   renderTasks("setup-tasks", "setup-count", LAB_SETUP, t => `<span class="title"><strong>${esc(t[1])}</strong></span><span class="meta">${esc(t[2])}</span>`);
   renderTasks("lab-tasks", "lab-count", LAB_TASKS, t => `<span class="title"><strong>${t[0]}.</strong> ${esc(t[1])}</span><span class="meta">${esc(t[2])}</span>`, howTo);
+  renderUmiec();
   renderCheat();
   renderSubScore();
   examInput.value = stats.exam || "";
