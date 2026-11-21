@@ -547,7 +547,7 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
         <summary>Jak je zapamiętać</summary>
         <p>Wkuj tylko trzy. <b>AND</b> to „i”: mama i tata muszą się zgodzić, więc 1 wychodzi tylko przy 1 i 1. <b>OR</b> to „lub”: wystarczy jedna jedynka. <b>XOR</b> to „albo-albo”: 1, gdy wejścia są różne.</p>
         <p>Litera <b>N</b> z przodu nazwy to kropka na rysunku. Liczysz zwykłą bramkę i odwracasz wynik: tak powstają NAND, NOR i XNOR. NOT ma jedno wejście i je odwraca.</p>
-        <p>Kształt: AND wygląda jak litera D (AND też kończy się na D), OR jak pocisk, a XOR to OR z dodatkową kreską z tyłu. W prostokątach <code>&amp;</code> znaczy AND, <code>≥1</code> znaczy OR (co najmniej jedna jedynka), <code>=1</code> znaczy XOR (dokładnie jedna jedynka).</p>
+        <p>Kształt: AND wygląda jak litera D (AND też kończy się na D), OR jak pocisk, a XOR to OR z dodatkową kreską z tyłu.</p>
       </details>
     </div>
     <div class="qcard">
@@ -1877,29 +1877,26 @@ const GRULE = {
   NOT: "ma jedno wejście i odwraca je", NAND: "daje 0 tylko wtedy, gdy oba wejścia to 1", NOR: "daje 1 tylko wtedy, gdy oba wejścia to 0", XNOR: "daje 1, gdy wejścia są takie same"
 };
 const GMNEM = {
-  AND: "AND to „i”: oba wejścia muszą mieć 1. Kształt litery D, w prostokącie &.",
-  OR: "OR to „lub”: wystarczy jedna jedynka. Kształt pocisku, w prostokącie ≥1.",
-  XOR: "XOR to „albo-albo”: 1, gdy wejścia są różne. OR z dodatkową kreską z tyłu, w prostokącie =1.",
-  NOT: "NOT odwraca: 0 daje 1, a 1 daje 0. Trójkąt z kropką, w prostokącie 1 z kropką.",
+  AND: "AND to „i”: oba wejścia muszą mieć 1. Kształt litery D.",
+  OR: "OR to „lub”: wystarczy jedna jedynka. Kształt pocisku.",
+  XOR: "XOR to „albo-albo”: 1, gdy wejścia są różne. OR z dodatkową kreską z tyłu.",
+  NOT: "NOT odwraca: 0 daje 1, a 1 daje 0. Trójkąt z kropką.",
   NAND: "NAND to odwrócony AND: 0 tylko przy 1 i 1. Kształt D z kropką.",
   NOR: "NOR to odwrócony OR: 1 tylko przy 0 i 0. Pocisk z kropką.",
   XNOR: "XNOR to odwrócony XOR: 1, gdy wejścia są takie same. XOR z kropką."
 };
-function gateSvg(g, iec) {
+function gateSvg(g) {
   const base = { NAND: "AND", NOR: "OR", XNOR: "XOR" }[g] || g, inv = base !== g || g === "NOT", one = g === "NOT";
-  const t = (x, y, s, extra = "") => `<text x="${x}" y="${y}" fill="currentColor" stroke="none" font-size="15" font-weight="800"${extra}>${s}</text>`;
+  const t = (x, y, s) => `<text x="${x}" y="${y}" fill="currentColor" stroke="none" font-size="15" font-weight="800">${s}</text>`;
   let body, inEnd, outX;
-  if (iec) {
-    body = `<rect x="60" y="18" width="64" height="64" rx="2"/>` + t(92, 57, { AND: "&amp;", OR: "≥1", XOR: "=1", NOT: "1" }[base], ` font-size="20" text-anchor="middle"`);
-    inEnd = 60; outX = 124;
-  } else if (base === "AND") { body = `<path d="M60 20H95A30 30 0 0 1 95 80H60Z"/>`; inEnd = 60; outX = 125; }
+  if (base === "AND") { body = `<path d="M60 20H95A30 30 0 0 1 95 80H60Z"/>`; inEnd = 60; outX = 125; }
   else if (base === "NOT") { body = `<path d="M60 25L60 75L110 50Z"/>`; inEnd = 60; outX = 110; }
   else { body = `<path d="M55 20Q75 50 55 80Q100 80 130 50Q100 20 55 20Z"/>` + (base === "XOR" ? `<path d="M46 20Q66 50 46 80"/>` : ""); inEnd = base === "XOR" ? 54 : 66; outX = 130; }
   const out = inv ? `<circle cx="${outX + 6}" cy="50" r="6"/><path d="M${outX + 12} 50H175"/>` : `<path d="M${outX} 50H175"/>`;
   const ins = one ? `<path d="M20 50H${inEnd}"/>` + t(4, 55, "A") : `<path d="M20 35H${inEnd}M20 65H${inEnd}"/>` + t(4, 40, "A") + t(4, 70, "B");
   return `<svg viewBox="0 0 200 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${body}${out}${ins}${t(180, 55, "Y")}</svg>`;
 }
-console.assert(G7.XNOR(1, 1) === 1 && G7.NOR(0, 0) === 1 && gateSvg("NAND").includes("circle") && !gateSvg("AND").includes("circle") && gateSvg("XOR", true).includes("=1"), "bramki");
+console.assert(G7.XNOR(1, 1) === 1 && G7.NOR(0, 0) === 1 && gateSvg("NAND").includes("circle") && !gateSvg("AND").includes("circle"), "bramki");
 
 let gq = null;
 const gStreak = g => { const s = stats.gate[g]; return Array.isArray(s) ? +s[0] || 0 : 0; };
@@ -1911,10 +1908,10 @@ function pickGate(pool) {
 }
 function newGate() {
   const k = Math.random();
-  const kind = k < 0.3 ? "ansi" : k < 0.45 ? "iec" : k < 0.7 ? "val" : k < 0.85 ? "rule" : "table";
+  const kind = k < 0.4 ? "ansi" : k < 0.65 ? "val" : k < 0.82 ? "rule" : "table";
   const g = pickGate(kind === "table" ? GNAMES.filter(x => x !== "NOT") : GNAMES);
   const q = { g, kind, pick: null, opts: GNAMES, ans: g };
-  if (kind === "ansi" || kind === "iec") { q.fig = gateSvg(g, kind === "iec"); q.ask = "Jaka to bramka?"; }
+  if (kind === "ansi") { q.fig = gateSvg(g); q.ask = "Jaka to bramka?"; }
   else if (kind === "rule") q.ask = `Która bramka ${GRULE[g]}?`;
   else if (kind === "table") {
     q.ask = "Która bramka ma taką tabelę prawdy?";
@@ -1934,7 +1931,7 @@ function renderGate() {
   html += `<div class="gopts">${q.opts.map(o => `<button class="ans${done ? (o === q.ans ? " right" : o === q.pick ? " wrong" : " dim") : ""}" data-o="${o}" ${done ? "disabled" : ""}>${o}</button>`).join("")}</div>`;
   if (done) {
     html += `<div class="expl" role="status">${ok ? `<b class="ok">${ico("check")}Dobrze.</b>` : `<b class="no">${ico("x")}Źle.</b>`}${esc(q.kind === "val" ? "" : `To ${q.g}. `)}${esc(GMNEM[q.g])}
-      <div class="gpair" aria-hidden="true">${gateSvg(q.g)}${gateSvg(q.g, true)}</div></div>
+      <div class="gpair" aria-hidden="true">${gateSvg(q.g)}</div></div>
       <div class="qnav"><span class="right"><button class="primary" id="gate-next">Dalej${ico("arrow-right")}</button></span></div>`;
   }
   const el = document.getElementById("gate-q");
