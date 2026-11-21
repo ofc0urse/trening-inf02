@@ -197,6 +197,21 @@ select { font: 700 16px var(--f-body); padding: 9px 12px; min-height: 46px; bord
 .qfig { margin: 0 0 18px; padding: 16px; border-radius: 14px; background: var(--bg); color: var(--ink); display: grid; place-items: center; }
 .qfig svg { width: 100%; max-width: 380px; height: auto; }
 .qfig.small svg { max-width: 220px; }
+/* bramki na pamięć */
+.gcard { margin-bottom: 28px; }
+.gchips { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 18px; }
+.gchip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border: 2px solid var(--line); border-radius: 999px; font: 700 13px var(--f-mono); color: var(--muted); }
+.gchip i { font-style: normal; font-size: 10px; letter-spacing: 1px; }
+.gchip.ok { border-color: var(--accent); background: var(--accent-soft); color: var(--ink); }
+.gopts { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+.gopts .ans { grid-template-columns: 1fr; text-align: center; font-family: var(--f-mono); padding: 12px 8px; }
+.gtab { border-collapse: collapse; margin: 0 0 18px; font: 600 16px var(--f-mono); }
+.gtab th, .gtab td { border: 1px solid var(--line); padding: 4px 16px; text-align: center; }
+.gpair { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; }
+.gpair svg { width: 150px; height: auto; }
+.gmnem { margin-top: 20px; font-size: 16px; }
+.gmnem summary { cursor: pointer; font-weight: 800; }
+.gmnem p { margin: 8px 0 0; }
 .answers { display: grid; gap: 10px; }
 .ans { display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 14px; text-align: left; font: 700 17px/1.45 var(--f-body); padding: 12px 16px; border: 2px solid var(--line); border-bottom-width: 4px; border-radius: 14px; background: var(--paper); color: var(--ink); }
 .ans .key { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; border: 2px solid var(--line); background: var(--bg); font: 900 15px var(--f-head); color: var(--muted); }
@@ -524,6 +539,17 @@ section.in, .qcard.in .qtext, .qcard.in .ans, .expl, .score { animation: fade .2
 
   <!-- LICZBY I BRAMKI -->
   <section id="tab-liczby" hidden>
+    <div class="qcard gcard">
+      <div class="qhead"><span>Bramki na pamięć</span><span id="gate-score"></span></div>
+      <div class="gchips" id="gate-chips"></div>
+      <div id="gate-q"></div>
+      <details class="gmnem">
+        <summary>Jak je zapamiętać</summary>
+        <p>Wkuj tylko trzy. <b>AND</b> to „i”: mama i tata muszą się zgodzić, więc 1 wychodzi tylko przy 1 i 1. <b>OR</b> to „lub”: wystarczy jedna jedynka. <b>XOR</b> to „albo-albo”: 1, gdy wejścia są różne.</p>
+        <p>Litera <b>N</b> z przodu nazwy to kropka na rysunku. Liczysz zwykłą bramkę i odwracasz wynik: tak powstają NAND, NOR i XNOR. NOT ma jedno wejście i je odwraca.</p>
+        <p>Kształt: AND wygląda jak litera D (AND też kończy się na D), OR jak pocisk, a XOR to OR z dodatkową kreską z tyłu. W prostokątach <code>&amp;</code> znaczy AND, <code>≥1</code> znaczy OR (co najmniej jedna jedynka), <code>=1</code> znaczy XOR (dokładnie jedna jedynka).</p>
+      </details>
+    </div>
     <div class="qcard">
       <div class="qhead"><span>Trener liczb i bramek</span><span id="lic-score"></span></div>
       <div class="qprog" aria-hidden="true"><i id="lic-bar" style="width:0"></i></div>
@@ -1156,7 +1182,7 @@ const CHEAT = [
 const T568B = [["b-pom","#f4a259","#fff"],["pom","#e8892b","#e8892b"],["b-ziel","#4caf6a","#fff"],["nieb","#3a6fd8","#3a6fd8"],["b-nieb","#3a6fd8","#fff"],["ziel","#3c9a58","#3c9a58"],["b-brąz","#8a5a3c","#fff"],["brąz","#7a4b2e","#7a4b2e"]];
 
 // ---------- zapis postępów ----------
-let stats = { q: {}, s: [], lab: {}, d: {}, exam: "", sub: [0, 0], lic: [0, 0] };
+let stats = { q: {}, s: [], lab: {}, d: {}, exam: "", sub: [0, 0], lic: [0, 0], gate: {} };
 const GOAL = 30; // odpowiedzi dziennie
 function today() { const t = new Date(); return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`; }
 function bumpDay() {
@@ -1178,7 +1204,7 @@ function lsRead() { try { return JSON.parse(localStorage.getItem(lsKey()) || "nu
 function lsWrite() { try { localStorage.setItem(lsKey(), JSON.stringify(stats)); } catch (e) {} }
 function normalize(s) {
   if (!s || typeof s !== "object") s = {};
-  return { q: s.q || {}, s: Array.isArray(s.s) ? s.s : [], lab: s.lab || {}, d: s.d || {}, exam: typeof s.exam === "string" ? s.exam : "", sub: Array.isArray(s.sub) ? s.sub : [0, 0], lic: Array.isArray(s.lic) ? s.lic : [0, 0], prac: s.prac && s.prac.start ? s.prac : null, pr: Array.isArray(s.pr) ? s.pr : [] };
+  return { q: s.q || {}, s: Array.isArray(s.s) ? s.s : [], lab: s.lab || {}, d: s.d || {}, exam: typeof s.exam === "string" ? s.exam : "", sub: Array.isArray(s.sub) ? s.sub : [0, 0], lic: Array.isArray(s.lic) ? s.lic : [0, 0], gate: s.gate && typeof s.gate === "object" ? s.gate : {}, prac: s.prac && s.prac.start ? s.prac : null, pr: Array.isArray(s.pr) ? s.pr : [] };
 }
 const amount = s => Object.values(s.q).reduce((a, v) => a + v[0] + v[1], 0) + Object.keys(s.lab).length;
 
@@ -1842,6 +1868,101 @@ document.getElementById("lic-in").addEventListener("keydown", e => { if (e.key =
 // samokontrola: kroki i wynik muszą się zgadzać z wbudowaną konwersją
 console.assert(licSteps(173, 2, 16)[0].includes("1010 = A") && licSteps(111, 8, 10)[0].endsWith("= 111."), "licSteps");
 
+// ---------- bramki na pamięć ----------
+// Bramka jest opanowana po 3 dobrych odpowiedziach pod rząd. Błąd zeruje serię, a nieopanowane losują się częściej.
+const G7 = { AND: (a, b) => a & b, OR: (a, b) => a | b, XOR: (a, b) => a ^ b, NOT: a => 1 - a, NAND: (a, b) => 1 - (a & b), NOR: (a, b) => 1 - (a | b), XNOR: (a, b) => 1 - (a ^ b) };
+const GNAMES = Object.keys(G7);
+const GRULE = {
+  AND: "daje 1 tylko wtedy, gdy oba wejścia to 1", OR: "daje 0 tylko wtedy, gdy oba wejścia to 0", XOR: "daje 1, gdy wejścia są różne",
+  NOT: "ma jedno wejście i odwraca je", NAND: "daje 0 tylko wtedy, gdy oba wejścia to 1", NOR: "daje 1 tylko wtedy, gdy oba wejścia to 0", XNOR: "daje 1, gdy wejścia są takie same"
+};
+const GMNEM = {
+  AND: "AND to „i”: oba wejścia muszą mieć 1. Kształt litery D, w prostokącie &.",
+  OR: "OR to „lub”: wystarczy jedna jedynka. Kształt pocisku, w prostokącie ≥1.",
+  XOR: "XOR to „albo-albo”: 1, gdy wejścia są różne. OR z dodatkową kreską z tyłu, w prostokącie =1.",
+  NOT: "NOT odwraca: 0 daje 1, a 1 daje 0. Trójkąt z kropką, w prostokącie 1 z kropką.",
+  NAND: "NAND to odwrócony AND: 0 tylko przy 1 i 1. Kształt D z kropką.",
+  NOR: "NOR to odwrócony OR: 1 tylko przy 0 i 0. Pocisk z kropką.",
+  XNOR: "XNOR to odwrócony XOR: 1, gdy wejścia są takie same. XOR z kropką."
+};
+function gateSvg(g, iec) {
+  const base = { NAND: "AND", NOR: "OR", XNOR: "XOR" }[g] || g, inv = base !== g || g === "NOT", one = g === "NOT";
+  const t = (x, y, s, extra = "") => `<text x="${x}" y="${y}" fill="currentColor" stroke="none" font-size="15" font-weight="800"${extra}>${s}</text>`;
+  let body, inEnd, outX;
+  if (iec) {
+    body = `<rect x="60" y="18" width="64" height="64" rx="2"/>` + t(92, 57, { AND: "&amp;", OR: "≥1", XOR: "=1", NOT: "1" }[base], ` font-size="20" text-anchor="middle"`);
+    inEnd = 60; outX = 124;
+  } else if (base === "AND") { body = `<path d="M60 20H95A30 30 0 0 1 95 80H60Z"/>`; inEnd = 60; outX = 125; }
+  else if (base === "NOT") { body = `<path d="M60 25L60 75L110 50Z"/>`; inEnd = 60; outX = 110; }
+  else { body = `<path d="M55 20Q75 50 55 80Q100 80 130 50Q100 20 55 20Z"/>` + (base === "XOR" ? `<path d="M46 20Q66 50 46 80"/>` : ""); inEnd = base === "XOR" ? 54 : 66; outX = 130; }
+  const out = inv ? `<circle cx="${outX + 6}" cy="50" r="6"/><path d="M${outX + 12} 50H175"/>` : `<path d="M${outX} 50H175"/>`;
+  const ins = one ? `<path d="M20 50H${inEnd}"/>` + t(4, 55, "A") : `<path d="M20 35H${inEnd}M20 65H${inEnd}"/>` + t(4, 40, "A") + t(4, 70, "B");
+  return `<svg viewBox="0 0 200 100" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${body}${out}${ins}${t(180, 55, "Y")}</svg>`;
+}
+console.assert(G7.XNOR(1, 1) === 1 && G7.NOR(0, 0) === 1 && gateSvg("NAND").includes("circle") && !gateSvg("AND").includes("circle") && gateSvg("XOR", true).includes("=1"), "bramki");
+
+let gq = null;
+const gStreak = g => { const s = stats.gate[g]; return Array.isArray(s) ? +s[0] || 0 : 0; };
+function pickGate(pool) {
+  const w = pool.map(g => (gStreak(g) >= 3 ? 1 : 4) * (gq && gq.g === g ? 0.2 : 1));
+  let r = Math.random() * w.reduce((a, b) => a + b);
+  for (let i = 0; i < pool.length; i++) if ((r -= w[i]) < 0) return pool[i];
+  return pool[pool.length - 1];
+}
+function newGate() {
+  const k = Math.random();
+  const kind = k < 0.3 ? "ansi" : k < 0.45 ? "iec" : k < 0.7 ? "val" : k < 0.85 ? "rule" : "table";
+  const g = pickGate(kind === "table" ? GNAMES.filter(x => x !== "NOT") : GNAMES);
+  const q = { g, kind, pick: null, opts: GNAMES, ans: g };
+  if (kind === "ansi" || kind === "iec") { q.fig = gateSvg(g, kind === "iec"); q.ask = "Jaka to bramka?"; }
+  else if (kind === "rule") q.ask = `Która bramka ${GRULE[g]}?`;
+  else if (kind === "table") {
+    q.ask = "Która bramka ma taką tabelę prawdy?";
+    q.table = [[0, 0], [0, 1], [1, 0], [1, 1]].map(([a, b]) => [a, b, G7[g](a, b)]);
+  } else {
+    const A = rnd(2), B = rnd(2), y = g === "NOT" ? G7.NOT(A) : G7[g](A, B);
+    q.ask = g === "NOT" ? `${g}, wejście A = ${A}. Co jest na wyjściu?` : `${g}, wejścia A = ${A} i B = ${B}. Co jest na wyjściu?`;
+    q.opts = ["0", "1"]; q.ans = String(y);
+  }
+  gq = q; renderGate();
+}
+function renderGate() {
+  const q = gq, done = q.pick !== null, ok = q.pick === q.ans;
+  let html = q.fig ? `<figure class="qfig small" role="img" aria-label="Symbol bramki">${q.fig}</figure>` : "";
+  html += `<p class="qtext">${esc(q.ask)}</p>`;
+  if (q.table) html += `<table class="gtab"><tr><th>A</th><th>B</th><th>Y</th></tr>${q.table.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</table>`;
+  html += `<div class="gopts">${q.opts.map(o => `<button class="ans${done ? (o === q.ans ? " right" : o === q.pick ? " wrong" : " dim") : ""}" data-o="${o}" ${done ? "disabled" : ""}>${o}</button>`).join("")}</div>`;
+  if (done) {
+    html += `<div class="expl" role="status">${ok ? `<b class="ok">${ico("check")}Dobrze.</b>` : `<b class="no">${ico("x")}Źle.</b>`}${esc(q.kind === "val" ? "" : `To ${q.g}. `)}${esc(GMNEM[q.g])}
+      <div class="gpair" aria-hidden="true">${gateSvg(q.g)}${gateSvg(q.g, true)}</div></div>
+      <div class="qnav"><span class="right"><button class="primary" id="gate-next">Dalej${ico("arrow-right")}</button></span></div>`;
+  }
+  const el = document.getElementById("gate-q");
+  el.innerHTML = html;
+  const nx = document.getElementById("gate-next");
+  if (nx) nx.focus({ preventScroll: true });
+}
+function answerGate(o) {
+  if (gq.pick !== null) return;
+  gq.pick = o;
+  const s = Array.isArray(stats.gate[gq.g]) ? stats.gate[gq.g] : [0, 0];
+  stats.gate[gq.g] = o === gq.ans ? [(+s[0] || 0) + 1, +s[1] || 0] : [0, (+s[1] || 0) + 1];
+  renderGate(); renderGateScore(); scheduleSave();
+}
+function renderGateScore() {
+  const m = GNAMES.filter(g => gStreak(g) >= 3).length;
+  document.getElementById("gate-score").textContent = `opanowane ${m} z 7`;
+  document.getElementById("gate-chips").innerHTML = GNAMES.map(g => {
+    const s = Math.min(gStreak(g), 3);
+    return `<span class="gchip${s >= 3 ? " ok" : ""}" title="${s >= 3 ? "opanowana" : `${s} z 3 dobrze pod rząd`}">${g}<i aria-hidden="true">${"●".repeat(s)}${"○".repeat(3 - s)}</i></span>`;
+  }).join("");
+}
+document.getElementById("gate-q").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  if (b.id === "gate-next") newGate(); else if (b.dataset.o) answerGate(b.dataset.o);
+});
+
 // ---------- próbna praktyka ----------
 // kryteria uogólnione z 42 kluczy oceniania CKE (2021–2026)
 const PRAC = [
@@ -1953,6 +2074,7 @@ function renderAll() {
   renderCheat();
   renderSubScore();
   renderLicScore();
+  renderGateScore();
   renderPrac();
   examInput.value = stats.exam || "";
 }
@@ -1968,6 +2090,7 @@ showTab();
 { const first = document.querySelector("section:not([hidden])"); first.classList.add("in"); setTimeout(() => first.classList.remove("in"), 900); }
 newSub();
 newLic();
+newGate();
 initStore();
 </script>
 
